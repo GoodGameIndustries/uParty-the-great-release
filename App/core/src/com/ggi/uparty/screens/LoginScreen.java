@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.uParty;
+import com.ggi.uparty.network.Login;
 
 /**
  * @author Emmett
@@ -38,20 +39,20 @@ public class LoginScreen implements Screen, InputProcessor {
 	
 	public String e="",p="";
 	
-	public TextButton login,back,forgot;
+	public TextButton login,back,forgot,error;
 	
 	public CheckBox remember;
 	
-	public Rectangle emailB,passB,loginB,backB,forgotB,rememberB;
+	public Rectangle emailB,passB,loginB,backB,forgotB,rememberB,errorB;
 
 	private GlyphLayout layout = new GlyphLayout();
 	
 	public Stage stage = new Stage();
 	
-	public Screen nextScreen;
 	
 	public LoginScreen(uParty u){
 		this.u=u;
+		u.nextScreen=null;
 	}
 	
 	/* (non-Javadoc)
@@ -60,6 +61,7 @@ public class LoginScreen implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this);
+		u.nextScreen=null;
 		pic = new SpriteBatch();
 
 		logo = u.assets.get("Logos/1024.png");
@@ -71,6 +73,7 @@ public class LoginScreen implements Screen, InputProcessor {
 		backB=new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
 		forgotB=new Rectangle(.35f*u.w,.27f*u.h,.3f*u.w,u.h/60);
 		rememberB=new Rectangle(.6f*u.w,.386f*u.h,u.h/64,u.h/64);
+		errorB = new Rectangle(u.w/9,.2f*u.h,7*u.w/9,u.h/16);
 		
 		email = new TextField(e, u.textFieldStyle);
 			email.setMessageText("Email");
@@ -79,6 +82,8 @@ public class LoginScreen implements Screen, InputProcessor {
 		pass = new TextField(p, u.textFieldStyle);
 			pass.setMessageText("Password");
 			pass.setAlignment(Align.center);
+			pass.setPasswordMode(true);
+			pass.setPasswordCharacter('*');
 			pass.setBounds(passB.x, passB.y, passB.width, passB.height);
 		
 		login = new TextButton("Login",u.standardButtonStyle);
@@ -87,7 +92,9 @@ public class LoginScreen implements Screen, InputProcessor {
 			back.setBounds(backB.x, backB.y, backB.width, backB.height);
 		forgot = new TextButton("Forgot Password?",u.linkButtonStyle);
 			forgot.setBounds(forgotB.x, forgotB.y, forgotB.width, forgotB.height);
-		
+		error = new TextButton(u.error,u.errorButtonStyle);
+			error.setBounds(errorB.x, errorB.y, errorB.width, errorB.height);
+			
 		remember = new CheckBox("",u.checkStyle);
 			remember.setBounds(rememberB.x, rememberB.y, rememberB.width, rememberB.height);
 			
@@ -101,21 +108,18 @@ public class LoginScreen implements Screen, InputProcessor {
 	 */
 	@Override
 	public void render(float delta) {
-		if(nextScreen!=null&&nextScreen instanceof HomeScreen){
-			HomeScreen hs = (HomeScreen)nextScreen;
-			if(fade>.1f){fade+=(0-fade)/2;}
-			if(fade<.5f&&logoMoveAnim>.1f){logoMoveAnim+=(0-logoMoveAnim)/2;}
-			else if(logoMoveAnim<.1f){hs.logoMoveAnim=.55f;u.setScreen(hs);}
+		error.setText(u.error);
+		
+		if(u.myAcc!=null){
+			if(!u.myAcc.confirmed){u.nextScreen=new ConfirmationScreen(u);}
 		}
-		else{
-		if(logoMoveAnim<1f){logoMoveAnim+=(1-logoMoveAnim)/2;}
-		if(logoMoveAnim>.5f&&fade<1){fade+=(1-fade)/2;}}
 		
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		pic.begin();
 		pic.setColor(1, 1, 1, 1);
 		pic.draw(background, 0, 0, u.w, u.h);
+		pic.setColor(1, 1, 1, ((u.nextScreen!=null&&u.nextScreen instanceof HomeScreen)||u.nextScreen==null?1f:fade));
 		pic.draw(logo, .25f*u.w, .569f*u.h+(logoMoveAnim*u.h/16), u.w/2, u.w/2);
 		
 		email.draw(pic, fade);
@@ -124,6 +128,7 @@ public class LoginScreen implements Screen, InputProcessor {
 		back.draw(pic, fade);
 		forgot.draw(pic, fade);
 		remember.draw(pic, fade);
+		error.draw(pic, fade);
 		
 		pic.setColor(1, 1, 1, fade);
 		layout .setText(u.smallFnt, "Remember me?      ");
@@ -132,7 +137,21 @@ public class LoginScreen implements Screen, InputProcessor {
 		
 		pic.end();
 		
-		
+		if(u.nextScreen!=null){
+			//System.out.println(u.nextScreen);
+			if(u.nextScreen instanceof HomeScreen){
+			HomeScreen hs = (HomeScreen)u.nextScreen;
+			if(fade>.1f){fade+=(0-fade)/2;}
+			if(fade<.5f&&logoMoveAnim>.1f){logoMoveAnim+=(0-logoMoveAnim)/2;}
+			else if(logoMoveAnim<.1f){hs.logoMoveAnim=.55f;u.setScreen(hs);}}
+			else{
+				if(fade>.1f){fade+=(0-fade)/2;}
+				else{u.setScreen(u.nextScreen);}
+			}
+		}
+		else{
+		if(logoMoveAnim<1f){logoMoveAnim+=(1-logoMoveAnim)/2;}
+		if(logoMoveAnim>.5f&&fade<1){fade+=(1-fade)/2;}}
 
 	}
 
@@ -239,11 +258,17 @@ public class LoginScreen implements Screen, InputProcessor {
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){nextScreen = new HomeScreen(u);}
+		if(Intersector.overlaps(touch, backB)){u.nextScreen = new HomeScreen(u);}
 		else if(Intersector.overlaps(touch, forgotB)){}
-		else if(Intersector.overlaps(touch, loginB)){}
-		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);}
-		else if(Intersector.overlaps(touch, passB)){stage.setKeyboardFocus(pass);}
+		else if(Intersector.overlaps(touch, loginB)){
+			if(e.length()>0&&p.length()>0){
+				Login l = new Login();
+					l.e=e;
+					l.p=p;
+				u.send(l);}
+			else{u.error="Invalid email or password";}}
+		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, passB)){stage.setKeyboardFocus(pass);Gdx.input.setOnscreenKeyboardVisible(true);}
 		else if(Intersector.overlaps(touch, rememberB)){remember.toggle();}
 		
 		
@@ -251,6 +276,7 @@ public class LoginScreen implements Screen, InputProcessor {
 	}
 
 	private void toggleOff() {
+		Gdx.input.setOnscreenKeyboardVisible(false);
 		stage.setKeyboardFocus(null);
 		if(back.isChecked()){back.toggle();}
 		if(login.isChecked()){login.toggle();}

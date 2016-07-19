@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.uParty;
+import com.ggi.uparty.network.SignUp;
 
 /**
  * @author Emmett
@@ -38,9 +39,9 @@ public class SignUpScreen implements Screen, InputProcessor{
 	
 	public TextField user,email,pass,cpass;
 	
-	public TextButton tos,signUp,back;
+	public TextButton tos,signUp,back,error;
 	
-	public Rectangle userB,emailB,passB,cpassB,tosB,tosBC,signUpB,backB;
+	public Rectangle userB,emailB,passB,cpassB,tosB,tosBC,signUpB,backB,errorB;
 	
 	public String uN="",e="",p="",cp="";
 	
@@ -48,10 +49,11 @@ public class SignUpScreen implements Screen, InputProcessor{
 	
 	public GlyphLayout layout = new GlyphLayout();
 
-	private HomeScreen nextScreen;
+	
 	
 	public SignUpScreen(uParty u){
 		this.u=u;
+		u.nextScreen=null;
 	}
 	
 	/* (non-Javadoc)
@@ -59,7 +61,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 	 */
 	@Override
 	public void show() {
-		
+		u.nextScreen=null;
 		
 		//DIALOG EXAMPLE
 		//MyTextInputListener listener = new MyTextInputListener();
@@ -78,6 +80,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 		tosBC=new Rectangle(.71f*u.w,.276f*u.h,u.h/64,u.h/64);
 		signUpB = new Rectangle(u.w/9,.195f*u.h,7*u.w/9,u.h/16);
 		backB = new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
+		errorB = new Rectangle(u.w/9,.125f*u.h,7*u.w/9,u.h/16);
 		
 		user = new TextField(uN,u.textFieldStyle);
 			user.setMessageText("Username");
@@ -109,6 +112,8 @@ public class SignUpScreen implements Screen, InputProcessor{
 			signUp.setBounds(signUpB.x, signUpB.y, signUpB.width, signUpB.height);
 		back = new TextButton("Back",u.standardButtonStyle);
 			back.setBounds(backB.x, backB.y, backB.width, backB.height);
+		error = new TextButton(u.error,u.errorButtonStyle);
+			error.setBounds(errorB.x, errorB.y, errorB.width, errorB.height);
 			
 			stage.addActor(user);
 			stage.addActor(email);
@@ -123,14 +128,11 @@ public class SignUpScreen implements Screen, InputProcessor{
 	 */
 	@Override
 	public void render(float delta) {
-		if(nextScreen!=null&&nextScreen instanceof HomeScreen){
-			if(fade>.1f){fade+=(0-fade)/2;}
-			if(fade<.5f&&logoMoveAnim>.1f){logoMoveAnim+=(0-logoMoveAnim)/2;}
-			else if(logoMoveAnim<.1f){nextScreen.logoMoveAnim=.55f;u.setScreen(nextScreen);}
+		error.setText(u.error);
+		if(u.myAcc!=null){
+			if(!u.myAcc.confirmed){u.nextScreen=new ConfirmationScreen(u);}
 		}
-		else{
-		if(logoMoveAnim<1f){logoMoveAnim+=(1-logoMoveAnim)/2;}
-		if(logoMoveAnim>.5f&&fade<1){fade+=(1-fade)/2;}}
+		
 		
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -148,12 +150,29 @@ public class SignUpScreen implements Screen, InputProcessor{
 		tosC.draw(pic, fade);
 		signUp.draw(pic, fade);
 		back.draw(pic, fade);
+		error.draw(pic, fade);
 		
 		pic.setColor(1, 1, 1, fade);
 		layout.setText(u.smallFnt, "I agree to the terms of service      ");
 		u.smallFnt.setColor(new Color(.694f,.694f,.694f,fade));
 		u.smallFnt.draw(pic, "I agree to the ", u.w/2-layout.width/2, .29f*u.h);
 		pic.end();
+		
+		if(u.nextScreen!=null){
+			//System.out.println(u.nextScreen);
+			if(u.nextScreen instanceof HomeScreen){
+			HomeScreen hs = (HomeScreen)u.nextScreen;
+			if(fade>.1f){fade+=(0-fade)/2;}
+			if(fade<.5f&&logoMoveAnim>.1f){logoMoveAnim+=(0-logoMoveAnim)/2;}
+			else if(logoMoveAnim<.1f){hs.logoMoveAnim=.55f;u.setScreen(hs);}}
+			else{
+				if(fade>.1f){fade+=(0-fade)/2;}
+				else{u.setScreen(u.nextScreen);}
+			}
+		}
+		else{
+		if(logoMoveAnim<1f){logoMoveAnim+=(1-logoMoveAnim)/2;}
+		if(logoMoveAnim>.5f&&fade<1){fade+=(1-fade)/2;}}
 
 	}
 
@@ -282,9 +301,20 @@ public class SignUpScreen implements Screen, InputProcessor{
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, signUpB)){}
+		if(Intersector.overlaps(touch, signUpB)){
+			if(e.length()>4&&uN.length()>0&&p.length()>0&&p.equals(cp)&&tosC.isChecked()&&e.endsWith(".edu")){
+			SignUp s = new SignUp();
+			s.e=e;
+			s.u=uN;
+			s.p=p;
+			u.send(s);
+			}
+			else{
+				u.error="Please make sure all fields are \nfilled out and your passwords match";
+			}
+		}
 		else if(Intersector.overlaps(touch, tosBC)){tosC.toggle();}
-		else if(Intersector.overlaps(touch, backB)){nextScreen = new HomeScreen(u);}
+		else if(Intersector.overlaps(touch, backB)){u.nextScreen = new HomeScreen(u);}
 		else if(Intersector.overlaps(touch, userB)){stage.setKeyboardFocus(user);}
 		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);}
 		else if(Intersector.overlaps(touch, passB)){stage.setKeyboardFocus(pass);}

@@ -43,11 +43,11 @@ public class HomeScreen implements Screen, InputProcessor{
 
 	private boolean fadeOut = false;
 
-	private Screen nextScreen;
 	
 	
 	public HomeScreen(uParty u){
 		this.u=u;
+		u.nextScreen=null;
 	}
 	
 	/* (non-Javadoc)
@@ -56,6 +56,7 @@ public class HomeScreen implements Screen, InputProcessor{
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this);
+		u.nextScreen=null;
 		u.assets.update();
 		pic = new SpriteBatch();
 		
@@ -76,6 +77,11 @@ public class HomeScreen implements Screen, InputProcessor{
 			u.linkButtonStyle.checkedFontColor = new Color(1,.8f,.2f,1);
 			u.linkButtonStyle.fontColor = u.orange;
 			//u.linkButtonStyle.up=new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/TextField.png", Texture.class)));
+		u.errorButtonStyle = new TextButtonStyle();
+			u.errorButtonStyle.font = u.smallFnt;
+			//u.errorButtonStyle.checkedFontColor = new Color(1,.8f,.2f,1);
+			u.errorButtonStyle.fontColor = Color.RED;
+			//u.errorButtonStyle.up=new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/TextField.png", Texture.class)));
 		u.textFieldStyle = new TextFieldStyle();
 			u.textFieldStyle.font=u.mediumFnt;
 			u.textFieldStyle.fontColor=u.orange;
@@ -103,7 +109,7 @@ public class HomeScreen implements Screen, InputProcessor{
 		if(logoMoveAnim>.4f&&fade<1&&!fadeOut){fade+=(1-fade)/2;}
 		
 		if(fadeOut&&fade>.01f){fade+=(0-fade)/2;}
-		else if(fadeOut){u.setScreen(nextScreen);}
+		else if(fadeOut){u.setScreen(u.nextScreen);}
 		//System.out.println(fade);
 		
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
@@ -202,11 +208,11 @@ public class HomeScreen implements Screen, InputProcessor{
 		toggleOff();
 		if(Intersector.overlaps(touch, loginB)){
 			fadeOut=true;
-			nextScreen=new LoginScreen(u);
+			u.nextScreen=new LoginScreen(u);
 		}
 		else if(Intersector.overlaps(touch, signUpB)){
 			fadeOut =true;
-			nextScreen=new SignUpScreen(u);
+			u.nextScreen=new SignUpScreen(u);
 		}
 		return true;
 	}

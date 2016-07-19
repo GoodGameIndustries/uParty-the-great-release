@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="kryo-2.23.1-SNAPSHOT-all-debug.jar"/>
+	<classpathentry exported="true" kind="lib" path="kryonet-2.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Downloads/javax.mail.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
