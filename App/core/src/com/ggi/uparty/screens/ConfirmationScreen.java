@@ -186,6 +186,7 @@ public class ConfirmationScreen implements Screen, InputProcessor{
 		if(Intersector.overlaps(touch, resendB)){Resend r = new Resend();r.e=u.myAcc.e;u.send(r);u.error="Code has been resent";}
 		else if(Intersector.overlaps(touch, contB)){if((""+u.myAcc.code).equals(codeInput)){
 			Confirm c = new Confirm();c.e=u.myAcc.e;u.myAcc.confirmed=true;u.send(c);
+			u.nextScreen=new MainScreen(u);
 		}
 		else{
 			u.error="Incorrect code";

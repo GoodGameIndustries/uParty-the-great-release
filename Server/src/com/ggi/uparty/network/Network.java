@@ -19,6 +19,11 @@ public class Network {
 		kryo.register(ErrorMessage.class);
 		kryo.register(Confirm.class);
 		kryo.register(Resend.class);
+		kryo.register(Event.class);
+		kryo.register(UpVote.class);
+		kryo.register(DownVote.class);
+		kryo.register(Refresh.class);
+		kryo.register(Date.class);
 	}
 	
 }

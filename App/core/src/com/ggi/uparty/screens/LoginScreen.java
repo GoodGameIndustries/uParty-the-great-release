@@ -112,6 +112,7 @@ public class LoginScreen implements Screen, InputProcessor {
 		
 		if(u.myAcc!=null){
 			if(!u.myAcc.confirmed){u.nextScreen=new ConfirmationScreen(u);}
+			else{u.nextScreen=new MainScreen(u);}
 		}
 		
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
