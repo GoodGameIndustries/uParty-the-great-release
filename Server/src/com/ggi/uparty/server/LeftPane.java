@@ -37,7 +37,8 @@ public class LeftPane extends JPanel{
 			+ "\nUsers Online: "+(u.server!=null?u.server.getConnections().length:0)
 			+ "\nLast Response Time: "+u.lastResponse+" ms"
 			+ "\nTotal Data Points: " + u.world.points.size()
-			+ "\nEvents in Storage: " + u.world.eventsInStorage;
+			+ "\nEvents in Storage: " + u.world.eventsInStorage
+			+ "\nReported Events: " + u.world.reported.size();
 		//System.out.println((instance.totalMemory() - instance.freeMemory()) / mb);
 	}
 

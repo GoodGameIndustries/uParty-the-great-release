@@ -23,6 +23,7 @@ import com.ggi.uparty.network.Event;
 public class World implements Comparator<Datapoint>, Serializable{
 
 	public ArrayList<Datapoint> points = new ArrayList<Datapoint>();
+	public ArrayList<Event> reported = new ArrayList<Event>();
 	public float radius=25f;
 	public float refX=0,refY=0;
 	public int eventsInStorage = 0;

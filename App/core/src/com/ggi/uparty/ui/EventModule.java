@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.network.DownVote;
 import com.ggi.uparty.network.Event;
 import com.ggi.uparty.network.UpVote;
+import com.ggi.uparty.screens.EventScreen;
 
 public class EventModule {
 
@@ -47,7 +48,7 @@ public class EventModule {
 	}
 	
 	private String dateToString(Date d) {
-		String result = d.getMonth()+"/"+d.getDate()+"/"+(d.getYear()+1900);
+		String result = d.getMonth()+1+"/"+d.getDate()+"/"+(d.getYear()+1900);
 		int hour = -1;
 		boolean isPm=false;
 		if(d.getHours()>=12){isPm=true;}
@@ -83,6 +84,7 @@ public class EventModule {
 	}
 
 	public void touch(Rectangle touchDown, Rectangle touchUp) {
+		if(Math.abs(touchDown.x-touchUp.x)<10&&Math.abs(touchDown.y-touchUp.y)<10){
 		if(Intersector.overlaps(touchDown, upB)&&Intersector.overlaps(touchUp, upB)){
 			if(e.downVote.contains(l.s.u.myAcc.e)){e.downVote.remove(l.s.u.myAcc.e);}
 			if(!e.upVote.contains(l.s.u.myAcc.e)){e.upVote.add(l.s.u.myAcc.e);}
@@ -90,6 +92,7 @@ public class EventModule {
 			o.e=l.s.u.myAcc.e;
 			o.ID=e.ID;
 			o.lng=e.lng;o.lat=e.lat;
+			o.group=e.group;
 			l.s.u.send(o);
 		}
 		else if(Intersector.overlaps(touchDown, downB)&&Intersector.overlaps(touchUp, downB)){
@@ -99,9 +102,13 @@ public class EventModule {
 			o.e=l.s.u.myAcc.e;
 			o.ID=e.ID;
 			o.lng=e.lng;o.lat=e.lat;
+			o.group=e.group;
 			l.s.u.send(o);
 		}
-		
+		else{
+			l.s.u.nextScreen=new EventScreen(l.s.u,e,l.s.g);
+		}
+		}
 	}
 	
 }

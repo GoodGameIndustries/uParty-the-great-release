@@ -133,6 +133,10 @@ public class HomeScreen implements Screen, InputProcessor{
 	 */
 	@Override
 	public void render(float delta) {
+		if(u.myAcc!=null){
+			if(!u.myAcc.confirmed){u.setScreen(new ConfirmationScreen(u));}
+			else{u.setScreen(new MainScreen(u));}
+		}
 		if(logoMoveAnim<.55f){logoMoveAnim+=(.55-logoMoveAnim)/2;}
 		if(logoMoveAnim>.4f&&fade<1&&!fadeOut){fade+=(1-fade)/2;}
 		

@@ -260,12 +260,21 @@ public class LoginScreen implements Screen, InputProcessor {
 		toggleOff();
 		
 		if(Intersector.overlaps(touch, backB)){u.nextScreen = new HomeScreen(u);}
-		else if(Intersector.overlaps(touch, forgotB)){}
+		else if(Intersector.overlaps(touch, forgotB)){
+			u.nextScreen=new ForgotScreen(u,null);
+		}
 		else if(Intersector.overlaps(touch, loginB)){
 			if(e.length()>0&&p.length()>0){
 				Login l = new Login();
 					l.e=e;
 					l.p=p;
+					
+					if(remember.isChecked()){
+						u.prefs.putString("email", e);
+						u.prefs.putString("password", p);
+						u.prefs.flush();
+					}
+					
 				u.send(l);}
 			else{u.error="Invalid email or password";}}
 		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);Gdx.input.setOnscreenKeyboardVisible(true);}

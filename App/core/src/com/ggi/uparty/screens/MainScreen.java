@@ -1,8 +1,5 @@
 package com.ggi.uparty.screens;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -11,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.ggi.uparty.uParty;
-import com.ggi.uparty.network.Event;
+import com.ggi.uparty.network.Group;
 import com.ggi.uparty.network.Refresh;
 import com.ggi.uparty.ui.EventList;
 import com.ggi.uparty.ui.PopUpMenu;
@@ -34,6 +31,8 @@ public class MainScreen implements Screen, InputProcessor{
 	public float fade=0;
 	
 	public int lastY;
+	
+	public Group g = null;
 	
 	public Rectangle touchDown;
 	
@@ -97,8 +96,25 @@ public class MainScreen implements Screen, InputProcessor{
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		if(u.needUpdate){
+		if(g!=null){toolbar.feed=g.name;}
+		else{
+			toolbar.feed="";
+		}
+		
+		if(u.needUpdate&&g==null){
 			events.giveEvents(u.events);
+			u.needUpdate=false;
+		}else if(u.needUpdate){
+			boolean gRef = false;
+			for(int i = 0; i < u.myAcc.groups.size();i++){
+				if(g.name.equals(u.myAcc.groups.get(i).name)&&g.owner.equals(u.myAcc.groups.get(i).owner)){
+					g=u.myAcc.groups.get(i);
+					gRef=true;
+					System.out.println("update");
+					events.giveEvents(g.events);
+				}
+			}
+			if(!gRef){g=null;}
 			u.needUpdate=false;
 		}
 		
@@ -181,10 +197,10 @@ public class MainScreen implements Screen, InputProcessor{
 		lastY=0;
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		
-		events.touch(touchDown,touch);
+		if(!menu.open){events.touch(touchDown,touch);}
 		
 		if(touch.overlaps(menu.bounds)){menu.touchUp(touch);}
-		else if(!touch.overlaps(menu.bounds)&&menu.open){menu.open=!menu.open;}
+		else if(!touch.overlaps(menu.bounds)&&menu.open&&!menu.initTouch){menu.open=!menu.open;}
 		else if(touch.overlaps(toolbar.bounds)){toolbar.touchUp(touch);}
 		return true;
 	}
@@ -192,11 +208,15 @@ public class MainScreen implements Screen, InputProcessor{
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		screenY=(int) (u.h-screenY);
+		if(!menu.open){
 		events.scrolled+=screenY-lastY;
 		if(Math.abs(screenY-lastY)>50){events.momentum =screenY-lastY;}else{events.momentum=0;}
 		lastY=screenY;
 		if(events.scrolled>.095f*u.h){events.scrolled=(int) (-.095f*u.h);events.focus++;}
 		if(events.scrolled<-.095f*u.h){events.scrolled=(int) (.095f*u.h);events.focus--;}
+		}else{
+			menu.touchDragged(screenY);
+		}
 		return true;
 	}
 

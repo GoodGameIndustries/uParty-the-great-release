@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.Event;
+import com.ggi.uparty.network.Group;
 import com.ggi.uparty.ui.DateModule;
 
 public class CreateEventScreen implements Screen, InputProcessor{
@@ -46,8 +47,11 @@ public class CreateEventScreen implements Screen, InputProcessor{
 	
 	public GlyphLayout layout = new GlyphLayout();
 	
-	public CreateEventScreen(uParty u){
+	public Group g;
+	
+	public CreateEventScreen(uParty u,Group g){
 		this.u=u;
+		this.g=g;
 	}
 	
 	@Override
@@ -353,22 +357,32 @@ public class CreateEventScreen implements Screen, InputProcessor{
 		if(Intersector.overlaps(touch, backB)){u.nextScreen=new MainScreen(u);}
 		else if(Intersector.overlaps(touch, createB)){
 			if(n.length()>0&&d.length()>0&&l.length()>0&&start.isFilled()&&end.isFilled()){
+				if(d.length()>140){d=d.substring(0, 140);}
+				if(l.length()>140){l=l.substring(0, 140);}
+				
 				Date start = new Date();
-					start.setMonth(Integer.parseInt(this.start.m));
+					start.setMonth(Integer.parseInt(this.start.m)-1);
 					start.setDate(Integer.parseInt(this.start.d));
 					start.setYear(Integer.parseInt(this.start.y)-1900);
 					start.setHours((Integer.parseInt(this.start.hr)%12)+(this.start.isPM?12:0));
 					start.setMinutes(Integer.parseInt(this.start.min));
 				Date end = new Date();
-					end.setMonth(Integer.parseInt(this.end.m));
+					end.setMonth(Integer.parseInt(this.end.m)-1);
 					end.setDate(Integer.parseInt(this.end.d));
 					end.setYear(Integer.parseInt(this.end.y)-1900);
 					end.setHours((Integer.parseInt(this.end.hr)%12)+(this.end.isPM?12:0));
 					end.setMinutes(Integer.parseInt(this.end.min));
 
-				Event event = new Event(u.controller.getLong(),u.controller.getLat(),n,d,l,start,end,u.myAcc);	
+				Event event = new Event(u.controller.getLong(),u.controller.getLat(),n,d,l,start,end,u.myAcc.e,u.myAcc.xp);	
+				if(g!=null){
+					event.group=g.name.replace(" ", "")+g.owner.replace(".", "_").replace("@", "_");
+				}
 				u.send(event);
-				u.nextScreen=new MainScreen(u);
+				
+				MainScreen s = new MainScreen(u);
+				s.g=g;
+				
+				u.nextScreen=s;
 				
 			}else{
 				u.error="Please fill out all fields";

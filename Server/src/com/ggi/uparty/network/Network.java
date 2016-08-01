@@ -24,6 +24,13 @@ public class Network {
 		kryo.register(DownVote.class);
 		kryo.register(Refresh.class);
 		kryo.register(Date.class);
+		kryo.register(Report.class);
+		kryo.register(NewGroup.class);
+		kryo.register(Member.class);
+		kryo.register(Invite.class);
+		kryo.register(LeaveGroup.class);
+		kryo.register(DeleteGroup.class);
+		kryo.register(Forgot.class);
 	}
 	
 }

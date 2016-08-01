@@ -26,14 +26,21 @@ import com.ggi.uparty.data.Datapoint;
 import com.ggi.uparty.data.World;
 import com.ggi.uparty.network.Account;
 import com.ggi.uparty.network.Confirm;
+import com.ggi.uparty.network.DeleteGroup;
 import com.ggi.uparty.network.DownVote;
 import com.ggi.uparty.network.ErrorMessage;
 import com.ggi.uparty.network.Event;
+import com.ggi.uparty.network.Forgot;
 import com.ggi.uparty.network.Friend;
 import com.ggi.uparty.network.Group;
+import com.ggi.uparty.network.Invite;
+import com.ggi.uparty.network.LeaveGroup;
 import com.ggi.uparty.network.Login;
+import com.ggi.uparty.network.Member;
 import com.ggi.uparty.network.Network;
+import com.ggi.uparty.network.NewGroup;
 import com.ggi.uparty.network.Refresh;
+import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.Resend;
 import com.ggi.uparty.network.SignUp;
 import com.ggi.uparty.network.UpVote;
@@ -51,7 +58,7 @@ public class UPServer extends JFrame{
 	
 	public World world;
 
-	private String htmlTemplate="";
+	private String htmlTemplate="",forgotTemplate="";
 
 	public long lastResponse=0;
 	
@@ -83,6 +90,17 @@ public class UPServer extends JFrame{
 		} catch (IOException e) {
 		}
 		htmlTemplate = contentBuilder.toString();
+		
+		try {
+		    BufferedReader in = new BufferedReader(new FileReader("uPartyForgotEmail.html"));
+		    String str;
+		    while ((str = in.readLine()) != null) {
+		        contentBuilder.append(str);
+		    }
+		    in.close();
+		} catch (IOException e) {
+		}
+		forgotTemplate = contentBuilder.toString();
 		
 		
 		Timer timer = new Timer();
@@ -163,6 +181,47 @@ public class UPServer extends JFrame{
 					saveAccount(a);
 				}
 				
+				if(object instanceof Forgot){
+					Forgot o = (Forgot)object;
+					Account a = loadAccount(o.e);
+					
+					try {
+	        			  String msg = forgotTemplate.replace("$password", ""+a.p);
+	        				new SendMailSSL().send(o.e,"uParty Forgot Password",msg);
+	        			} catch (Exception e1) {
+	        				right.printConsole("[Error]-Unable to send email");
+	        			}
+					
+				}
+				
+				if(object instanceof Report){
+					Report o = (Report)object;
+					if(o.group.length()>0){
+						Group g = loadGroup(o.group);
+						ArrayList<Event> events = g.events;
+						for(int i =0; i < events.size();i++){
+							Event e = events.get(i);
+							if(e.ID.equals(o.ID)){
+								e.reporters.add(o.e);
+								if(!world.reported.contains(e)){world.reported.add(e);}
+							}
+						}
+					saveWorld(world);
+					saveGroup(g);
+					}
+					else{
+					ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
+						for(int i =0; i < events.size();i++){
+							Event e = events.get(i);
+							if(e.ID.equals(o.ID)){
+								e.reporters.add(o.e);
+								if(!world.reported.contains(e)){world.reported.add(e);}
+							}
+						}
+					saveWorld(world);
+					}
+				}
+				
 				if(object instanceof Resend){
 					Resend o = (Resend)object;
 					Account a = loadAccount(o.e);
@@ -174,43 +233,143 @@ public class UPServer extends JFrame{
 	        			}
 				}
 				
-				if(object instanceof Confirm){
-					Confirm o = (Confirm)object;
-					Account a = loadAccount(o.e);
-					a.confirmed=true;
+				if(object instanceof NewGroup){
+					NewGroup o = (NewGroup)object;
+					Group g = new Group();
+					g.owner=o.owner;
+					g.name=o.name;
+					
+					Account a =loadAccount(g.owner);
+					
+					Member m = new Member();
+					m.e=a.e;
+					m.u=a.u;
+					m.xp=a.xp;
+					m.rank=2;
+					g.members.add(m);
+					a.groups.add(g);
 					saveAccount(a);
+					saveGroup(g);
+					sendGroup(connection,g);
 				}
 				
 				if(object instanceof Event){
 					Event o = (Event)object;
+					if(o.group.length()==0){
 					world.addToClosest(o);
 					saveWorld(world);
+					}else{
+						Group g = loadGroup(o.group);
+						g.events.add(o);
+						saveGroup(g);
+					}
+					
+					giveXp(o.owner,2);
+					
+				}
+				
+				if(object instanceof DeleteGroup){
+					DeleteGroup o = (DeleteGroup)object;
+					File f = new File(path+"Groups\\"+o.group+".uPGroup");
+					f.delete();
+					
+				}
+				
+				if(object instanceof LeaveGroup){
+					LeaveGroup o = (LeaveGroup)object;
+					Group g = loadGroup(o.group);
+					for(int i = 0; i < g.members.size(); i++){
+						if(g.members.get(i).e.equals(o.e)){
+							g.members.remove(i);
+						}
+					}
+					saveGroup(g);
+					
+					Account a = loadAccount(o.e);
+					a.groups.remove(g);
+					saveAccount(a);
+					
+				}
+				
+				if(object instanceof Invite){
+					Invite o = (Invite)object;
+					Group g = loadGroup(o.group);
+					Account a = loadAccount(o.e);
+					if(a!=null){
+					Member m = new Member();
+					m.e=a.e;m.u=a.u;m.xp=a.xp;
+					if(!g.members.contains(m)){
+					a.groups.add(g);
+					g.members.add(m);
+					}
+					saveGroup(g);
+					saveAccount(a);
+					}
 				}
 				
 				if(object instanceof UpVote){
 					UpVote o = (UpVote)object;
+					if(o.group.length()>0){
+						Group g = loadGroup(o.group);
+						ArrayList<Event> events = g.events;
+						for(int i = 0; i < events.size();i++){
+							if(events.get(i).ID.equals(o.ID)){
+								Event e = events.get(i);
+								if(!e.downVote.contains(o.e)&&!e.upVote.contains(o.e)){giveXp(o.e,1);}
+								
+								if(e.downVote.contains(o.e)){e.downVote.remove(o.e);giveXp(e.owner,1);}
+								if(!e.upVote.contains(o.e)){e.upVote.add(o.e);giveXp(e.owner,1);}
+							}
+						}
+						saveGroup(g);
+					}
+					else{
 					ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
 					for(int i = 0; i < events.size();i++){
 						if(events.get(i).ID.equals(o.ID)){
 							Event e = events.get(i);
-							if(e.downVote.contains(o.e)){e.downVote.remove(o.e);}
-							if(!e.upVote.contains(o.e)){e.upVote.add(o.e);}
+							if(!e.downVote.contains(o.e)&&!e.upVote.contains(o.e)){giveXp(o.e,1);}
+							
+							if(e.downVote.contains(o.e)){e.downVote.remove(o.e);giveXp(e.owner,1);}
+							if(!e.upVote.contains(o.e)){e.upVote.add(o.e);giveXp(e.owner,1);}
 						}
 					}
+					
 					saveWorld(world);
+					}
 				}
 				
 				if(object instanceof DownVote){
 					DownVote o = (DownVote)object;
+					if(o.group.length()>0){
+						Group g = loadGroup(o.group);
+						ArrayList<Event> events = g.events;
+						
+						for(int i = 0; i < events.size();i++){
+							if(events.get(i).ID.equals(o.ID)){
+								Event e = events.get(i);
+								if(!e.downVote.contains(o.e)&&!e.upVote.contains(o.e)){giveXp(o.e,1);}
+								
+								if(!e.downVote.contains(o.e)){e.downVote.add(o.e);giveXp(e.owner,-1);}
+								if(e.upVote.contains(o.e)){e.upVote.remove(o.e);giveXp(e.owner,-1);}
+							}
+						}
+						saveGroup(g);
+					}
+					else{
 					ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
 					for(int i = 0; i < events.size();i++){
 						if(events.get(i).ID.equals(o.ID)){
 							Event e = events.get(i);
-							if(!e.downVote.contains(o.e)){e.downVote.add(o.e);}
-							if(e.upVote.contains(o.e)){e.upVote.remove(o.e);}
+							if(!e.downVote.contains(o.e)&&!e.upVote.contains(o.e)){giveXp(o.e,1);}
+							
+							if(!e.downVote.contains(o.e)){e.downVote.add(o.e);giveXp(e.owner,-1);}
+							if(e.upVote.contains(o.e)){e.upVote.remove(o.e);giveXp(e.owner,-1);}
 						}
 					}
+					
 					saveWorld(world);
+					}
 				}
 				
 				
@@ -219,11 +378,10 @@ public class UPServer extends JFrame{
 					ArrayList<Event> events = new ArrayList<Event>();
 					ArrayList<Datapoint> points = world.getAround(o.lat, o.lng);
 					Date d = new Date();
-						d.setDate(d.getDate()+1);
 					for(Datapoint p:points){
 						for(int i = 0; i < p.events.size();i++){
 							if(p.events.get(i).end.before(d)||p.events.get(i).upVote.size()-p.events.get(i).downVote.size()<-5){p.events.remove(i);world.eventsInStorage--;}
-							else{events.add(p.events.get(i));}
+							else {events.add(p.events.get(i));}
 						}
 					}
 					saveWorld(world);
@@ -238,6 +396,14 @@ public class UPServer extends JFrame{
 				
 			 lastResponse = System.currentTimeMillis()-startTime;}
 
+			private void giveXp(String e, int i) {
+				Account a = loadAccount(e);
+				a.xp+=i;
+				if(a.xp<5)a.xp=5;
+				saveAccount(a);
+				
+			}
+
 			private void sendAccount(Connection c,Account a) {
 				Account n = new Account();
 				n.u=a.u;n.e=a.e;n.p=a.p;n.xp=a.xp;n.code=a.code;n.confirmed=a.confirmed;
@@ -247,26 +413,69 @@ public class UPServer extends JFrame{
 					c.sendTCP(f);
 				}
 				
-				for(Group g:a.groups){
-					c.sendTCP(g);
+				for(int i = 0; i < a.groups.size(); i++){
+					Group g = a.groups.get(i);
+					boolean sent = false;
+					Group g2=loadGroup(g.name.replace(" ", "")+g.owner.replace(".", "_").replace("@", "_"));
+					if(g2!=null){
+						
+						for(int j = 0; j < g2.members.size();j++){
+							if(g2.members.get(j).e.equals(a.e)){
+								sent=true;
+							sendGroup(c,g2);
+							g=g2;
+							}
+						}
+					}else{
+						a.groups.remove(i);sent=true;
+					}
+				if(!sent){a.groups.remove(i);}
+				}
+				saveAccount(a);
+				
+			}
+			
+			private void sendGroup(Connection c,Group g) {
+				Group n = new Group();
+				n.name=g.name;
+				n.owner=g.owner;
+				c.sendTCP(n);
+				
+				for(Event e: g.events){
+					//e.group=g.name.replace(" ", "")+g.owner.replace(".", "_").replace("@", "_");
+					sendEvent(c,e);
+				}
+				
+				for(Member m:g.members){
+					c.sendTCP(m);
 				}
 				
 			}
 
 			private void sendEvent(Connection connection,Event e) {
-				Event s = new Event(e.lng,e.lat,e.name,e.description,e.location,e.start,e.end,e.owner);
+				Event s = new Event(e.lng,e.lat,e.name,e.description,e.location,e.start,e.end,e.owner,e.ownerXp);
+				s.group=e.group;
 				s.posted=e.posted;
 				connection.sendTCP(s);
 				for(String a:e.upVote){
 					UpVote u = new UpVote();
 					u.e=a;
 					u.ID=s.ID;
+					u.group=e.group;
 				connection.sendTCP(u);
 				}
 				for(String a:e.downVote){
 					DownVote u = new DownVote();
 					u.e=a;
 					u.ID=s.ID;
+					u.group=e.group;
+					connection.sendTCP(u);
+				}
+				for(String a:e.reporters){
+					Report u = new Report();
+					u.e=a;
+					u.ID=s.ID;
+					u.group=e.group;
 					connection.sendTCP(u);
 				}
 			}
@@ -275,6 +484,7 @@ public class UPServer extends JFrame{
 	}
 
 	public void saveAccount(Account a){
+		
 		String loc = a.e;
 		 String dir="";
 		 //System.out.println(a.e);
@@ -359,6 +569,42 @@ public class UPServer extends JFrame{
 			result = new World();
 			result.init();
 			saveWorld(result);
+		}
+		
+		}catch(Exception e){
+			
+		//right.printConsole("[Error]-World load error");
+		}
+		return result;
+	}
+	
+	public void saveGroup(Group g){
+		File directory = new File(path+"Groups\\");
+		if(!directory.exists()){directory.mkdir();}
+		File f = new File(path+"Groups\\"+g.name.replace(" ", "")+g.owner.replace(".", "_").replace("@", "_")+".uPGroup");
+		
+		try{
+			FileOutputStream fos = new FileOutputStream(f);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(g);
+			oos.close();
+		}catch(Exception e){
+			e.printStackTrace();
+			right.printConsole("[Error]-Group save error");
+		}
+	}
+	
+	public Group loadGroup(String id){
+		Group result = null;
+		try{
+		File f = new File(path+"Groups\\"+id+".uPGroup");
+		
+		if(f.exists()){
+			FileInputStream fis = new FileInputStream(f);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			result = (Group) ois.readObject();
+			ois.close();
+			
 		}
 		
 		}catch(Exception e){

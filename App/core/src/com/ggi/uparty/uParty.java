@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -27,10 +28,13 @@ import com.ggi.uparty.network.ErrorMessage;
 import com.ggi.uparty.network.Event;
 import com.ggi.uparty.network.Friend;
 import com.ggi.uparty.network.Group;
+import com.ggi.uparty.network.Member;
 import com.ggi.uparty.network.Network;
 import com.ggi.uparty.network.Refresh;
+import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.UpVote;
 import com.ggi.uparty.screens.LoadScreen;
+import com.ggi.uparty.screens.NewGroupScreen;
 
 public class uParty extends Game {
 	
@@ -59,6 +63,8 @@ public class uParty extends Game {
 	
 	public Account myAcc;
 	
+	public Preferences prefs;
+	
 	/**Colors*/
 	public Color orange = new Color(247f/255f,148f/255f,29f/255f,1f);
 	public Color dark = new Color(.05f,.05f,.05f,1);
@@ -77,6 +83,10 @@ public class uParty extends Game {
 
 	public boolean needUpdate = false;
 	
+	public boolean accRefresh = false;
+
+	public boolean logout=false;
+	
 	public uParty(NativeController controller){
 		this.controller=controller;
 	}
@@ -84,10 +94,12 @@ public class uParty extends Game {
 	@Override
 	public void create () {
 		load();
+		prefs = Gdx.app.getPreferences("My Preferences");
 		createClient();
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
 		setScreen(new LoadScreen(this));
+		
 		
 	}
 
@@ -104,6 +116,7 @@ public class uParty extends Game {
 		assets.load("UI/Toolbar.png", Texture.class);
 		assets.load("Logos/512.png", Texture.class);
 		assets.load("UI/PopUpMenu.png", Texture.class);
+		assets.load("UI/PopUpMenuBottom.png", Texture.class);
 		assets.load("UI/SlideUp.png",Texture.class);
 		assets.load("UI/SlideDown.png", Texture.class);
 		assets.load("UI/SlideUpChecked.png",Texture.class);
@@ -156,6 +169,12 @@ public class uParty extends Game {
 				if(object instanceof Account){
 					Account o = (Account)object;
 					myAcc=o;
+					accRefresh=true;
+				}
+				
+				if(object instanceof Member){
+					Member o = (Member)object;
+					myAcc.groups.get(myAcc.groups.size()-1).members.add(o);
 				}
 				
 				if(object instanceof Friend){
@@ -166,6 +185,10 @@ public class uParty extends Game {
 				if(object instanceof Group){
 					Group o = (Group)object;
 					myAcc.groups.add(o);
+					if(getScreen() instanceof NewGroupScreen){
+						NewGroupScreen s = (NewGroupScreen)getScreen();
+						s.created=true;
+					}
 				}
 				
 				if(object instanceof Event){
@@ -174,24 +197,76 @@ public class uParty extends Game {
 					Date d = new Date();
 					Event o = (Event)object;
 					if(o.end.after(d)){
-						events.add(o);
+						//System.out.println(o.end.getTime()-d.getTime());
+						System.out.println("Group: "+o.group);
+						if(o.group.length()>0){
+							myAcc.groups.get(myAcc.groups.size()-1).events.add(o);
+						}else{
+						events.add(o);}
 					}
 				}
 				
 				if(object instanceof UpVote){
 					System.out.println("Recieved upVote");
 					UpVote o = (UpVote)object;
-						
-						events.get(events.size()-1).upVote.add(o.e);System.out.println("Added");
-					
+					if(o.group.length()>0){
+						Event e = myAcc.groups.get(myAcc.groups.size()-1).events.get(myAcc.groups.get(myAcc.groups.size()-1).events.size()-1);
+						if(e.ID.equals(o.ID)){
+							e.upVote.add(o.e);
+						}
+					}
+					else{
+					if(events.size()>0){
+						Event e = events.get(events.size()-1);
+						if(e.ID.equals(o.ID)){
+						e.upVote.add(o.e);System.out.println("Added");
+						}
+					}
+					}
 				}
 				
 				if(object instanceof DownVote){
 					System.out.println("Recieved downVote");
 					DownVote o = (DownVote)object;
-						
-						events.get(events.size()-1).downVote.add(o.e);System.out.println("Added");
 					
+					if(o.group.length()>0){
+						Event e = myAcc.groups.get(myAcc.groups.size()-1).events.get(myAcc.groups.get(myAcc.groups.size()-1).events.size()-1);
+						if(e.ID.equals(o.ID)){
+							e.downVote.add(o.e);
+						}
+					}
+					else{
+					if(events.size()>0){
+						Event e = events.get(events.size()-1);
+						if(e.ID.equals(o.ID)){
+						e.downVote.add(o.e);System.out.println("Added");
+						}
+					}
+					}
+				}
+				
+				if(object instanceof Report){
+					System.out.println("Recieved Report");
+					Report o = (Report)object;
+					
+					if(o.group.length()>0){
+						Event e = myAcc.groups.get(myAcc.groups.size()-1).events.get(myAcc.groups.get(myAcc.groups.size()-1).events.size()-1);
+						if(e.ID.equals(o.ID)){
+							if(o.e.equals(myAcc.e)){
+							myAcc.groups.get(myAcc.groups.size()-1).events.remove(e);
+							}
+							}
+					}
+					else{
+					if(events.size()>0){
+						Event e = events.get(events.size()-1);
+						if(e.ID.equals(o.ID)){
+						if(o.e.equals(myAcc.e)){
+							events.remove(events.size()-1);
+						}
+						}
+					}
+					}
 				}
 				
 				if(object instanceof Refresh){
@@ -226,7 +301,8 @@ public class uParty extends Game {
 				client.connect(5000, debug ?"localhost":"52.89.96.208", 36693);
 				Network.register(client);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				error="Cannot connect to server.\nMake sure your app is up to date\nand try again soon.";
+				
 				e.printStackTrace();
 			}
 		}
@@ -242,7 +318,6 @@ public class uParty extends Game {
 				client.sendTCP(o);
 				noSend=false;
 			}catch (Exception e){
-				error="Cannot connect to server";
 				connect();
 			}
 		}

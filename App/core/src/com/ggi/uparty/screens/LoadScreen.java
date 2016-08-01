@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.ggi.uparty.uParty;
+import com.ggi.uparty.network.Login;
 import com.ggi.uparty.ui.RadialSprite;
 
 /**
@@ -44,6 +44,15 @@ public class LoadScreen implements Screen {
 		pic = new SpriteBatch();
 		u.loadFonts();
 		
+		if(!u.logout){
+		Login l = new Login();
+		l.e=u.prefs.getString("email", "");
+		l.p=u.prefs.getString("password","");
+		if(l.e.length()>0&&l.p.length()>0){
+			u.send(l);
+		}
+		}
+		//System.out.println(l.e+":"+l.p);
 		
 
 	}
@@ -54,6 +63,8 @@ public class LoadScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		u.assets.update();
+		
+		
 		
 		i++;
 		angle = (u.assets.getLoadedAssets()/(float)(u.assets.getLoadedAssets()+u.assets.getQueuedAssets()))*360f;
@@ -76,6 +87,7 @@ public class LoadScreen implements Screen {
 		}
 
 		if(i>50&&u.assets.update()){
+			
 			u.setScreen(new HomeScreen(u));
 		}
 		

@@ -59,6 +59,9 @@ public class Toolbar {
 		if(!(feed.length()>0)){
 		pic.setColor(1, 1, 1, fade);
 		pic.draw(logo,bounds.x+.5f*bounds.width-.15f*bounds.height,bounds.y+.55f*bounds.height,.3f*bounds.height,.3f*bounds.height);
+		}else{
+			layout.setText(s.u.mediumFnt, feed);
+			s.u.mediumFnt.draw(pic, feed, bounds.width/2-layout.width/2, .87f*bounds.height-layout.height/2+bounds.y);
 		}
 		hot.draw(pic, fade);
 		next.draw(pic, fade);
