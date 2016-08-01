@@ -1,10 +1,12 @@
 package com.ggi.uparty;
 
-import android.os.Bundle;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.ggi.uparty.uParty;
+
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Bundle;
 
 public class AndroidLauncher extends AndroidApplication implements NativeController{
 	@Override
@@ -16,13 +18,15 @@ public class AndroidLauncher extends AndroidApplication implements NativeControl
 
 	@Override
 	public float getLong() {
-		// TODO Auto-generated method stub
-		return 0;
+		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		return (float) location.getLongitude();
 	}
 
 	@Override
 	public float getLat() {
-		// TODO Auto-generated method stub
-		return 0;
+		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE); 
+		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		return (float) location.getLatitude();
 	}
 }

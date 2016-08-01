@@ -35,7 +35,9 @@ public class EventList {
 	
 	public void giveEvents(ArrayList<Event> evs){
 		modules.clear();
-		this.evs=evs;
+		this.evs.clear();
+		this.evs.addAll(evs);
+		System.out.println(this.evs.size());
 		focus=0;
 		
 		for(Event e:evs){

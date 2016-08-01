@@ -245,7 +245,12 @@ public class EventScreen implements Screen, InputProcessor{
 		screenY = (int) (u.h-screenY);
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		toggleOff();
-		if(Intersector.overlaps(touch, backB)){u.nextScreen=new MainScreen(u);}
+		if(Intersector.overlaps(touch, backB)){
+			MainScreen s = new MainScreen(u);
+			s.g=g;
+			
+			u.nextScreen=s;
+		}
 		else if(Intersector.overlaps(touch, reportB)){
 			Report r = new Report();
 			r.ID=e.ID;

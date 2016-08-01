@@ -234,6 +234,7 @@ public class MainScreen implements Screen, InputProcessor{
 
 	
 	public void refresh(){
+		u.events.clear();
 		Refresh r = new Refresh();
 		r.e=u.myAcc.e;
 		r.lat=u.controller.getLat();r.lng=u.controller.getLong();

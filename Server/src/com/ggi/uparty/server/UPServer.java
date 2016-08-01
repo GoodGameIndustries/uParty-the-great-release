@@ -51,8 +51,8 @@ public class UPServer extends JFrame{
 	
 	public Server server;
 	
-	private boolean debug = true;
-	private String path = debug?"D:\\profiles\\":"C:\\Users\\Administrator\\Google Drive\\uParty\\profiles\\";
+	private boolean debug = false;
+	private String path = debug?"D:\\profiles\\":"C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
 	private RightPane right;
 	private LeftPane left;
 	
@@ -61,6 +61,8 @@ public class UPServer extends JFrame{
 	private String htmlTemplate="",forgotTemplate="";
 
 	public long lastResponse=0;
+
+	public boolean newReport=true;
 	
 	public UPServer(){
 		world = loadWorld();
@@ -122,7 +124,7 @@ public class UPServer extends JFrame{
 		server = new Server();
 		server.start();
 		try {
-			server.bind(36693);
+			server.bind(36694);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -195,6 +197,7 @@ public class UPServer extends JFrame{
 				}
 				
 				if(object instanceof Report){
+					newReport=true;
 					Report o = (Report)object;
 					if(o.group.length()>0){
 						Group g = loadGroup(o.group);
@@ -250,7 +253,7 @@ public class UPServer extends JFrame{
 					a.groups.add(g);
 					saveAccount(a);
 					saveGroup(g);
-					sendGroup(connection,g);
+					sendGroup(connection,g,g.owner);
 				}
 				
 				if(object instanceof Event){
@@ -386,7 +389,7 @@ public class UPServer extends JFrame{
 					}
 					saveWorld(world);
 					for(Event e:events){
-						sendEvent(connection,e);
+						sendEvent(connection,e,o.e);
 					}
 					
 					sendAccount(connection,loadAccount(o.e));
@@ -422,7 +425,7 @@ public class UPServer extends JFrame{
 						for(int j = 0; j < g2.members.size();j++){
 							if(g2.members.get(j).e.equals(a.e)){
 								sent=true;
-							sendGroup(c,g2);
+							sendGroup(c,g2,a.e);
 							g=g2;
 							}
 						}
@@ -435,15 +438,18 @@ public class UPServer extends JFrame{
 				
 			}
 			
-			private void sendGroup(Connection c,Group g) {
+			private void sendGroup(Connection c,Group g,String email) {
 				Group n = new Group();
 				n.name=g.name;
 				n.owner=g.owner;
 				c.sendTCP(n);
 				
-				for(Event e: g.events){
-					//e.group=g.name.replace(" ", "")+g.owner.replace(".", "_").replace("@", "_");
-					sendEvent(c,e);
+				for(int i = 0; i < g.events.size(); i++){
+					Event e = g.events.get(i);
+					Date d = new Date();
+					if(e.end.before(d)||e.upVote.size()-e.downVote.size()<-5){g.events.remove(e);}
+					else{
+					sendEvent(c,e,email);}
 				}
 				
 				for(Member m:g.members){
@@ -452,10 +458,11 @@ public class UPServer extends JFrame{
 				
 			}
 
-			private void sendEvent(Connection connection,Event e) {
+			private void sendEvent(Connection connection,Event e,String email) {
 				Event s = new Event(e.lng,e.lat,e.name,e.description,e.location,e.start,e.end,e.owner,e.ownerXp);
 				s.group=e.group;
 				s.posted=e.posted;
+				if(!e.reporters.contains(email)){
 				connection.sendTCP(s);
 				for(String a:e.upVote){
 					UpVote u = new UpVote();
@@ -471,13 +478,15 @@ public class UPServer extends JFrame{
 					u.group=e.group;
 					connection.sendTCP(u);
 				}
-				for(String a:e.reporters){
+				
+				/*for(String a:e.reporters){
 					Report u = new Report();
 					u.e=a;
 					u.ID=s.ID;
 					u.group=e.group;
 					connection.sendTCP(u);
-				}
+				}*/
+			}
 			}
 			 }));
 		
@@ -616,6 +625,31 @@ public class UPServer extends JFrame{
 	
 	public static void main(String[] args){
 		new UPServer();
+	}
+
+	public void removeEvent(Event e) {
+		if(e.group.length()>0){
+			Group group = loadGroup(e.group);
+			for(int i = 0; i < group.events.size(); i++){
+				if(group.events.get(i).ID.equals(e.ID)){
+					group.events.remove(i);
+				}
+			}
+			saveGroup(group);
+		}else{
+			ArrayList<Event> evs = world.getAround(e.lat, e.lng).get(0).events;
+			for(int i = 0; i < evs.size();i++){
+				if(evs.get(i).ID.equals(e.ID)){
+					evs.remove(i);
+					world.eventsInStorage--;
+				}
+				
+			}
+		}
+		
+		saveWorld(world);
+		
+		
 	}
 	
 }

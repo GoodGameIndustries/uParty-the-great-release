@@ -3,6 +3,7 @@ package com.ggi.uparty.server;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ScrollPane;
 import java.util.Date;
 
 import javax.swing.JPanel;
@@ -15,6 +16,8 @@ public class LeftPane extends JPanel{
 	public String sts="";
 	public int mb = 1024*1024;
 	
+	public ScrollPane scroll = new ScrollPane();
+	
 	public LeftPane(UPServer u){
 		this.u=u;
 		this.setBackground(Color.black);
@@ -25,8 +28,13 @@ public class LeftPane extends JPanel{
 		stats.setForeground(Color.orange);
 		stats.setSize(400, 200);
 		
+		scroll.setBackground(Color.black);
+		scroll.setForeground(Color.orange);
+		scroll.setSize(400, 200);
+		
 		this.setLayout(new BorderLayout());
 		this.add(stats,BorderLayout.NORTH);
+		this.add(scroll,BorderLayout.SOUTH);
 	}
 	
 	private void buildStats(){
@@ -47,5 +55,15 @@ public class LeftPane extends JPanel{
 		if(stats!=null){
 			buildStats();
 		stats.setText(sts);}
+		
+		if(scroll!=null&&u.newReport){
+		scroll.removeAll();
+		GridPanel g = new GridPanel();
+		for(int i = 0; i <u.world.reported.size();i++){
+			g.add(new ReportPane(this,u.world.reported.get(i)));
+		}
+		scroll.add(g);
+		u.newReport=false;
+		}
 	}
 }

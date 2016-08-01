@@ -320,7 +320,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);}
 		else if(Intersector.overlaps(touch, passB)){stage.setKeyboardFocus(pass);}
 		else if(Intersector.overlaps(touch, cpassB)){stage.setKeyboardFocus(cpass);}
-		else if(Intersector.overlaps(touch, tosB)){}
+		else if(Intersector.overlaps(touch, tosB)){Gdx.net.openURI("http://upartyapp.com/terms-and-conditions/");}
 		
 		return true;
 	}

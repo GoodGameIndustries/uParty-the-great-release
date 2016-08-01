@@ -193,7 +193,7 @@ public class uParty extends Game {
 				
 				if(object instanceof Event){
 					System.out.println("Event Recieved");
-					if(!refreshing){refreshing = true;events.clear();}
+					if(!refreshing){refreshing = true;events.clear();System.out.println(events.size());}
 					Date d = new Date();
 					Event o = (Event)object;
 					if(o.end.after(d)){
@@ -272,6 +272,7 @@ public class uParty extends Game {
 				if(object instanceof Refresh){
 					refreshing=false;
 					needUpdate =true;
+					System.out.println(events.size());
 				}
 			}
 
@@ -298,7 +299,7 @@ public class uParty extends Game {
 			try {
 				
 				client.start();
-				client.connect(5000, debug ?"localhost":"52.89.96.208", 36693);
+				client.connect(5000, debug ?"localhost":"52.89.96.208", 36694);
 				Network.register(client);
 			} catch (IOException e) {
 				error="Cannot connect to server.\nMake sure your app is up to date\nand try again soon.";
