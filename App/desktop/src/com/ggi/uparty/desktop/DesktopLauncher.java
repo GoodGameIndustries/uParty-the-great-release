@@ -20,12 +20,12 @@ public class DesktopLauncher implements NativeController {
 	@Override
 	public float getLong() {
 		// TODO Auto-generated method stub
-		return 28.09003f;
+		return -84.23030830f;
 	}
 
 	@Override
 	public float getLat() {
 		// TODO Auto-generated method stub
-		return -119.401436f;
+		return 34.11953680f;
 	}
 }

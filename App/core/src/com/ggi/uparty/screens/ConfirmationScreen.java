@@ -192,11 +192,12 @@ public class ConfirmationScreen implements Screen, InputProcessor{
 			u.error="Incorrect code";
 		}
 		}
-		else if(Intersector.overlaps(touch, codeFieldB)){stage.setKeyboardFocus(codeField);}
+		else if(Intersector.overlaps(touch, codeFieldB)){stage.setKeyboardFocus(codeField);Gdx.input.setOnscreenKeyboardVisible(true);}
 		return true;
 	}
 
 	private void toggleOff() {
+		Gdx.input.setOnscreenKeyboardVisible(false);
 		stage.setKeyboardFocus(null);
 		if(cont.isChecked()){cont.toggle();}
 		if(resend.isChecked()){resend.toggle();}

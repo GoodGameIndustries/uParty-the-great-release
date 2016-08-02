@@ -255,9 +255,11 @@ public class EventScreen implements Screen, InputProcessor{
 			Report r = new Report();
 			r.ID=e.ID;
 			r.lat=e.lat;
+			r.lng=e.lng;
 			r.e=u.myAcc.e;
 			r.group=e.group;
 			u.send(r);
+			System.out.println("Report sent");
 			MainScreen s = new MainScreen(u);
 			s.g=g;
 			

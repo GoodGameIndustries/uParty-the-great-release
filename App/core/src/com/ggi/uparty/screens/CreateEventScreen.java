@@ -49,6 +49,8 @@ public class CreateEventScreen implements Screen, InputProcessor{
 	
 	public Group g;
 	
+	public float scr = 0;
+	
 	public CreateEventScreen(uParty u,Group g){
 		this.u=u;
 		this.g=g;
@@ -137,14 +139,14 @@ public class CreateEventScreen implements Screen, InputProcessor{
 		
 		u.largeFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
 		layout.setText(u.largeFnt, "New Event");
-		u.largeFnt.draw(pic, "New Event", u.w/2-layout.width/2, .9f*u.h-layout.height/2);
+		u.largeFnt.draw(pic, "New Event", u.w/2-layout.width/2, .9f*u.h-layout.height/2+scr);
 		
 		u.mediumFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
 		layout.setText(u.mediumFnt, "Start Date:");
-		u.mediumFnt.draw(pic, "Start Date:", u.w/2-layout.width/2, .745f*u.h-layout.height/2);
+		u.mediumFnt.draw(pic, "Start Date:", u.w/2-layout.width/2, .745f*u.h-layout.height/2+scr);
 		
 		layout.setText(u.mediumFnt, "End Date:");
-		u.mediumFnt.draw(pic, "End Date:", u.w/2-layout.width/2, .64f*u.h-layout.height/2);
+		u.mediumFnt.draw(pic, "End Date:", u.w/2-layout.width/2, .64f*u.h-layout.height/2+scr);
 		
 		error.setText(u.error);
 		
@@ -389,31 +391,35 @@ public class CreateEventScreen implements Screen, InputProcessor{
 			}
 			
 		}
-		else if(Intersector.overlaps(touch, nameB)){stage.setKeyboardFocus(name);}
-		else if(Intersector.overlaps(touch, descriptionB)){stage.setKeyboardFocus(description);}
-		else if(Intersector.overlaps(touch, locationB)){stage.setKeyboardFocus(location);}
+		else if(Intersector.overlaps(touch, nameB)){stage.setKeyboardFocus(name);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, descriptionB)){stage.setKeyboardFocus(description);Gdx.input.setOnscreenKeyboardVisible(true);scr=.07f*u.h;}
+		else if(Intersector.overlaps(touch, locationB)){stage.setKeyboardFocus(location);Gdx.input.setOnscreenKeyboardVisible(true);scr=.24f*u.h;}
 		
 		/**start date*/
-		else if(Intersector.overlaps(touch, start.monthB)){start.m="";stage.setKeyboardFocus(start.month);}
-		else if(Intersector.overlaps(touch, start.dayB)){start.d="";stage.setKeyboardFocus(start.day);}
-		else if(Intersector.overlaps(touch, start.yearB)){start.y="";stage.setKeyboardFocus(start.year);}
-		else if(Intersector.overlaps(touch, start.hourB)){start.hr="";stage.setKeyboardFocus(start.hour);}
-		else if(Intersector.overlaps(touch, start.minuteB)){start.min="";stage.setKeyboardFocus(start.minute);}
+		else if(Intersector.overlaps(touch, start.monthB)){start.m="";stage.setKeyboardFocus(start.month);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, start.dayB)){start.d="";stage.setKeyboardFocus(start.day);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, start.yearB)){start.y="";stage.setKeyboardFocus(start.year);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, start.hourB)){start.hr="";stage.setKeyboardFocus(start.hour);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, start.minuteB)){start.min="";stage.setKeyboardFocus(start.minute);Gdx.input.setOnscreenKeyboardVisible(true);}
 		else if(Intersector.overlaps(touch, start.halfB)){start.isPM=!start.isPM;}
 		
 		
 		/**end date*/
-		else if(Intersector.overlaps(touch, end.monthB)){end.m="";stage.setKeyboardFocus(end.month);}
-		else if(Intersector.overlaps(touch, end.dayB)){end.d="";stage.setKeyboardFocus(end.day);}
-		else if(Intersector.overlaps(touch, end.yearB)){end.y="";stage.setKeyboardFocus(end.year);}
-		else if(Intersector.overlaps(touch, end.hourB)){end.hr="";stage.setKeyboardFocus(end.hour);}
-		else if(Intersector.overlaps(touch, end.minuteB)){end.min="";stage.setKeyboardFocus(end.minute);}
+		else if(Intersector.overlaps(touch, end.monthB)){end.m="";stage.setKeyboardFocus(end.month);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, end.dayB)){end.d="";stage.setKeyboardFocus(end.day);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, end.yearB)){end.y="";stage.setKeyboardFocus(end.year);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, end.hourB)){end.hr="";stage.setKeyboardFocus(end.hour);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, end.minuteB)){end.min="";stage.setKeyboardFocus(end.minute);Gdx.input.setOnscreenKeyboardVisible(true);}
 		else if(Intersector.overlaps(touch, end.halfB)){end.isPM=!end.isPM;}
+		
+		setB();
 		
 		return true;
 	}
 	
 	public void toggleOff(){
+		scr=0;
+		Gdx.input.setOnscreenKeyboardVisible(false);
 		stage.setKeyboardFocus(null);
 		if(back.isChecked()){back.toggle();}
 		if(create.isChecked()){create.toggle();}
@@ -438,4 +444,28 @@ public class CreateEventScreen implements Screen, InputProcessor{
 		return false;
 	}
 
+	public void setB(){
+		nameB = new Rectangle(2*u.w/9,.75f*u.h+scr,5*u.w/9,u.h/16);
+		createB = new Rectangle(2*u.w/9,.11f*u.h+scr,5*u.w/9,u.h/16);
+		descriptionB = new Rectangle(u.w/9,.38f*u.h+scr,7*u.w/9,u.h/8);
+		locationB = new Rectangle(u.w/9,.21f*u.h+scr,7*u.w/9,u.h/8);
+		backB=new Rectangle(u.w/36,.93f*u.h+scr,.15f*u.w,.05f*u.h);
+		errorB = new Rectangle(u.w/9,.04f*u.h+scr,7*u.w/9,u.h/16);
+		
+			start.bounds= new Rectangle(2*u.w/9,.645f*u.h+scr,5*u.w/9,u.h/16);
+	
+			end.bounds= new Rectangle(2*u.w/9,.54f*u.h+scr,5*u.w/9,u.h/16);
+		
+			name.setBounds(nameB.x, nameB.y, nameB.width, nameB.height);
+		
+			description.setBounds(descriptionB.x, descriptionB.y, descriptionB.width, descriptionB.height);
+			
+			location.setBounds(locationB.x, locationB.y, locationB.width, locationB.height);
+			
+			create.setBounds(createB.x, createB.y, createB.width, createB.height);
+		
+			back.setBounds(backB.x, backB.y, backB.width, backB.height);	
+		
+			error.setBounds(errorB.x, errorB.y, errorB.width, errorB.height);
+	}
 }

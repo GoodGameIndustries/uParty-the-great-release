@@ -40,7 +40,8 @@ public class List {
 	
 	public void move(float move){
 		//System.out.println(move);
-		scrolled=true;
+		if(move>3){
+		scrolled=true;}
 		toggleOff();
 		scr+=move;
 		lastY+=move;

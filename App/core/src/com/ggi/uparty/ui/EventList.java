@@ -1,6 +1,7 @@
 package com.ggi.uparty.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
@@ -51,11 +52,11 @@ public class EventList {
 	
 	public void sort() {
 		switch(s.toolbar.sortState){
-		case 0:modules.sort(new HotComparator());
+		case 0:Collections.sort(modules, new HotComparator());
 			break;
-		case 1:modules.sort(new NextComparator());
+		case 1:Collections.sort(modules, new NextComparator());
 			break;
-		case 2:modules.sort(new NewComparator());
+		case 2:Collections.sort(modules, new NewComparator());
 			break;
 		}
 		

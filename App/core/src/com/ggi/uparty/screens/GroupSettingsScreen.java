@@ -1,6 +1,7 @@
 package com.ggi.uparty.screens;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -71,7 +72,7 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 			delete.setBounds(deleteB.x, deleteB.y, deleteB.width, deleteB.height);
 			
 			
-		g.members.sort(new RankComparator());
+		Collections.sort(g.members,new RankComparator());
 		
 		//System.out.println(g.members.size());
 		

@@ -56,7 +56,7 @@ public class World implements Comparator<Datapoint>, Serializable{
 		refX=x; refY=y;
 		points.sort(this);
 		for(Datapoint p: points){
-			if(result.size()<16){
+			if(result.size()<8){
 				result.add(p);
 			}
 		}

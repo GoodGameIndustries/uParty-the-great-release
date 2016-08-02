@@ -197,8 +197,10 @@ public class UPServer extends JFrame{
 				}
 				
 				if(object instanceof Report){
+					
 					newReport=true;
 					Report o = (Report)object;
+					
 					if(o.group.length()>0){
 						Group g = loadGroup(o.group);
 						ArrayList<Event> events = g.events;
@@ -215,8 +217,10 @@ public class UPServer extends JFrame{
 					else{
 					ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
 						for(int i =0; i < events.size();i++){
+							System.out.println("Searching");
 							Event e = events.get(i);
 							if(e.ID.equals(o.ID)){
+								
 								e.reporters.add(o.e);
 								if(!world.reported.contains(e)){world.reported.add(e);}
 							}

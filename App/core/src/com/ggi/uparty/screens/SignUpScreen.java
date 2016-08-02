@@ -49,6 +49,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 	
 	public GlyphLayout layout = new GlyphLayout();
 
+	public float scr=0;
 	
 	
 	public SignUpScreen(uParty u){
@@ -141,7 +142,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 		pic.begin();
 		pic.setColor(1, 1, 1, 1);
 		pic.draw(background, 0, 0, u.w, u.h);
-		pic.draw(logo, .25f*u.w, .569f*u.h+(logoMoveAnim*u.h/16), u.w/2, u.w/2);
+		pic.draw(logo, .25f*u.w, .569f*u.h+(logoMoveAnim*u.h/16)+scr, u.w/2, u.w/2);
 		
 		user.draw(pic, fade);
 		email.draw(pic, fade);
@@ -156,7 +157,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 		pic.setColor(1, 1, 1, fade);
 		layout.setText(u.smallFnt, "I agree to the terms of service      ");
 		u.smallFnt.setColor(new Color(.694f,.694f,.694f,fade));
-		u.smallFnt.draw(pic, "I agree to the ", u.w/2-layout.width/2, .29f*u.h);
+		u.smallFnt.draw(pic, "I agree to the ", u.w/2-layout.width/2, .29f*u.h+scr);
 		pic.end();
 		
 		if(u.nextScreen!=null){
@@ -316,16 +317,20 @@ public class SignUpScreen implements Screen, InputProcessor{
 		}
 		else if(Intersector.overlaps(touch, tosBC)){tosC.toggle();}
 		else if(Intersector.overlaps(touch, backB)){u.nextScreen = new HomeScreen(u);}
-		else if(Intersector.overlaps(touch, userB)){stage.setKeyboardFocus(user);}
-		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);}
-		else if(Intersector.overlaps(touch, passB)){stage.setKeyboardFocus(pass);}
-		else if(Intersector.overlaps(touch, cpassB)){stage.setKeyboardFocus(cpass);}
+		else if(Intersector.overlaps(touch, userB)){stage.setKeyboardFocus(user);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);Gdx.input.setOnscreenKeyboardVisible(true);}
+		else if(Intersector.overlaps(touch, passB)){stage.setKeyboardFocus(pass);Gdx.input.setOnscreenKeyboardVisible(true);scr=.06f*u.h;}
+		else if(Intersector.overlaps(touch, cpassB)){stage.setKeyboardFocus(cpass);Gdx.input.setOnscreenKeyboardVisible(true);scr=.14f*u.h;}
 		else if(Intersector.overlaps(touch, tosB)){Gdx.net.openURI("http://upartyapp.com/terms-and-conditions/");}
+		
+		setB();
 		
 		return true;
 	}
 
 	private void toggleOff() {
+		scr=0;
+		Gdx.input.setOnscreenKeyboardVisible(false);
 		stage.setKeyboardFocus(null);
 		if(signUp.isChecked()){signUp.toggle();}
 		if(back.isChecked()){back.toggle();}
@@ -349,6 +354,38 @@ public class SignUpScreen implements Screen, InputProcessor{
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public void setB(){
+		userB=new Rectangle(2*u.w/9,.55f*u.h+scr,5*u.w/9,u.h/16);
+		emailB=new Rectangle(u.w/9,.47f*u.h+scr,7*u.w/9,u.h/16);
+		passB=new Rectangle(u.w/9,.39f*u.h+scr,7*u.w/9,u.h/16);
+		cpassB=new Rectangle(u.w/9,.31f*u.h+scr,7*u.w/9,u.h/16);
+		tosB=new Rectangle(.45f*u.w,.267f*u.h+scr,u.w/4,u.h/32);
+		tosBC=new Rectangle(.71f*u.w,.276f*u.h+scr,u.h/64,u.h/64);
+		signUpB = new Rectangle(u.w/9,.195f*u.h+scr,7*u.w/9,u.h/16);
+		backB = new Rectangle(u.w/36,.93f*u.h+scr,.15f*u.w,.05f*u.h);
+		errorB = new Rectangle(u.w/9,.125f*u.h+scr,7*u.w/9,u.h/16);
+		
+	
+		user.setBounds(userB.x, userB.y, userB.width, userB.height);
+		
+	
+		email.setBounds(emailB.x, emailB.y, emailB.width, emailB.height);
+		
+		pass.setBounds(passB.x,passB.y,passB.width,passB.height);
+		
+		cpass.setBounds(cpassB.x, cpassB.y, cpassB.width, cpassB.height);
+		
+		tosC.setBounds(tosBC.x, tosBC.y, tosBC.width, tosBC.height);
+
+		tos.setBounds(tosB.x, tosB.y, tosB.width, tosB.height);
+	
+		signUp.setBounds(signUpB.x, signUpB.y, signUpB.width, signUpB.height);
+	
+		back.setBounds(backB.x, backB.y, backB.width, backB.height);
+	
+		error.setBounds(errorB.x, errorB.y, errorB.width, errorB.height);
 	}
 
 }

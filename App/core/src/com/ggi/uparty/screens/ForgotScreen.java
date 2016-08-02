@@ -191,12 +191,13 @@ public class ForgotScreen implements Screen, InputProcessor{
 			u.nextScreen = new LoadScreen(u);
 			
 		}
-		else if(Intersector.overlaps(touch, groupB)){stage.setKeyboardFocus(group);}
+		else if(Intersector.overlaps(touch, groupB)){stage.setKeyboardFocus(group);Gdx.input.setOnscreenKeyboardVisible(true);}
 		
 		return true;
 	}
 	
 	private void toggleOff(){
+		Gdx.input.setOnscreenKeyboardVisible(false);
 		stage.setKeyboardFocus(null);
 		if(back.isChecked()){back.toggle();}
 		if(create.isChecked()){create.toggle();}

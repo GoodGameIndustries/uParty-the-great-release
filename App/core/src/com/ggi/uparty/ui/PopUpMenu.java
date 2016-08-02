@@ -141,6 +141,11 @@ public class PopUpMenu {
 		layout.setText(s.u.smallFnt, "("+s.u.myAcc.e+")");
 		s.u.smallFnt.draw(pic, "("+s.u.myAcc.e+")", bounds.width/2-layout.width/2, .87f*bounds.height+bounds.y-layout.height/2);
 		
+		s.u.smallFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
+		layout.setText(s.u.smallFnt, s.u.controller.getLat()+":"+s.u.controller.getLong());
+		//s.u.smallFnt.draw(pic, s.u.controller.getLat()+":"+s.u.controller.getLong(), bounds.width/2-layout.width/2, .87f*bounds.height+bounds.y-layout.height/2);
+		
+		
 		layout.setText(s.u.smallFnt, "Groups:");
 		s.u.smallFnt.draw(pic, "Groups:", bounds.width/2-layout.width/2, .34f*bounds.height+bounds.y-layout.height/2);
 		
