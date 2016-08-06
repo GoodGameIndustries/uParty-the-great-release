@@ -1,12 +1,14 @@
-package com.ggi.uparty;
+package com.GGI.uParty.android;
+
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.ggi.uparty.NativeController;
+import com.ggi.uparty.uParty;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,9 +22,13 @@ public class AndroidLauncher extends AndroidApplication implements NativeControl
 	
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
+		while(!checkPermission(this)){
 		showPermissionDialog();
+		try{
 		lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,1,0,this);
+		}catch(Exception e){}
+		}
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new uParty(this), config);
