@@ -22,7 +22,8 @@ public class IOSLauncher extends IOSApplication.Delegate implements NativeContro
     protected IOSApplication createApplication() {
 		
 		c = new CLLocationManager();
-		if(c.isLocationServicesEnabled()){
+		
+		
 		c.setDelegate(new CLLocationManagerDelegateAdapter(){
 			
 			public void didUpdateLocations(CLLocationManager manager, NSArray<CLLocation> locations){
@@ -33,6 +34,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements NativeContro
 		});
 		c.setDesiredAccuracy(10);
 		c.requestWhenInUseAuthorization();
+		if(c.isLocationServicesEnabled()){
 		c.startUpdatingLocation();}
 		
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
@@ -47,13 +49,19 @@ public class IOSLauncher extends IOSApplication.Delegate implements NativeContro
 
 	@Override
 	public float getLong() {
-		// TODO Auto-generated method stub
+		if(locationMeasurements.size()>0){
 		return (float) locationMeasurements.get(locationMeasurements.size()-1).getCoordinate().getLongitude();
+		}
+		c.startUpdatingLocation();
+		return 0;
 	}
 
 	@Override
 	public float getLat() {
-		// TODO Auto-generated method stub
-		return (float) locationMeasurements.get(locationMeasurements.size()-1).getCoordinate().getLatitude();
-	}
+		if(locationMeasurements.size()>0){
+			return (float) locationMeasurements.get(locationMeasurements.size()-1).getCoordinate().getLatitude();
+			}
+			c.startUpdatingLocation();
+			return 0;
+		}
 }
