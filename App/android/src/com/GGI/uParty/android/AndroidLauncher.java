@@ -41,15 +41,34 @@ public class AndroidLauncher extends AndroidApplication implements NativeControl
 	public float getLong() { 
 		//Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		//return location==null?0:(float) location.getLongitude();
-		return (float) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
-	}
+		if(lm==null){lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);}
+		try{
+			return (float) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
+			}catch(Exception e){
+				try{
+				return (float) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLongitude();
+				}catch(Exception e2){}
+			}
+		
+		return 0;
+		
+		}
 
 	@Override
 	public float getLat() {
 		//Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		//return location==null?0:(float) location.getLongitude();
-		
+		if(lm==null){lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);}
+		try{
 		return (float) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude();
+		}catch(Exception e){
+			try{
+			return (float) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLatitude();
+			}catch(Exception e2){
+				
+			}
+			}
+	return 0;
 	}
 	
 	 public static boolean checkPermission(final Context context) {
