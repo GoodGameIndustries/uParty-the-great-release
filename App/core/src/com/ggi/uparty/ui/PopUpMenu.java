@@ -15,6 +15,7 @@ import com.ggi.uparty.screens.CreateEventScreen;
 import com.ggi.uparty.screens.LoadScreen;
 import com.ggi.uparty.screens.MainScreen;
 import com.ggi.uparty.screens.NewGroupScreen;
+import com.ggi.uparty.screens.SettingsScreen;
 
 public class PopUpMenu {
 
@@ -28,9 +29,9 @@ public class PopUpMenu {
 	
 	public Button slideButton;
 	
-	public TextButton post,logout,group;
+	public TextButton post,settings,group;
 	
-	public Rectangle bounds,slideB,postB,logoutB,groupB;
+	public Rectangle bounds,slideB,postB,settingsB,groupB;
 	
 	public GlyphLayout layout = new GlyphLayout();
 	
@@ -68,15 +69,15 @@ public class PopUpMenu {
 		lvBar = new RadialSprite(new TextureRegion(s.u.assets.get("UI/CircleLoad.png",Texture.class)));
 		
 		postB = new Rectangle(bounds.width/4,.52f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
-		logoutB = new Rectangle(bounds.width/4,.36f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
+		settingsB = new Rectangle(bounds.width/4,.36f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
 		groupB = new Rectangle(bounds.width/4,.44f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
 		
 		post = new TextButton("Post an Event",s.u.standardButtonStyle);
 			post.setBounds(postB.x, postB.y, postB.width, postB.height);
 		group = new TextButton("New Group",s.u.standardButtonStyle);
 			group.setBounds(groupB.x, groupB.y, groupB.width, groupB.height);
-		logout = new TextButton("Logout",s.u.redButtonStyle);
-			logout.setBounds(logoutB.x, logoutB.y, logoutB.width, logoutB.height);
+		settings = new TextButton("Settings",s.u.standardButtonStyle);
+			settings.setBounds(settingsB.x, settingsB.y, settingsB.width, settingsB.height);
 		
 		
 		s.u.myAcc.xp=9;
@@ -112,10 +113,10 @@ public class PopUpMenu {
 		pic.draw(bottom,bounds.x,bounds.y,bounds.width,bounds.height);
 		
 		postB = new Rectangle(bounds.width/4,.52f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
-		logoutB = new Rectangle(bounds.width/4,.36f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
+		settingsB = new Rectangle(bounds.width/4,.36f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
 		groupB = new Rectangle(bounds.width/4,.44f*bounds.height+bounds.y,bounds.width/2,s.u.h/20);
 		post.setBounds(postB.x, postB.y, postB.width, postB.height);
-		logout.setBounds(logoutB.x, logoutB.y, logoutB.width, logoutB.height);
+		settings.setBounds(settingsB.x, settingsB.y, settingsB.width, settingsB.height);
 		group.setBounds(groupB.x, groupB.y, groupB.width, groupB.height);
 		
 		l.draw(pic, fade);
@@ -123,7 +124,7 @@ public class PopUpMenu {
 		pic.draw(background,bounds.x,bounds.y,bounds.width,bounds.height);
 		slideButton.draw(pic, fade);
 		post.draw(pic, fade);
-		logout.draw(pic, fade);
+		settings.draw(pic, fade);
 		group.draw(pic, fade);
 		
 		s.u.largeFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
@@ -175,7 +176,7 @@ public class PopUpMenu {
 
 	public void touchDown(Rectangle touch) {
 		if(Intersector.overlaps(touch, postB)){post.toggle();}
-		else if(Intersector.overlaps(touch, logoutB)){logout.toggle();}
+		else if(Intersector.overlaps(touch, settingsB)){settings.toggle();}
 		else if(Intersector.overlaps(touch, groupB)){group.toggle();}
 		else if(Intersector.overlaps(touch, l.bounds)){l.touchDown(touch);initTouch=true;}
 	}
@@ -185,7 +186,8 @@ public class PopUpMenu {
 		
 		if(!initTouch){
 		if(Intersector.overlaps(touch, postB)){s.u.nextScreen=new CreateEventScreen(s.u,s.g);}
-		else if(Intersector.overlaps(touch, logoutB)){s.u.myAcc=null;s.u.logout=true;s.u.setScreen(new LoadScreen(s.u));}
+		//else if(Intersector.overlaps(touch, settingsB)){s.u.myAcc=null;s.u.settings=true;s.u.setScreen(new LoadScreen(s.u));}
+		else if(Intersector.overlaps(touch, settingsB)){s.u.setScreen(new SettingsScreen(s.u));}
 		else if(Intersector.overlaps(touch, groupB)){s.u.nextScreen=new NewGroupScreen(s.u);}
 		else if(!open){open=!open;}
 		}
@@ -196,7 +198,7 @@ public class PopUpMenu {
 
 	private void toggleOff() {
 		if(post.isChecked()){post.toggle();}
-		if(logout.isChecked()){logout.toggle();}
+		if(settings.isChecked()){settings.toggle();}
 		if(group.isChecked()){group.toggle();}
 		
 	}

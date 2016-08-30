@@ -87,6 +87,8 @@ public class uParty extends Game {
 
 	public boolean logout=false;
 	
+	public boolean groupRefresh=false;
+	
 	public uParty(NativeController controller){
 		this.controller=controller;
 	}
@@ -104,6 +106,7 @@ public class uParty extends Game {
 	}
 
 	private void load() {
+		assets.load("Logos/Social.png",Texture.class);
 		assets.load("UI/Background.png", Texture.class);
 		assets.load("Logos/1024.png", Texture.class);
 		assets.load("UI/CircleLoad.png", Texture.class);
@@ -128,6 +131,7 @@ public class uParty extends Game {
 		assets.load("UI/TextAreaChecked.png", Texture.class);
 		assets.load("UI/EventModule.png", Texture.class);
 		assets.load("UI/Load.png", Texture.class);
+		
 		
 		assets.update();
 		
@@ -160,6 +164,8 @@ public class uParty extends Game {
 		client.addListener(new ThreadedListener(new Listener(){
 			 
 
+			
+
 			public void received (Connection connection, Object object) {
 				if(object instanceof ErrorMessage){
 					ErrorMessage o = (ErrorMessage)object;
@@ -189,11 +195,12 @@ public class uParty extends Game {
 						NewGroupScreen s = (NewGroupScreen)getScreen();
 						s.created=true;
 					}
+					groupRefresh=true;
 				}
 				
 				if(object instanceof Event){
 					System.out.println("Event Recieved");
-					if(!refreshing){refreshing = true;events.clear();System.out.println(events.size());}
+					if(!refreshing){refreshing = true;groupRefresh=false;events.clear();System.out.println(events.size());}
 					Date d = new Date();
 					Event o = (Event)object;
 					if(o.end.after(d)){

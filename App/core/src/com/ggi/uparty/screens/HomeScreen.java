@@ -86,7 +86,7 @@ public class HomeScreen implements Screen, InputProcessor{
 			//u.linkButtonStyle.up=new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/TextField.png", Texture.class)));
 		u.sortButtonStyle = new TextButtonStyle();
 			u.sortButtonStyle.font = u.mediumFnt;
-			u.sortButtonStyle.checkedFontColor = Color.DARK_GRAY;
+			u.sortButtonStyle.checkedFontColor = new Color(1f,1f,1f,.7f);
 			u.sortButtonStyle.fontColor = Color.BLACK;
 			//u.sortButtonStyle.up=new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/FilledChecked.png", Texture.class)));
 		u.errorButtonStyle = new TextButtonStyle();

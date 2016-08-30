@@ -63,7 +63,7 @@ public class MemberModule extends Module{
 			l.e=m.e;
 			l.group=this.l.g.name.replace(" ", "")+this.l.g.owner.replace(".", "_").replace("@", "_");
 			this.l.u.send(l);
-			this.l.modules.remove(this);
+			//this.l.modules.remove(this);
 		}
 	}
 	

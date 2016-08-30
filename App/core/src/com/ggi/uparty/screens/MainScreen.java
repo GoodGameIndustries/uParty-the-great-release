@@ -197,11 +197,12 @@ public class MainScreen implements Screen, InputProcessor{
 		lastY=0;
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		
-		if(!menu.open){events.touch(touchDown,touch);}
 		
-		if(touch.overlaps(menu.bounds)){menu.touchUp(touch);}
-		else if(!touch.overlaps(menu.bounds)&&menu.open&&!menu.initTouch){menu.open=!menu.open;}
-		else if(touch.overlaps(toolbar.bounds)){toolbar.touchUp(touch);}
+		if(touch.overlaps(toolbar.bounds)){toolbar.touchUp(touch);}
+		else if(touch.overlaps(menu.bounds)){menu.touchUp(touch);}
+		else if(!menu.open){events.touch(touchDown,touch);}
+		else if(!touch.overlaps(menu.bounds)&&menu.open&&!menu.initTouch&&!u.needUpdate){menu.open=!menu.open;}
+		
 		return true;
 	}
 

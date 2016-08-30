@@ -68,6 +68,9 @@ public class EventModule {
 		pic.setColor(1, 1, 1, fade);
 		pic.draw(background,bounds.x,bounds.y,bounds.width,bounds.height);
 		
+		//Rectangle upBB = new Rectangle(bounds.x+.9f*bounds.width-.05f*l.s.u.w,bounds.y+.75f*bounds.height-.05f*l.s.u.h,.1f*l.s.u.w,.1f*l.s.u.h);
+		//Rectangle downBB = new Rectangle(bounds.x+.9f*bounds.width-.05f*l.s.u.w,bounds.y+.25f*bounds.height-.05f*l.s.u.h,.1f*l.s.u.w,.1f*l.s.u.h);
+		
 		pic.draw(e.upVote.contains(l.s.u.myAcc.e)?upC:up,upB.x,upB.y,upB.width,upB.height);
 		pic.draw(e.downVote.contains(l.s.u.myAcc.e)?downC:down,downB.x,downB.y,downB.width,downB.height);
 		
@@ -84,8 +87,11 @@ public class EventModule {
 	}
 
 	public void touch(Rectangle touchDown, Rectangle touchUp) {
+		Rectangle upBB = new Rectangle(bounds.x+.9f*bounds.width-.05f*l.s.u.w,bounds.y+.75f*bounds.height-.05f*l.s.u.h,.1f*l.s.u.w,.1f*l.s.u.h);
+		Rectangle downBB = new Rectangle(bounds.x+.9f*bounds.width-.05f*l.s.u.w,bounds.y+.25f*bounds.height-.05f*l.s.u.h,.1f*l.s.u.w,.1f*l.s.u.h);
+		
 		if(Math.abs(touchDown.x-touchUp.x)<10&&Math.abs(touchDown.y-touchUp.y)<10){
-		if(Intersector.overlaps(touchDown, upB)&&Intersector.overlaps(touchUp, upB)){
+		if(Intersector.overlaps(touchDown, upBB)&&Intersector.overlaps(touchUp, upBB)){
 			if(e.downVote.contains(l.s.u.myAcc.e)){e.downVote.remove(l.s.u.myAcc.e);}
 			if(!e.upVote.contains(l.s.u.myAcc.e)){e.upVote.add(l.s.u.myAcc.e);}
 			UpVote o= new UpVote();
@@ -95,7 +101,7 @@ public class EventModule {
 			o.group=e.group;
 			l.s.u.send(o);
 		}
-		else if(Intersector.overlaps(touchDown, downB)&&Intersector.overlaps(touchUp, downB)){
+		else if(Intersector.overlaps(touchDown, downBB)&&Intersector.overlaps(touchUp, downBB)){
 			if(!e.downVote.contains(l.s.u.myAcc.e)){e.downVote.add(l.s.u.myAcc.e);}
 			if(e.upVote.contains(l.s.u.myAcc.e)){e.upVote.remove(l.s.u.myAcc.e);}
 			DownVote o= new DownVote();

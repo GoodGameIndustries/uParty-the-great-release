@@ -77,6 +77,7 @@ public class LoadScreen implements Screen {
 		pic.begin();
 		pic.draw(background, 0, 0, u.w, u.h);
 		pic.draw(logo, .25f*u.w, .5f*u.h-u.w/4, u.w/2, u.w/2);
+		pic.draw(u.assets.get("Logos/Social.png",Texture.class),.25f*u.w,.005f*u.h,.5f*u.w,.25f*u.w);
 		loadingBar.draw(pic,.25f*u.w, .5f*u.h-u.w/4, u.w/2, u.w/2);
 		pic.end();}
 		else if(u.assets.isLoaded("UI/Background.png")&&u.assets.isLoaded("Logos/1024.png")&&u.assets.isLoaded("UI/CircleLoad.png")){

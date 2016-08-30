@@ -74,7 +74,7 @@ public class EventList {
 		if(refresh){focus=0;scrolled=(int) (-.095f*s.u.h);}
 		
 		float alpha = scrolled/(.19f*s.u.h);
-		if(s.lastY==0&&momentum == 0&&!refresh){scrolled+=(0-scrolled)/3;}
+		if(s.lastY==0&&momentum == 0&&!refresh){/*scrolled+=(0-scrolled)/3;*/scrolled=scrolled;if(focus==0&&!refresh&&scrolled<0){scrolled+=(0-scrolled)/3;}}
 		
 		if(!refresh&&focus==0){rM.bounds=new Rectangle(0,s.toolbar.bounds.y+alpha*.34f*s.u.h,s.u.w,.17f*s.u.h);}
 		else if(refresh){rM.bounds=new Rectangle(0,s.toolbar.bounds.y-.17f*s.u.h,s.u.w,.17f*s.u.h);}

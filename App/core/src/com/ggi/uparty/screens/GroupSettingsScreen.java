@@ -17,6 +17,7 @@ import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.Group;
 import com.ggi.uparty.network.LeaveGroup;
 import com.ggi.uparty.network.Member;
+import com.ggi.uparty.network.Refresh;
 import com.ggi.uparty.ui.List;
 import com.ggi.uparty.ui.MemberModule;
 import com.ggi.uparty.ui.Module;
@@ -45,6 +46,8 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 	public List list;
 	
 	public boolean initTouch = false;
+
+	private boolean override = true;
 	
 	public GroupSettingsScreen(uParty u, Group g){
 		this.u=u;
@@ -54,6 +57,7 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 	
 	@Override
 	public void show() {
+		override=true;
 		background = u.assets.get("UI/Background.png");
 		
 		Gdx.input.setInputProcessor(this);
@@ -122,6 +126,12 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		
+		if(override){refresh();override=false;}
+		
+		refreshModules();
+		
+		
 		list.g=g;
 		list.give(modules);
 		
@@ -145,6 +155,30 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
 		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		
+		
+	}
+
+	private void refreshModules() {
+		for(int i = 0; i < u.myAcc.groups.size(); i++){
+			if(u.myAcc.groups.get(i).name.equals(g.name)&&u.myAcc.groups.get(i).owner.equals(g.owner)){
+				g.members.clear();
+				g.members.addAll(u.myAcc.groups.get(i).members);
+			}
+		}
+		
+		modules.clear();
+		Collections.sort(g.members,new RankComparator());
+		
+		//System.out.println(g.members.size());
+		
+		for(Member m:g.members){
+			modules.add(new MemberModule(list,m));
+		}
+		
+		list.give(modules);
+		list.bounds=new Rectangle(0,.0625f*u.h,u.w,.7f*u.h);
+		
 	}
 
 	@Override
@@ -232,6 +266,14 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 		if(back.isChecked()){back.toggle();}
 		if(invite.isChecked()){invite.toggle();}
 		if(delete.isChecked()){delete.toggle();}
+		refresh();
+	}
+	
+	public void refresh(){
+		Refresh r = new Refresh();
+		r.e=u.myAcc.e;
+		r.lat=u.controller.getLat();r.lng=u.controller.getLong();
+		u.send(r);
 	}
 
 	@Override

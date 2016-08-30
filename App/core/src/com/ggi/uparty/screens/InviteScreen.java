@@ -188,9 +188,9 @@ public class InviteScreen implements Screen, InputProcessor{
 			Invite i = new Invite();
 			i.e=g;
 			i.group=groupR.name.replace(" ", "")+groupR.owner.replace(".", "_").replace("@", "_");
-			
-			u.send(i);
 			refresh();
+			u.send(i);
+			
 			u.nextScreen = new GroupSettingsScreen(u,groupR);
 			
 		}
