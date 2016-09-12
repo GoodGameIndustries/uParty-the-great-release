@@ -23,6 +23,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.ggi.uparty.network.Account;
+import com.ggi.uparty.network.Comment;
 import com.ggi.uparty.network.DownVote;
 import com.ggi.uparty.network.ErrorMessage;
 import com.ggi.uparty.network.Event;
@@ -35,6 +36,7 @@ import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.UpVote;
 import com.ggi.uparty.screens.LoadScreen;
 import com.ggi.uparty.screens.NewGroupScreen;
+import com.ggi.uparty.screens.SignUpScreen;
 
 public class uParty extends Game {
 	
@@ -57,7 +59,7 @@ public class uParty extends Game {
 	
 	public String error="";
 	
-	public boolean debug = false;
+	public boolean debug = true;
 	
 	public Screen nextScreen;
 	
@@ -170,6 +172,7 @@ public class uParty extends Game {
 				if(object instanceof ErrorMessage){
 					ErrorMessage o = (ErrorMessage)object;
 					error=o.error;
+					
 				}
 				
 				if(object instanceof Account){
@@ -210,6 +213,25 @@ public class uParty extends Game {
 							myAcc.groups.get(myAcc.groups.size()-1).events.add(o);
 						}else{
 						events.add(o);}
+					}
+				}
+				
+				if(object instanceof Comment){
+					System.out.println("Recieved Comment");
+					Comment o = (Comment)object;
+					if(o.group.length()>0){
+						Event e = myAcc.groups.get(myAcc.groups.size()-1).events.get(myAcc.groups.get(myAcc.groups.size()-1).events.size()-1);
+						if(e.ID.equals(o.ID)){
+							e.comments.add(o.c);
+						}
+					}
+					else{
+					if(events.size()>0){
+						Event e = events.get(events.size()-1);
+						if(e.ID.equals(o.ID)){
+							e.comments.add(o.c);
+						}
+					}
 					}
 				}
 				
@@ -306,7 +328,7 @@ public class uParty extends Game {
 			try {
 				
 				client.start();
-				client.connect(5000, debug ?"localhost":"52.89.96.208", 36694);
+				client.connect(5000, debug ?"localhost":"52.89.96.208", 36695);
 				Network.register(client);
 			} catch (IOException e) {
 				error="Cannot connect to server.\nMake sure your app is up to date\nand try again soon.";

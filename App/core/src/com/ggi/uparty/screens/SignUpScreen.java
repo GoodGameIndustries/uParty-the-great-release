@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.SignUp;
+import com.ggi.uparty.ui.RefreshModule;
 
 /**
  * @author Emmett
@@ -50,7 +51,10 @@ public class SignUpScreen implements Screen, InputProcessor{
 	public GlyphLayout layout = new GlyphLayout();
 
 	public float scr=0;
+
+	public RefreshModule rM;
 	
+	public boolean loading = false;
 	
 	public SignUpScreen(uParty u){
 		this.u=u;
@@ -63,6 +67,8 @@ public class SignUpScreen implements Screen, InputProcessor{
 	@Override
 	public void show() {
 		u.nextScreen=null;
+		
+		rM= new RefreshModule(u);
 		
 		//DIALOG EXAMPLE
 		//MyTextInputListener listener = new MyTextInputListener();
@@ -82,6 +88,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 		signUpB = new Rectangle(u.w/9,.195f*u.h,7*u.w/9,u.h/16);
 		backB = new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
 		errorB = new Rectangle(u.w/9,.125f*u.h,7*u.w/9,u.h/16);
+		rM.bounds=new Rectangle(0,.05f*u.h,u.w,.17f*u.h);
 		
 		user = new TextField(uN,u.textFieldStyle);
 			user.setMessageText("Username");
@@ -130,6 +137,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 	@Override
 	public void render(float delta) {
 		error.setText(u.error);
+		if(u.error.length()>0){loading = false;}
 		if(u.myAcc!=null){
 			if(!u.myAcc.confirmed){u.nextScreen=new ConfirmationScreen(u);}
 			else{u.nextScreen=new MainScreen(u);}
@@ -153,6 +161,8 @@ public class SignUpScreen implements Screen, InputProcessor{
 		signUp.draw(pic, fade);
 		back.draw(pic, fade);
 		error.draw(pic, fade);
+		
+		if(loading){rM.forceDraw(pic, fade);}
 		
 		pic.setColor(1, 1, 1, fade);
 		layout.setText(u.smallFnt, "I agree to the terms of service      ");
@@ -310,6 +320,7 @@ public class SignUpScreen implements Screen, InputProcessor{
 			s.u=uN;
 			s.p=p;
 			u.send(s);
+			loading=true;
 			}
 			else{
 				u.error="Please make sure all fields are \nfilled out and your passwords match";

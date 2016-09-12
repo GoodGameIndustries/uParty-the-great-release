@@ -9,33 +9,43 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.uParty;
-import com.ggi.uparty.network.DeleteGroup;
-import com.ggi.uparty.network.Group;
+import com.ggi.uparty.network.InviteNew;
+import com.ggi.uparty.network.Refresh;
 
-public class SettingsScreen implements Screen,InputProcessor {
+public class InviteNewScreen implements Screen, InputProcessor{
 
 	public uParty u;
 	
-	public Group g;
+	public TextField user;
 	
-	public float fade = 0;
+	public TextButton invite,back;
 	
-	public SpriteBatch pic;
+	public Rectangle userB,inviteB,backB;
 	
 	public Texture background;
 	
+	private SpriteBatch pic;
+	
+	public float fade = 0;
+	
+	public String g = "";
+	
 	public GlyphLayout layout = new GlyphLayout();
 	
-	public Rectangle changeUB,changePB,inviteB,reviewB,backB,logoutB;
+	public Stage stage;
+
+	public boolean invited = false;
 	
-	public TextButton changeU,changeP,invite,review,back,logout;
 	
-	public SettingsScreen(uParty u){
+	public InviteNewScreen(uParty u){
 		this.u=u;
 	}
-
+	
 	@Override
 	public void show() {
 		pic = new SpriteBatch();
@@ -44,31 +54,23 @@ public class SettingsScreen implements Screen,InputProcessor {
 		
 		background = u.assets.get("UI/Background.png");
 		
-		backB=new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
-		changeUB=new Rectangle(u.w/9,.6f*u.h,7*u.w/9,u.h/16);
-		changePB=new Rectangle(u.w/9,.52f*u.h,7*u.w/9,u.h/16);
-		reviewB=new Rectangle(u.w/9,.44f*u.h,7*u.w/9,u.h/16);
-		inviteB=new Rectangle(u.w/9,.36f*u.h,7*u.w/9,u.h/16);
-		logoutB =new Rectangle(u.w/9,.28f*u.h,7*u.w/9,u.h/16);
+		backB = new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
+		userB = new Rectangle(u.w/9,.5f*u.h,7*u.w/9,u.h/16);
+		inviteB = new Rectangle(u.w/4,.42f*u.h,u.w/2,u.h/16);
 		
 		back = new TextButton("Back",u.standardButtonStyle);
-		back.setBounds(backB.x, backB.y, backB.width, backB.height);
+			back.setBounds(backB.x, backB.y, backB.width, backB.height);
 		
-		changeU = new TextButton("Change Username",u.standardButtonStyle);
-		changeU.setBounds(changeUB.x, changeUB.y, changeUB.width, changeUB.height);
+		invite = new TextButton("Invite",u.standardButtonStyle);
+			invite.setBounds(inviteB.x, inviteB.y, inviteB.width, inviteB.height);
 		
-		changeP = new TextButton("Change Password",u.standardButtonStyle);
-		changeP.setBounds(changePB.x, changePB.y, changePB.width, changePB.height);
+		user = new TextField(g,u.textFieldStyle);
+			user.setBounds(userB.x, userB.y, userB.width, userB.height);
+			user.setAlignment(Align.center);
+			user.setMessageText("Email to Invite");
 		
-		review = new TextButton("Rate Us",u.standardButtonStyle);
-		review.setBounds(reviewB.x, reviewB.y, reviewB.width, reviewB.height);
-		
-		invite = new TextButton("Invite Someone",u.standardButtonStyle);
-		invite.setBounds(inviteB.x, inviteB.y, inviteB.width, inviteB.height);
-		
-		logout = new TextButton("Logout",u.redButtonStyle);
-		logout.setBounds(logoutB.x, logoutB.y, logoutB.width, logoutB.height);
-		
+		stage = new Stage();
+		stage.addActor(user);
 		
 	}
 
@@ -81,16 +83,14 @@ public class SettingsScreen implements Screen,InputProcessor {
 		pic.setColor(1, 1, 1, 1);
 		pic.draw(background, 0, 0, u.w, u.h);
 		
-		u.largeFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
-		layout.setText(u.largeFnt, "Settings");
-		u.largeFnt.draw(pic, "Settings", u.w/2-layout.width/2, .85f*u.h-layout.height/2);
-		
 		back.draw(pic, fade);
-		changeU.draw(pic, fade);
-		changeP.draw(pic, fade);
-		review.draw(pic, fade);
 		invite.draw(pic, fade);
-		logout.draw(pic, fade);
+		user.draw(pic, fade);
+		
+		u.largeFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
+		layout.setText(u.largeFnt, "Invite Someone to uParty");
+		u.largeFnt.draw(pic, "Invite Someone to uParty", u.w/2-layout.width/2, .7f*u.h-layout.height/2);
+		
 		
 		pic.end();
 		
@@ -146,49 +146,65 @@ public class SettingsScreen implements Screen,InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
+		if(stage.getKeyboardFocus().equals(user)){if(character == ''&&g.length()>0){
+			g=g.substring(0, g.length()-1);
+		}
+		else if((character == '\r' || character == '\n')){}
+		else{
+			g+=character;
+		}}
+		
+		g=g.replaceAll("\\p{Cntrl}","");
+		g=g.replaceAll("\\s+","");
+		
+		user.setText(g);
+		
+		return true;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		screenY = (int) (u.h-screenY);
+		screenY=(int) (u.h-screenY);
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		
 		if(Intersector.overlaps(touch, backB)){back.toggle();}
-		else if(Intersector.overlaps(touch, changeUB)){changeU.toggle();}
-		else if(Intersector.overlaps(touch, changePB)){changeP.toggle();}
 		else if(Intersector.overlaps(touch, inviteB)){invite.toggle();}
-		else if(Intersector.overlaps(touch, reviewB)){review.toggle();}
-		else if(Intersector.overlaps(touch, logoutB)){logout.toggle();}
 		
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		screenY = (int) (u.h-screenY);
+		screenY=(int) (u.h-screenY);
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
+		
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.setScreen(new MainScreen(u));}
-		else if(Intersector.overlaps(touch, changeUB)){u.setScreen(new ChangeUserScreen(u));}
-		else if(Intersector.overlaps(touch, changePB)){u.setScreen((new ChangePasswordScreen(u)));}
-		else if(Intersector.overlaps(touch, inviteB)){u.setScreen(new InviteNewScreen(u));}
-		else if(Intersector.overlaps(touch, reviewB)){Gdx.net.openURI("www.uaprtyapp.com/redirect");}
-		else if(Intersector.overlaps(touch, logoutB)){u.myAcc=null;u.logout=true;u.setScreen(new LoadScreen(u));}
+		if(Intersector.overlaps(touch, backB)){u.nextScreen = new SettingsScreen(u);}
+		else if(Intersector.overlaps(touch, inviteB)){
+			InviteNew i = new InviteNew();
+			i.e=g;
+			
+			u.send(i);
+			u.nextScreen = new SettingsScreen(u);
+		}
+		else if(Intersector.overlaps(touch, userB)){stage.setKeyboardFocus(user);Gdx.input.setOnscreenKeyboardVisible(true);}
 		
 		return true;
 	}
-
-	private void toggleOff() {
+	
+	private void toggleOff(){
+		Gdx.input.setOnscreenKeyboardVisible(false);
+		stage.setKeyboardFocus(null);
 		if(back.isChecked()){back.toggle();}
-		if(changeU.isChecked()){changeU.toggle();}
-		if(changeP.isChecked()){changeP.toggle();}
 		if(invite.isChecked()){invite.toggle();}
-		if(review.isChecked()){review.toggle();}
-		if(logout.isChecked()){logout.toggle();}
-		
+	}
+	
+	public void refresh(){
+		Refresh r = new Refresh();
+		r.e=u.myAcc.e;
+		r.lat=u.controller.getLat();r.lng=u.controller.getLong();
+		u.send(r);
 	}
 
 	@Override
@@ -208,6 +224,5 @@ public class SettingsScreen implements Screen,InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-}
 
+}

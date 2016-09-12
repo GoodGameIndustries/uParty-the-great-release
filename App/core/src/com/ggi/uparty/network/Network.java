@@ -31,6 +31,10 @@ public class Network {
 		kryo.register(LeaveGroup.class);
 		kryo.register(DeleteGroup.class);
 		kryo.register(Forgot.class);
+		kryo.register(ChangePass.class);
+		kryo.register(ChangeUser.class);
+		kryo.register(InviteNew.class);
+		kryo.register(Comment.class);
 	}
 	
 }

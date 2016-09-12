@@ -25,6 +25,9 @@ import com.esotericsoftware.kryonet.Server;
 import com.ggi.uparty.data.Datapoint;
 import com.ggi.uparty.data.World;
 import com.ggi.uparty.network.Account;
+import com.ggi.uparty.network.ChangePass;
+import com.ggi.uparty.network.ChangeUser;
+import com.ggi.uparty.network.Comment;
 import com.ggi.uparty.network.Confirm;
 import com.ggi.uparty.network.DeleteGroup;
 import com.ggi.uparty.network.DownVote;
@@ -34,6 +37,7 @@ import com.ggi.uparty.network.Forgot;
 import com.ggi.uparty.network.Friend;
 import com.ggi.uparty.network.Group;
 import com.ggi.uparty.network.Invite;
+import com.ggi.uparty.network.InviteNew;
 import com.ggi.uparty.network.LeaveGroup;
 import com.ggi.uparty.network.Login;
 import com.ggi.uparty.network.Member;
@@ -51,14 +55,14 @@ public class UPServer extends JFrame{
 	
 	public Server server;
 	
-	private boolean debug = false;
+	private boolean debug = true;
 	private String path = debug?"D:\\profiles\\":"C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
 	private RightPane right;
 	private LeftPane left;
 	
 	public World world;
 
-	private String htmlTemplate="",forgotTemplate="";
+	private String htmlTemplate="",forgotTemplate="",inviteTemplate ="";
 
 	public long lastResponse=0;
 
@@ -92,6 +96,7 @@ public class UPServer extends JFrame{
 		} catch (IOException e) {
 		}
 		htmlTemplate = contentBuilder.toString();
+		contentBuilder = new StringBuilder();
 		
 		try {
 		    BufferedReader in = new BufferedReader(new FileReader("uPartyForgotEmail.html"));
@@ -103,6 +108,18 @@ public class UPServer extends JFrame{
 		} catch (IOException e) {
 		}
 		forgotTemplate = contentBuilder.toString();
+		contentBuilder = new StringBuilder();
+		
+		try {
+		    BufferedReader in = new BufferedReader(new FileReader("uPartyInviteEmail.html"));
+		    String str;
+		    while ((str = in.readLine()) != null) {
+		        contentBuilder.append(str);
+		    }
+		    in.close();
+		} catch (IOException e) {
+		}
+		inviteTemplate = contentBuilder.toString();
 		
 		
 		Timer timer = new Timer();
@@ -124,7 +141,7 @@ public class UPServer extends JFrame{
 		server = new Server();
 		server.start();
 		try {
-			server.bind(36694);
+			server.bind(36695);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -282,6 +299,34 @@ public class UPServer extends JFrame{
 					
 				}
 				
+				if(object instanceof InviteNew){
+					InviteNew o = (InviteNew)object;
+					if(loadAccount(o.e)==null){
+						SendMailSSL mail = new SendMailSSL();
+						try {
+							mail.send(o.e,"uParty Invitation",inviteTemplate);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+				}
+				
+				if(object instanceof ChangeUser){
+					ChangeUser o = (ChangeUser) object;
+					Account a = loadAccount(o.e);
+					a.u=o.u;
+					saveAccount(a);	
+				}
+				
+				if(object instanceof ChangePass){
+					ChangePass o = (ChangePass) object;
+					Account a = loadAccount(o.e);
+					a.p=o.p;
+					saveAccount(a);	
+				}
+				
 				if(object instanceof LeaveGroup){
 					LeaveGroup o = (LeaveGroup)object;
 					Group g = loadGroup(o.group);
@@ -311,6 +356,32 @@ public class UPServer extends JFrame{
 					}
 					saveGroup(g);
 					saveAccount(a);
+					}
+				}
+				
+				if(object instanceof Comment){
+					Comment o = (Comment)object;
+					if(o.group.length()>0){
+						Group g = loadGroup(o.group);
+						ArrayList<Event> events = g.events;
+						for(int i = 0; i < events.size();i++){
+							if(events.get(i).ID.equals(o.ID)){
+								Event e = events.get(i);
+								e.comments.add(o.c);giveXp(o.e,2);
+							}
+						}
+						saveGroup(g);
+					}
+					else{
+					ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
+					for(int i = 0; i < events.size();i++){
+						if(events.get(i).ID.equals(o.ID)){
+							Event e = events.get(i);
+							e.comments.add(o.c);giveXp(o.e,2);
+						}
+					}
+					
+					saveWorld(world);
 					}
 				}
 				
@@ -481,6 +552,14 @@ public class UPServer extends JFrame{
 					u.ID=s.ID;
 					u.group=e.group;
 					connection.sendTCP(u);
+				}
+				for(String c:e.comments){
+					Comment com = new Comment();
+					com.e="";
+					com.c=c;
+					com.ID=s.ID;
+					com.group=e.group;
+					connection.sendTCP(com);
 				}
 				
 				/*for(String a:e.reporters){
