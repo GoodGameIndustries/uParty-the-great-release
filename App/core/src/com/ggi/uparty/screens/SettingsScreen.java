@@ -171,12 +171,12 @@ public class SettingsScreen implements Screen,InputProcessor {
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.setScreen(new MainScreen(u));}
-		else if(Intersector.overlaps(touch, changeUB)){u.setScreen(new ChangeUserScreen(u));}
-		else if(Intersector.overlaps(touch, changePB)){u.setScreen((new ChangePasswordScreen(u)));}
-		else if(Intersector.overlaps(touch, inviteB)){u.setScreen(new InviteNewScreen(u));}
+		if(Intersector.overlaps(touch, backB)){u.nextScreen =(new MainScreen(u));}
+		else if(Intersector.overlaps(touch, changeUB)){u.nextScreen =(new ChangeUserScreen(u));}
+		else if(Intersector.overlaps(touch, changePB)){u.nextScreen =((new ChangePasswordScreen(u)));}
+		else if(Intersector.overlaps(touch, inviteB)){u.nextScreen =(new InviteNewScreen(u));}
 		else if(Intersector.overlaps(touch, reviewB)){Gdx.net.openURI("www.uaprtyapp.com/redirect");}
-		else if(Intersector.overlaps(touch, logoutB)){u.myAcc=null;u.logout=true;u.setScreen(new LoadScreen(u));}
+		else if(Intersector.overlaps(touch, logoutB)){u.myAcc=null;u.logout=true;u.nextScreen =(new LoadScreen(u));}
 		
 		return true;
 	}

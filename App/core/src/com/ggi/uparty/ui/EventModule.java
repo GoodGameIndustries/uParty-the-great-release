@@ -2,6 +2,7 @@ package com.ggi.uparty.ui;
 
 import java.util.Date;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,10 +41,13 @@ public class EventModule {
 		down=l.s.u.assets.get("UI/SlideDown.png");
 		downC=l.s.u.assets.get("UI/SlideDownChecked.png");
 		
-		i="Start: "+dateToString(e.start)+"\nEnd: "+dateToString(e.end)+"\n\nDescription: "+e.description;
+		//i="Start: "+dateToString(e.start)+"\nEnd: "+dateToString(e.end)+"\n\nDescription: "+e.description;
+		i=e.description;
 		
 		info = new TextArea(i,l.s.u.viewAreaStyle);
 			info.setAlignment(Align.left);
+			
+		bounds = new Rectangle(0,0,Gdx.graphics.getWidth(),.19f*Gdx.graphics.getHeight());	
 			
 	}
 	
@@ -59,12 +63,12 @@ public class EventModule {
 		return result;
 	}
 
-	public void Draw(SpriteBatch pic, float fade){
+	public void draw(SpriteBatch pic, float fade){
 		
 		upB=new Rectangle(bounds.x+.9f*bounds.width-.048f*l.s.u.w,bounds.y+.75f*bounds.height-.012f*l.s.u.h,.096f*l.s.u.w,.024f*l.s.u.h);
 		downB=new Rectangle(bounds.x+.9f*bounds.width-.048f*l.s.u.w,bounds.y+.25f*bounds.height-.012f*l.s.u.h,.096f*l.s.u.w,.024f*l.s.u.h);
 		
-		info.setBounds(bounds.x+.05f*bounds.width, bounds.y+.1f*bounds.height, .6f*bounds.width, .6f*bounds.height);
+		info.setBounds(bounds.x+.05f*bounds.width, bounds.y+.25f*bounds.height, .7f*bounds.width, .5f*bounds.height);
 		pic.setColor(1, 1, 1, fade);
 		pic.draw(background,bounds.x,bounds.y,bounds.width,bounds.height);
 		

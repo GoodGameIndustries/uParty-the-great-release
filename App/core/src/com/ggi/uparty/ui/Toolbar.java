@@ -16,71 +16,69 @@ public class Toolbar {
 	
 	public Rectangle bounds;
 	
-	public int sortState=1;//0=hot 1=next 2=new
+	public int sortState=1;//0=menu 1=next 2=hot 3=new
 	
-	public Texture bg,logo;
+	public Texture bg,bg2;
 	
 	public GlyphLayout layout = new GlyphLayout();
 	
-	public TextButton hot,next,nw;
-	
-	public Rectangle hotB,nextB,nwB;
-	
 	public String feed = "";
+	
+	public float sideScroll = 0;
+
+	private float velocity = 0;
+	
+	public boolean isPan = false;
 	
 	
 	public Toolbar(MainScreen s){
 		this.s=s;
-		bounds = new Rectangle(0,.916f*s.u.h,s.u.w,.094f*s.u.h);
-		bg = s.u.assets.get("UI/Toolbar.png");
-		logo = s.u.assets.get("Logos/512.png");
+		bounds = new Rectangle(0,.875f*s.u.h,s.u.w,.125f*s.u.h);
+		bg = s.u.assets.get("UI/Filled.png");
+		bg2 = s.u.assets.get("UI/EventModule.png");
 		
-		hotB=new Rectangle(bounds.x,bounds.y,bounds.width/3f,bounds.height/2);
-		nextB=new Rectangle(bounds.x+bounds.width/3f,bounds.y,bounds.width/3f,bounds.height/2);
-		nwB=new Rectangle(bounds.x+2*bounds.width/3f,bounds.y,bounds.width/3f,bounds.height/2);
-		
-		hot = new TextButton("Hot",s.u.sortButtonStyle);
-			hot.setBounds(hotB.x, hotB.y, hotB.width, hotB.height);
-		next = new TextButton("Next",s.u.sortButtonStyle);
-			next.setBounds(nextB.x,nextB.y,nextB.width,nextB.height);
-		nw = new TextButton("New",s.u.sortButtonStyle);
-			nw.setBounds(nwB.x, nwB.y, nwB.width, nwB.height);
 	}
 	
 	public void draw(SpriteBatch pic, float fade){
-		toggle();
-		pic.setColor(1, 1, 1, fade);
-		pic.draw(bg,bounds.x,bounds.y,bounds.width,bounds.height);
-		s.u.mediumFnt.setColor(new Color(0f,0f,0f,fade));
-		layout.setText(s.u.mediumFnt, "uParty");
-		s.u.mediumFnt.draw(pic, "uParty", .02f*bounds.width, .87f*bounds.height-layout.height/2+bounds.y);
-		layout.setText(s.u.mediumFnt, s.u.myAcc.u);
-		s.u.mediumFnt.draw(pic, s.u.myAcc.u, .98f*bounds.width-layout.width, .87f*bounds.height-layout.height/2+bounds.y);
-		if(!(feed.length()>0)){
-		pic.setColor(1, 1, 1, fade);
-		pic.draw(logo,bounds.x+.5f*bounds.width-.15f*bounds.height,bounds.y+.55f*bounds.height,.3f*bounds.height,.3f*bounds.height);
-		}else{
-			layout.setText(s.u.mediumFnt, feed);
-			s.u.mediumFnt.draw(pic, feed, bounds.width/2-layout.width/2, .87f*bounds.height-layout.height/2+bounds.y);
-		}
-		hot.draw(pic, fade);
-		next.draw(pic, fade);
-		nw.draw(pic, fade);
-	}
-
-	private void toggle() {
-		if(hot.isChecked()){hot.toggle();}
-		if(next.isChecked()){next.toggle();}
-		if(nw.isChecked()){nw.toggle();}
 		
-		switch(sortState){
-		case 0:hot.toggle();
-			break;
-		case 1:next.toggle();
-			break;
-		case 2:nw.toggle();
-			break;
+		if(velocity!=0){
+			sideScroll += velocity;
+			velocity/=1.1;
 		}
+		
+		if(!isPan){
+		sideScroll/=1.1;
+		}
+		
+		if(sideScroll > .125f*s.u.w && sortState<3){
+			sortState+=1;
+			sideScroll-=.25f*s.u.w;
+			s.events.sort();
+		}
+		else if(sideScroll < -.125f*s.u.w && sortState>0){
+			sortState-=1;
+			sideScroll+=.25f*s.u.w;
+			s.events.sort();
+		}
+		
+		
+		
+		pic.setColor(1, 1, 1, fade);
+		pic.draw(bg,bounds.x,bounds.y+0.5f*bounds.height,bounds.width,.5f*bounds.height);
+		pic.draw(bg2,bounds.x,bounds.y,bounds.width,0.5f*bounds.height);
+		
+		pic.draw(sortState == 0?s.u.assets.get("UI/Toolbar/MenuC.png",Texture.class):s.u.assets.get("UI/Toolbar/Menu.png",Texture.class),bounds.x + .125f*bounds.width-.125f*bounds.height,bounds.y+.125f*bounds.height,.25f*bounds.height,.25f*bounds.height);
+		pic.draw(sortState == 1?s.u.assets.get("UI/Toolbar/NextC.png",Texture.class):s.u.assets.get("UI/Toolbar/Next.png",Texture.class),bounds.x + .375f*bounds.width-.125f*bounds.height,bounds.y+.125f*bounds.height,.25f*bounds.height,.25f*bounds.height);
+		pic.draw(sortState == 2?s.u.assets.get("UI/Toolbar/HotC.png",Texture.class):s.u.assets.get("UI/Toolbar/Hot.png",Texture.class),bounds.x + .625f*bounds.width-.125f*bounds.height,bounds.y+.125f*bounds.height,.25f*bounds.height,.25f*bounds.height);
+		pic.draw(sortState == 3?s.u.assets.get("UI/Toolbar/RecentC.png",Texture.class):s.u.assets.get("UI/Toolbar/Recent.png",Texture.class),bounds.x + .875f*bounds.width-.125f*bounds.height,bounds.y+.125f*bounds.height,.25f*bounds.height,.25f*bounds.height);
+		
+		pic.draw(bg,bounds.x+sortState*.25f*bounds.width+sideScroll,bounds.y,.25f*bounds.width,.05f*bounds.height);
+		
+		s.u.mediumFnt.setColor(new Color(0f,0f,0f,fade));
+		layout.setText(s.u.mediumFnt, feed.length()==0?"Around You":feed);
+		s.u.mediumFnt.draw(pic, feed.length()==0?"Around You":feed,bounds.x+bounds.width/2-layout.width/2,bounds.y+.75f*bounds.height+layout.height/2);
+		
+		
 		
 	}
 
@@ -90,11 +88,27 @@ public class Toolbar {
 	}
 
 	public void touchUp(Rectangle touch) {
-		if(Intersector.overlaps(touch, hotB)){sortState=0;}
-		else if(Intersector.overlaps(touch, nextB)){sortState=1;}
-		else if(Intersector.overlaps(touch, nwB)){sortState=2;}
+		
 		s.events.sort();
 		
+	}
+
+	public void fling(float velocityX) {
+		velocityX/=s.u.w/3;
+		velocity  = -velocityX;
+		
+	}
+
+	public void pan(float deltaX) {
+		//deltaX/=s.u.w/150;
+		deltaX/=4;
+		sideScroll  += -deltaX;
+		isPan = true;
+		
+	}
+	
+	public void panStop(){
+		isPan = false;
 	}
 	
 }

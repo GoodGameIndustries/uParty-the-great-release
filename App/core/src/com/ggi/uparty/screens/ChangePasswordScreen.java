@@ -231,7 +231,7 @@ public class ChangePasswordScreen implements Screen, InputProcessor{
 		
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.setScreen(new SettingsScreen(u));}
+		if(Intersector.overlaps(touch, backB)){u.nextScreen =(new SettingsScreen(u));}
 		else if(Intersector.overlaps(touch, changeB)){
 			if(!n.equals(cn)){
 				u.error="New passwords do not match.";

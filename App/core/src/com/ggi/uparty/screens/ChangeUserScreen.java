@@ -189,7 +189,7 @@ public class ChangeUserScreen implements Screen, InputProcessor{
 			ch.u=g;
 			
 			u.send(ch);
-			u.setScreen(new SettingsScreen(u));
+			u.nextScreen =(new SettingsScreen(u));
 			
 		}
 		else if(Intersector.overlaps(touch, userB)){stage.setKeyboardFocus(user);Gdx.input.setOnscreenKeyboardVisible(true);}

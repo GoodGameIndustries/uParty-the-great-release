@@ -110,6 +110,7 @@ public class LoginScreen implements Screen, InputProcessor {
 	public void render(float delta) {
 		error.setText(u.error);
 		
+		
 		if(u.myAcc!=null){
 			if(!u.myAcc.confirmed){u.nextScreen=new ConfirmationScreen(u);}
 			else{u.nextScreen=new MainScreen(u);}

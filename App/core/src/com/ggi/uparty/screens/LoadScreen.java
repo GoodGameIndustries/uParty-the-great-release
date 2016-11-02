@@ -67,8 +67,8 @@ public class LoadScreen implements Screen {
 		
 		
 		i++;
-		angle = (u.assets.getLoadedAssets()/(float)(u.assets.getLoadedAssets()+u.assets.getQueuedAssets()))*360f;
-		if(angle>i/50*360){angle=-i/50f*360f;}
+		angle = -(u.assets.getLoadedAssets()/(float)(u.assets.getLoadedAssets()+u.assets.getQueuedAssets()))*360f;
+		if(angle>i/50*360){/*angle=-i/50f*360f;*/}
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		//System.out.println(u.assets.getQueuedAssets());

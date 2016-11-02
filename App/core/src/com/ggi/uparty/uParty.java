@@ -59,7 +59,7 @@ public class uParty extends Game {
 	
 	public String error="";
 	
-	public boolean debug = false;
+	public boolean debug = true;
 	
 	public Screen nextScreen;
 	
@@ -118,7 +118,6 @@ public class uParty extends Game {
 		assets.load("UI/TextFieldChecked.png", Texture.class);
 		assets.load("UI/CheckBox.png", Texture.class);
 		assets.load("UI/CheckBoxChecked.png", Texture.class);
-		assets.load("UI/Toolbar.png", Texture.class);
 		assets.load("Logos/512.png", Texture.class);
 		assets.load("UI/PopUpMenu.png", Texture.class);
 		assets.load("UI/PopUpMenuBottom.png", Texture.class);
@@ -133,6 +132,23 @@ public class uParty extends Game {
 		assets.load("UI/TextAreaChecked.png", Texture.class);
 		assets.load("UI/EventModule.png", Texture.class);
 		assets.load("UI/Load.png", Texture.class);
+		assets.load("UI/Toolbar/Hot.png", Texture.class);
+		assets.load("UI/Toolbar/HotC.png", Texture.class);
+		assets.load("UI/Toolbar/Menu.png", Texture.class);
+		assets.load("UI/Toolbar/MenuC.png", Texture.class);
+		assets.load("UI/Toolbar/Next.png", Texture.class);
+		assets.load("UI/Toolbar/NextC.png", Texture.class);
+		assets.load("UI/Toolbar/Recent.png", Texture.class);
+		assets.load("UI/Toolbar/RecentC.png", Texture.class);
+		assets.load("UI/Menu/Banner.png", Texture.class);
+		assets.load("UI/Menu/Buttons/groupDown.png", Texture.class);
+		assets.load("UI/Menu/Buttons/groupUp.png", Texture.class);
+		assets.load("UI/Menu/Buttons/newGroupDown.png", Texture.class);
+		assets.load("UI/Menu/Buttons/newGroupUp.png", Texture.class);
+		assets.load("UI/Menu/Buttons/newDown.png", Texture.class);
+		assets.load("UI/Menu/Buttons/newUp.png", Texture.class);
+		assets.load("UI/Menu/Buttons/settingsDown.png", Texture.class);
+		assets.load("UI/Menu/Buttons/settingsUp.png", Texture.class);
 		
 		
 		assets.update();
@@ -142,15 +158,15 @@ public class uParty extends Game {
 	}
 
 	public void loadFonts() {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("calibri.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = (int) (h/80);
+		parameter.size = (int) (h/54);
 		supersmallFnt = generator.generateFont(parameter);
 		
-		parameter.size = (int) (h/50);
+		parameter.size = (int) (h/40);
 		smallFnt = generator.generateFont(parameter); 
 		
-		parameter.size = (int) (h/40);
+		parameter.size = (int) (h/35);
 		mediumFnt = generator.generateFont(parameter); 
 		
 		parameter.size = (int) (h/25);

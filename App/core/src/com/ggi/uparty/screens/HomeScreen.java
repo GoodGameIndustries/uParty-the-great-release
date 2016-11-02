@@ -111,6 +111,7 @@ public class HomeScreen implements Screen, InputProcessor{
 		u.viewAreaStyle = new TextFieldStyle();
 			u.viewAreaStyle.font=u.supersmallFnt;
 			u.viewAreaStyle.fontColor=Color.WHITE;	
+			//u.viewAreaStyle.background=new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/TextField.png", Texture.class)));
 		u.checkStyle = new CheckBoxStyle();
 			u.checkStyle.checkboxOff=new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/CheckBox.png", Texture.class)));
 			u.checkStyle.checkboxOn=new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/CheckBoxChecked.png", Texture.class)));

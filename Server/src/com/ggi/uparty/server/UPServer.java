@@ -55,7 +55,7 @@ public class UPServer extends JFrame{
 	
 	public Server server;
 	
-	private boolean debug = false;
+	private boolean debug = true;
 	private String path = debug?"D:\\profiles\\":"C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
 	private RightPane right;
 	private LeftPane left;

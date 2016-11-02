@@ -76,9 +76,9 @@ public class CreateEventScreen implements Screen, InputProcessor{
 		errorB = new Rectangle(u.w/9,.04f*u.h,7*u.w/9,u.h/16);
 		
 		start = new DateModule(this);
-			start.bounds= new Rectangle(2*u.w/9,.645f*u.h,5*u.w/9,u.h/16);
+			start.bounds= new Rectangle(.15f*u.w,.645f*u.h,.7f*u.w,u.h/16);
 		end = new DateModule(this);
-			end.bounds= new Rectangle(2*u.w/9,.54f*u.h,5*u.w/9,u.h/16);
+			end.bounds= new Rectangle(.15f*u.w,.54f*u.h,.7f*u.w,u.h/16);
 		
 		name = new TextField(n,u.textFieldStyle);
 			name.setMessageText("Event Name");
@@ -208,6 +208,8 @@ public class CreateEventScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean keyTyped(char character) {
+		if(!Character.isAlphabetic(character)&&!Character.isDigit(character)&&!Character.isSpaceChar(character)&&character!=''){return true;}
+		
 		if(stage.getKeyboardFocus()==null){}
 		
 		else if(stage.getKeyboardFocus().equals(name)){if(character == ''&&n.length()>0){
@@ -452,9 +454,9 @@ public class CreateEventScreen implements Screen, InputProcessor{
 		backB=new Rectangle(u.w/36,.93f*u.h+scr,.15f*u.w,.05f*u.h);
 		errorB = new Rectangle(u.w/9,.04f*u.h+scr,7*u.w/9,u.h/16);
 		
-			start.bounds= new Rectangle(2*u.w/9,.645f*u.h+scr,5*u.w/9,u.h/16);
+			start.bounds= new Rectangle(.15f*u.w,.645f*u.h+scr,.7f*u.w,u.h/16);
 	
-			end.bounds= new Rectangle(2*u.w/9,.54f*u.h+scr,5*u.w/9,u.h/16);
+			end.bounds= new Rectangle(.15f*u.w,.54f*u.h+scr,.7f*u.w,u.h/16);
 		
 			name.setBounds(nameB.x, nameB.y, nameB.width, nameB.height);
 		
