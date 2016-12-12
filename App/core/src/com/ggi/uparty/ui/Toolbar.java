@@ -41,27 +41,7 @@ public class Toolbar {
 	
 	public void draw(SpriteBatch pic, float fade){
 		
-		if(velocity!=0){
-			sideScroll += velocity;
-			velocity/=1.1;
-		}
-		
-		if(!isPan){
-		sideScroll/=1.1;
-		}
-		
-		if(sideScroll > .125f*s.u.w && sortState<3){
-			sortState+=1;
-			sideScroll-=.25f*s.u.w;
-			s.events.sort();
-		}
-		else if(sideScroll < -.125f*s.u.w && sortState>0){
-			sortState-=1;
-			sideScroll+=.25f*s.u.w;
-			s.events.sort();
-		}
-		
-		
+		if(sideScroll - sortState*(.25f*s.u.w) != 0) { sideScroll += (sortState*(.25f*s.u.w) - sideScroll) / 3; }
 		
 		pic.setColor(1, 1, 1, fade);
 		pic.draw(bg,bounds.x,bounds.y+0.5f*bounds.height,bounds.width,.5f*bounds.height);
@@ -72,7 +52,7 @@ public class Toolbar {
 		pic.draw(sortState == 2?s.u.assets.get("UI/Toolbar/HotC.png",Texture.class):s.u.assets.get("UI/Toolbar/Hot.png",Texture.class),bounds.x + .625f*bounds.width-.125f*bounds.height,bounds.y+.125f*bounds.height,.25f*bounds.height,.25f*bounds.height);
 		pic.draw(sortState == 3?s.u.assets.get("UI/Toolbar/RecentC.png",Texture.class):s.u.assets.get("UI/Toolbar/Recent.png",Texture.class),bounds.x + .875f*bounds.width-.125f*bounds.height,bounds.y+.125f*bounds.height,.25f*bounds.height,.25f*bounds.height);
 		
-		pic.draw(bg,bounds.x+sortState*.25f*bounds.width+sideScroll,bounds.y,.25f*bounds.width,.05f*bounds.height);
+		pic.draw(bg,bounds.x + sideScroll,bounds.y,.25f*bounds.width,.05f*bounds.height);
 		
 		s.u.mediumFnt.setColor(new Color(0f,0f,0f,fade));
 		layout.setText(s.u.mediumFnt, feed.length()==0?"Around You":feed);
@@ -90,20 +70,6 @@ public class Toolbar {
 	public void touchUp(Rectangle touch) {
 		
 		s.events.sort();
-		
-	}
-
-	public void fling(float velocityX) {
-		velocityX/=s.u.w/3;
-		velocity  = -velocityX;
-		
-	}
-
-	public void pan(float deltaX) {
-		//deltaX/=s.u.w/150;
-		deltaX/=4;
-		sideScroll  += -deltaX;
-		isPan = true;
 		
 	}
 	

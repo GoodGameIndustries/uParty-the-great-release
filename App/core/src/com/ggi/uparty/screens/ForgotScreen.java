@@ -43,6 +43,8 @@ public class ForgotScreen implements Screen, InputProcessor{
 	public boolean created = false;
 	
 	public Group groupR;
+
+	private boolean goB = false;
 	
 	public ForgotScreen(uParty u,Group groupR){
 		this.u=u;
@@ -99,9 +101,10 @@ public class ForgotScreen implements Screen, InputProcessor{
 		
 		if(created){u.nextScreen = new GroupSettingsScreen(u,u.myAcc.groups.get(u.myAcc.groups.size()-1));created=false;}
 		
-		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
-		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
+		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
+		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		else if(goB){u.goBack();}
 		
 	}
 
@@ -183,7 +186,7 @@ public class ForgotScreen implements Screen, InputProcessor{
 		
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.nextScreen = new LoadScreen(u);}
+		if(Intersector.overlaps(touch, backB)){goB = true;}
 		else if(Intersector.overlaps(touch, createB)){
 			Forgot i = new Forgot();
 			i.e=g;

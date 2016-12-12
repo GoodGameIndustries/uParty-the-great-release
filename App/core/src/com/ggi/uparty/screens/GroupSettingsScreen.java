@@ -48,6 +48,8 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 	public boolean initTouch = false;
 
 	private boolean override = true;
+
+	private boolean goB = false;
 	
 	public GroupSettingsScreen(uParty u, Group g){
 		this.u=u;
@@ -152,9 +154,10 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 		
 		pic.end();
 		
-		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
-		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
+		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
+		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		else if(goB){u.goBack();}
 		
 		
 	}
@@ -246,7 +249,7 @@ public class GroupSettingsScreen implements Screen,InputProcessor{
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		toggleOff();
 		if(!initTouch){
-		if(Intersector.overlaps(touch, backB)){u.nextScreen=new MainScreen(u);}
+		if(Intersector.overlaps(touch, backB)){goB = true;}
 		if(Intersector.overlaps(touch, inviteB)&&g.owner.equals(u.myAcc.e)){u.nextScreen=new InviteScreen(u,g);}
 		if(Intersector.overlaps(touch, deleteB)&&g.owner.equals(u.myAcc.e)){u.nextScreen=new ConfirmDeleteScreen(u,g);}
 		else if(Intersector.overlaps(touch, deleteB)){

@@ -49,7 +49,7 @@ public class CommentModule extends Module{
 	public void draw(SpriteBatch pic, float fade){
 		pic.setColor(1, 1, 1, fade);
 		pic.draw(bg,bounds.x,bounds.y,bounds.width,bounds.height);
-		a.setBounds(.05f*bounds.width+bounds.height, bounds.y+.1f*bounds.height, .9f*bounds.width-bounds.height, .6f*bounds.height);
+		a.setBounds(.05f*bounds.width+bounds.height, bounds.y+.1f*bounds.height, .9f*bounds.width-bounds.height, .8f*bounds.height);
 		a.draw(pic, fade);
 		
 		float ratio = -(leftOverXP/neededToLvXP)*360;

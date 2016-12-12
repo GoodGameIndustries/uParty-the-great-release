@@ -12,8 +12,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
@@ -24,11 +27,12 @@ import com.ggi.uparty.network.Group;
 import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.UpVote;
 import com.ggi.uparty.ui.CommentModule;
+import com.ggi.uparty.ui.EventBar;
 import com.ggi.uparty.ui.List;
 import com.ggi.uparty.ui.Module;
 import com.ggi.uparty.ui.RadialSprite;
 
-public class EventScreen implements Screen, InputProcessor{
+public class EventScreen implements Screen, GestureListener{
 
 	public uParty u;
 	
@@ -38,15 +42,13 @@ public class EventScreen implements Screen, InputProcessor{
 	
 	public SpriteBatch pic;
 	
-	public float fade = 0;
+	public TextArea description, location, time;
 	
-	public TextArea info;
+	public float fade = 0;
 	
 	public TextButton back,report,reply;
 	
-	public String i = "";
-	
-	public Rectangle infoB,backB,upB,downB,reportB,replyB;
+	public Rectangle descriptionB,locationB,timeB,backB,upB,downB,reportB,replyB;
 	
 	public GlyphLayout layout = new GlyphLayout();
 	
@@ -55,6 +57,8 @@ public class EventScreen implements Screen, InputProcessor{
     public long lv=0;
 	
 	public float leftOverXP=1,neededToLvXP=1;
+	
+	public float veloc = 0;
 	
 	public RadialSprite lvBar;
 	
@@ -67,6 +71,16 @@ public class EventScreen implements Screen, InputProcessor{
 	public ArrayList<Module> modules = new ArrayList<Module>();
 
 	private boolean initTouch;
+
+	public float scrolled = 0;
+	
+	public float velocity = 0;
+	
+	public EventBar bar;
+	
+	public boolean isPan = false;
+
+	private boolean goB = false;
 	
 	public EventScreen(uParty u, Event e, Group g){
 		this.u=u;
@@ -74,6 +88,8 @@ public class EventScreen implements Screen, InputProcessor{
 		this.g=g;
 		
 		list = new List(u);
+		
+		bar = new EventBar(u,this);
 		
 		genModules();
 	}
@@ -89,21 +105,21 @@ public class EventScreen implements Screen, InputProcessor{
 	public void show() {
 		pic = new SpriteBatch();
 		
-		Gdx.input.setInputProcessor(this);
+		GestureDetector gd = new GestureDetector(this);
+		Gdx.input.setInputProcessor(gd);
 		
 		getLv();
 		
-		i="> Start: "+dateToString(e.start)+"\n> End: "+dateToString(e.end)+"\n> Description: "+e.description+"\n> Location: "+e.location + "\n> Total Votes: "+(e.upVote.size()+e.downVote.size())+"\n> Posted by: lv " + lv;
-		layout.setText(u.supersmallFnt, i);
-		iHeight=layout.height;
-		backB = new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
-		infoB = new Rectangle(.05f*u.w,.89f*u.h-2f*iHeight,.6f*u.w,2f*iHeight);
-		upB=new Rectangle(.9f*u.w-.048f*u.w,.85f*u.h-.8f*iHeight/2+.05f*u.h-.012f*u.h,.096f*u.w,.024f*u.h);
-		downB=new Rectangle(.9f*u.w-.048f*u.w,.85f*u.h-.8f*iHeight/2-.05f*u.h-.012f*u.h,.096f*u.w,.024f*u.h);
-		reportB = new Rectangle(u.w-.15f*u.w-u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
+		descriptionB = new Rectangle(.2f*u.w,.7584375f*u.h-.05f*u.h-.012f*u.h,.55f*u.w,.124f*u.h);
+		locationB = new Rectangle(.2f*u.w,.7584375f*u.h-.05f*u.h-.012f*u.h - .189375f*u.h,.55f*u.w,.124f*u.h);
+		timeB = new Rectangle(.2f*u.w,.7584375f*u.h-.05f*u.h-.012f*u.h - .378750f*u.h,.55f*u.w,.124f*u.h);
+		backB = new Rectangle(u.w/36,.93f*u.h,.2f*u.w,.05f*u.h);
+		upB=new Rectangle(.9f*u.w-.048f*u.w,.7584375f*u.h+.05f*u.h-.012f*u.h,.096f*u.w,.024f*u.h);
+		downB=new Rectangle(.9f*u.w-.048f*u.w,.7584375f*u.h-.05f*u.h-.012f*u.h,.096f*u.w,.024f*u.h);
+		reportB = new Rectangle(u.w-.2f*u.w-u.w/36,.93f*u.h,.2f*u.w,.05f*u.h);
 		replyB = new Rectangle(0, 0, u.w, u.h/16);
 		
-		background = u.assets.get("UI/Background.png");
+		background = u.assets.get("UI/EventScreenBG.png");
 		up=u.assets.get("UI/SlideUp.png");
 		upC=u.assets.get("UI/SlideUpChecked.png");
 		down=u.assets.get("UI/SlideDown.png");
@@ -115,20 +131,38 @@ public class EventScreen implements Screen, InputProcessor{
 			report.setBounds(reportB.x, reportB.y, reportB.width, reportB.height);
 		reply = new TextButton("Tap to Reply",u.standardButtonStyle);
 			reply.setBounds(replyB.x, replyB.y, replyB.width, replyB.height);
-		info = new TextArea(i,u.viewAreaStyle);
-			info.setAlignment(Align.left);
-			info.setBounds(infoB.x, infoB.y, infoB.width, infoB.height);
+			
+		description = new TextArea(e.description,u.viewAreaStyle);
+			description.setBounds(descriptionB.x, descriptionB.y, descriptionB.width, descriptionB.height);
+		location = new TextArea(e.location, u.viewAreaStyle);
+			location.setBounds(locationB.x, locationB.y, locationB.width, locationB.height);
+		time = new TextArea("Start: " + dateToString(e.start) + "\nEnd: " + dateToString(e.end),u.viewAreaStyle);
+			time.setBounds(timeB.x, timeB.y, timeB.width, timeB.height);
 			
 		
 		lvBar = new RadialSprite(new TextureRegion(u.assets.get("UI/CircleLoad.png",Texture.class)));	
 		
-		list.bounds=new Rectangle(0,.0625f*u.h,u.w,.89f*u.h-2.5f*iHeight-.0625f*u.h);
+		list.bounds=new Rectangle(0,.0625f*u.h,u.w,.6f*u.h);
+		list.modHeight = .1f;
 		
 		getLv();
 	}
 
 	@Override
 	public void render(float delta) {
+		
+		list.move(veloc);
+		
+		if(scrolled < 0) { scrolled = 0; }
+		if(scrolled > .378750f*u.h) {scrolled = .378750f*u.h;}
+		if(scrolled - bar.select*(.189375f*u.h) != 0) { scrolled += (bar.select*(.189375f*u.h) - scrolled) / 3; }
+		
+		descriptionB = new Rectangle(.2f*u.w,.7584375f*u.h-.05f*u.h-.012f*u.h+scrolled,.55f*u.w,.124f*u.h);
+		locationB = new Rectangle(.2f*u.w,.7584375f*u.h-.05f*u.h-.012f*u.h - .189375f*u.h+scrolled,.55f*u.w,.124f*u.h);
+		timeB = new Rectangle(.2f*u.w,.7584375f*u.h-.05f*u.h-.012f*u.h - .378750f*u.h+scrolled,.55f*u.w,.124f*u.h);
+		description.setBounds(descriptionB.x, descriptionB.y, descriptionB.width, descriptionB.height);
+		location.setBounds(locationB.x, locationB.y, locationB.width, locationB.height);
+		time.setBounds(timeB.x, timeB.y, timeB.width, timeB.height);
 		
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -138,13 +172,22 @@ public class EventScreen implements Screen, InputProcessor{
 		pic.begin();
 		
 		pic.setColor(1, 1, 1, 1);
+		pic.draw(u.assets.get("UI/EventModule.png",Texture.class),.13f*u.w,.66375f*u.h,.87f*u.w,.189375f*u.h);
 		pic.draw(background, 0, 0, u.w, u.h);
+		
+		description.draw(pic, fade);
+		location.draw(pic, fade);
+		time.draw(pic, fade);
+		pic.draw(u.assets.get("UI/EventScreenBG.png",Texture.class),0,0,u.w,u.h);
+		pic.draw(u.assets.get("Logos/1024.png",Texture.class),u.w/2-.025f*u.h,.93f*u.h,.05f*u.h,.05f*u.h);
+		
+		bar.draw(pic, fade);
 		list.draw(pic, fade);
-		pic.draw(u.assets.get("UI/EventModule.png",Texture.class),0,.89f*u.h-2.5f*iHeight,u.w,u.h-.89f*u.h+2.5f*iHeight);
 		
 		back.draw(pic, fade);
-		info.draw(pic, fade);
+		//info.draw(pic, fade);
 		reply.draw(pic, fade);
+		report.draw(pic, fade);
 		
 		
 		pic.setColor(1, 1, 1, fade);
@@ -153,37 +196,18 @@ public class EventScreen implements Screen, InputProcessor{
 		
 		u.mediumFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
 		layout.setText(u.mediumFnt,e.name);
-		u.mediumFnt.draw(pic,e.name,.05f*u.w,.91f*u.h+layout.height/2);
+		u.mediumFnt.draw(pic,e.name,u.w/2 - layout.width/2,.89f*u.h+layout.height/2);
 		layout.setText(u.mediumFnt,""+(e.upVote.size()-e.downVote.size()));
-		u.mediumFnt.draw(pic,""+(e.upVote.size()-e.downVote.size()),.9f*u.w-layout.width/2,.85f*u.h-.8f*iHeight/2+layout.height/2);
+		u.mediumFnt.draw(pic,""+(e.upVote.size()-e.downVote.size()),.9f*u.w-layout.width/2,.7584375f*u.h+layout.height/2);
 		
-		/*
-		u.smallFnt.setColor(1,1,1,fade);
-
-		layout.setText(u.smallFnt,"Total Votes: "+(e.upVote.size()+e.downVote.size()));
-		u.smallFnt.draw(pic,"Total Votes: "+(e.upVote.size()+e.downVote.size()), u.w/2-layout.width/2, .42f*u.h+layout.height/2);
-		layout.setText(u.smallFnt,"Posted by:");
-		u.smallFnt.draw(pic,"Posted by:", u.w/2-layout.width/2, .415f*u.h-layout.height/2);
 		
-		getLv();
-		float ratio = -(leftOverXP/neededToLvXP)*360;
-		if(lvAngle!=ratio){lvAngle+=(ratio-lvAngle)/32;}
-		lvBar.setAngle(lvAngle);
-		
-		lvBar.setColor(new Color(1,1,1,fade));
-		if(leftOverXP!=0&&lvAngle!=0){lvBar.draw(pic, u.w/2-u.w/8, .3f*u.h-u.w/8,u.w/4,u.w/4);}
-		
-		u.largeFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
-		layout.setText(u.largeFnt, ""+lv);
-		u.largeFnt.draw(pic, ""+lv, u.w/2-layout.width/2, .3f*u.h+layout.height/2);
-		*/
-		report.draw(pic, fade);
 		
 		pic.end();
 		
-		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
-		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
+		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
+		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		else if(goB){u.goBack();}
 	}
 
 	@Override
@@ -247,46 +271,31 @@ public class EventScreen implements Screen, InputProcessor{
 	    return factorial;
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+	private void toggleOff(){
+		if(report.isChecked()){report.toggle();}
+		if(back.isChecked()){back.toggle();}
+		if(reply.isChecked()){reply.toggle();}
 	}
-
+	
 	@Override
-	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		screenY = (int) (u.h-screenY);
-		Rectangle touch = new Rectangle(screenX,screenY,1,1);
+	public boolean touchDown(float x, float y, int pointer, int button) {
+		initTouch = false;
+		y = (int) (u.h-y);
+		Rectangle touch = new Rectangle(x,y,1,1);
 		if(Intersector.overlaps(touch, backB)){back.toggle();}
 		else if(Intersector.overlaps(touch, reportB)){report.toggle();}
 		else if(Intersector.overlaps(touch, replyB)){reply.toggle();}
 		if(Intersector.overlaps(touch, list.bounds)){list.touchDown(touch);initTouch=true;}
-		
 		return true;
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		screenY = (int) (u.h-screenY);
-		Rectangle touch = new Rectangle(screenX,screenY,1,1);
+	public boolean tap(float x, float y, int count, int button) {
+		y = (int) (u.h-y);
+		Rectangle touch = new Rectangle(x,y,1,1);
 		toggleOff();
 		if(Intersector.overlaps(touch, backB)){
-			MainScreen s = new MainScreen(u);
-			s.g=g;
-			
-			u.nextScreen=s;
+		goB = true;
 		}
 		else if(Intersector.overlaps(touch, reportB)){
 			Report r = new Report();
@@ -327,32 +336,67 @@ public class EventScreen implements Screen, InputProcessor{
 		initTouch=false;
 		return true;
 	}
-	
-	private void toggleOff(){
-		if(report.isChecked()){report.toggle();}
-		if(back.isChecked()){back.toggle();}
-		if(reply.isChecked()){reply.toggle();}
+
+	@Override
+	public boolean longPress(float x, float y) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		screenY = (int) (u.h-screenY);
-		if(initTouch){
-			list.move(screenY-list.lastY);
+	public boolean fling(float velocityX, float velocityY, int button) {
+		velocityY = u.h - velocityY;
+		if (Math.abs(velocityY) > Math.abs(velocityX)&& Math.abs(velocityY) > .01f*u.h) {
+			if(initTouch){
+				
+			}
+			else{
+			if(velocityY > 0){bar.select++;}
+			else if(velocityY < 0){bar.select--;}
+			if(bar.select < 0) { bar.select = 0;}
+			if(bar.select > 2) { bar.select = 2;}
+			}
+		} else if (Math.abs(velocityY) < Math.abs(velocityX)) {
+			//toolbar.fling(velocityX);
 		}
 		return true;
 	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		if (Math.abs(deltaY) > Math.abs(deltaX)) {
+			if(initTouch){
+				list.move(-deltaY);
+			}
+		} else if (Math.abs(deltaY) < Math.abs(deltaX)) {
+			//toolbar.pan(deltaX);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean panStop(float x, float y, int pointer, int button) {
+		velocity = 0;
+		isPan = false;
+		return true;
+	}
+
+	@Override
+	public boolean zoom(float initialDistance, float distance) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean scrolled(int amount) {
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void pinchStop() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

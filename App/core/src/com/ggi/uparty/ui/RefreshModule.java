@@ -35,6 +35,7 @@ public class RefreshModule {
 
 	public void draw(SpriteBatch pic, float fade){
 		theta-=2;
+		pic.setColor(1, 1, 1, fade);
 		pic.draw(icon,bounds.width/2-bounds.height/4,bounds.y+bounds.height/4,bounds.height/2,bounds.height/2);
 		if(s.events.refresh){
 			pic.draw(load, bounds.width/2-bounds.height/4, bounds.y+bounds.height/4, bounds.height/4, bounds.height/4, bounds.height/2, bounds.height/2, 1, 1, theta);

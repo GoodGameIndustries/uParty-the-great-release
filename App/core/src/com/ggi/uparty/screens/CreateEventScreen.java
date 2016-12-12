@@ -50,6 +50,8 @@ public class CreateEventScreen implements Screen, InputProcessor{
 	public Group g;
 	
 	public float scr = 0;
+
+	private boolean goB = false;
 	
 	public CreateEventScreen(uParty u,Group g){
 		this.u=u;
@@ -158,9 +160,10 @@ public class CreateEventScreen implements Screen, InputProcessor{
 		
 		pic.end();
 		
-		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
-		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
+		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
+		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		else if(goB){u.goBack();}
 		
 	}
 
@@ -358,7 +361,7 @@ public class CreateEventScreen implements Screen, InputProcessor{
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.nextScreen=new MainScreen(u);}
+		if(Intersector.overlaps(touch, backB)){goB = true;}
 		else if(Intersector.overlaps(touch, createB)){
 			if(n.length()>0&&d.length()>0&&l.length()>0&&start.isFilled()&&end.isFilled()){
 				if(d.length()>140){d=d.substring(0, 140);}

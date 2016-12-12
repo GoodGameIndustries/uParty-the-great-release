@@ -31,6 +31,8 @@ public class SettingsScreen implements Screen,InputProcessor {
 	public Rectangle changeUB,changePB,inviteB,reviewB,backB,logoutB;
 	
 	public TextButton changeU,changeP,invite,review,back,logout;
+
+	private boolean goB = false;
 	
 	public SettingsScreen(uParty u){
 		this.u=u;
@@ -96,9 +98,10 @@ public class SettingsScreen implements Screen,InputProcessor {
 		
 		
 		
-		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
-		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
+		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
+		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		else if(goB){u.goBack();}
 		
 	}
 
@@ -171,11 +174,11 @@ public class SettingsScreen implements Screen,InputProcessor {
 		Rectangle touch = new Rectangle(screenX,screenY,1,1);
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.nextScreen =(new MainScreen(u));}
+		if(Intersector.overlaps(touch, backB)){goB = true;}
 		else if(Intersector.overlaps(touch, changeUB)){u.nextScreen =(new ChangeUserScreen(u));}
 		else if(Intersector.overlaps(touch, changePB)){u.nextScreen =((new ChangePasswordScreen(u)));}
 		else if(Intersector.overlaps(touch, inviteB)){u.nextScreen =(new InviteNewScreen(u));}
-		else if(Intersector.overlaps(touch, reviewB)){Gdx.net.openURI("www.uaprtyapp.com/redirect");}
+		else if(Intersector.overlaps(touch, reviewB)){Gdx.net.openURI("www.upartyapp.com/redirect");}
 		else if(Intersector.overlaps(touch, logoutB)){u.myAcc=null;u.logout=true;u.nextScreen =(new LoadScreen(u));}
 		
 		return true;

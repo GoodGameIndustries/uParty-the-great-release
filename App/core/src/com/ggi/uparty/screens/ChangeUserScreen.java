@@ -40,6 +40,8 @@ public class ChangeUserScreen implements Screen, InputProcessor{
 	public Stage stage;
 
 	public boolean changed = false;
+
+	private boolean goB = false;
 	
 	
 	
@@ -97,9 +99,10 @@ public class ChangeUserScreen implements Screen, InputProcessor{
 		
 		
 		
-		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
-		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
+		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
+		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		else if(goB){u.goBack();}
 		
 	}
 
@@ -181,7 +184,7 @@ public class ChangeUserScreen implements Screen, InputProcessor{
 		
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.setScreen(new SettingsScreen(u));}
+		if(Intersector.overlaps(touch, backB)){goB = true;}
 		else if(Intersector.overlaps(touch, changeB)&&g.length()>0){
 			
 			ChangeUser ch = new ChangeUser();

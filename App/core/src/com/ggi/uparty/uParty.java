@@ -3,6 +3,7 @@ package com.ggi.uparty;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Stack;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -36,11 +37,12 @@ import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.UpVote;
 import com.ggi.uparty.screens.LoadScreen;
 import com.ggi.uparty.screens.NewGroupScreen;
-import com.ggi.uparty.screens.SignUpScreen;
 
 public class uParty extends Game {
 	
 	public AssetManager assets = new AssetManager();
+	
+	public Stack<Screen> screens = new Stack<Screen>();
 	
 	public float w,h;
 	public BitmapFont supersmallFnt,smallFnt,mediumFnt,largeFnt;
@@ -106,6 +108,7 @@ public class uParty extends Game {
 		
 		
 	}
+	
 
 	private void load() {
 		assets.load("Logos/Social.png",Texture.class);
@@ -119,6 +122,7 @@ public class uParty extends Game {
 		assets.load("UI/CheckBox.png", Texture.class);
 		assets.load("UI/CheckBoxChecked.png", Texture.class);
 		assets.load("Logos/512.png", Texture.class);
+		assets.load("Logos/1024.png", Texture.class);
 		assets.load("UI/PopUpMenu.png", Texture.class);
 		assets.load("UI/PopUpMenuBottom.png", Texture.class);
 		assets.load("UI/SlideUp.png",Texture.class);
@@ -149,7 +153,13 @@ public class uParty extends Game {
 		assets.load("UI/Menu/Buttons/newUp.png", Texture.class);
 		assets.load("UI/Menu/Buttons/settingsDown.png", Texture.class);
 		assets.load("UI/Menu/Buttons/settingsUp.png", Texture.class);
-		
+		assets.load("UI/newPostDown.png", Texture.class);
+		assets.load("UI/newPostUp.png", Texture.class);
+		assets.load("UI/EventScreenBG.png", Texture.class);
+		assets.load("UI/Toolbar/Desc.png", Texture.class);
+		assets.load("UI/Toolbar/DescC.png", Texture.class);
+		assets.load("UI/Toolbar/Loc.png", Texture.class);
+		assets.load("UI/Toolbar/LocC.png", Texture.class);
 		
 		assets.update();
 		
@@ -369,8 +379,16 @@ public class uParty extends Game {
 		}
 	}
 	
+	public void goBack(){
+		error = "";
+		nextScreen = null;
+		super.setScreen(screens.pop());
+		
+	}
+	
 	public void setScreen(Screen s){
 		error="";
+		screens.push(getScreen());
 		nextScreen=null;
 		super.setScreen(s);
 	}

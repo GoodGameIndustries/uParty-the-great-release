@@ -47,6 +47,8 @@ public class CommentScreen implements Screen, InputProcessor{
 	
 	public Group group;
 
+	private boolean goB = false;
+
 	
 	
 	
@@ -67,8 +69,8 @@ public class CommentScreen implements Screen, InputProcessor{
 		tAC = u.assets.get("UI/TextAreaChecked.png");
 		
 		backB = new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
-		commentB = new Rectangle(u.w/9,.5f*u.h,7*u.w/9,.1f*u.h);
-		inviteB = new Rectangle(u.w/4,.42f*u.h,u.w/2,u.h/16);
+		commentB = new Rectangle(u.w/9,.5f*u.h,7*u.w/9,.15f*u.h);
+		inviteB = new Rectangle(u.w/4,.4f*u.h,u.w/2,u.h/16);
 		
 		back = new TextButton("Back",u.standardButtonStyle);
 			back.setBounds(backB.x, backB.y, backB.width, backB.height);
@@ -103,16 +105,17 @@ public class CommentScreen implements Screen, InputProcessor{
 		
 		u.largeFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
 		layout.setText(u.largeFnt, "New Comment");
-		u.largeFnt.draw(pic, "New Comment", u.w/2-layout.width/2, .7f*u.h-layout.height/2);
+		u.largeFnt.draw(pic, "New Comment", u.w/2-layout.width/2, .73f*u.h-layout.height/2);
 		
 		
 		pic.end();
 		
 		
 		
-		if(u.nextScreen==null&&fade<1f){fade+=(1-fade)/2;}
-		else if(u.nextScreen!=null&&fade>.1f){fade+=(0-fade)/2;}
+		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
+		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
 		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
+		else if(goB ){u.goBack();}
 		
 	}
 
@@ -194,7 +197,7 @@ public class CommentScreen implements Screen, InputProcessor{
 		
 		toggleOff();
 		
-		if(Intersector.overlaps(touch, backB)){u.nextScreen=new EventScreen(u,e,group);}
+		if(Intersector.overlaps(touch, backB)){goB = true;}
 		else if(Intersector.overlaps(touch, inviteB)){
 			Comment c = new Comment();
 			c.ID=e.ID;
