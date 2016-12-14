@@ -42,6 +42,7 @@ public class EventList {
 	}
 	
 	public void giveEvents(ArrayList<Event> evs){
+		//System.out.println("Refresh End");
 		modules.clear();
 		this.evs.clear();
 		this.evs.addAll(evs);
@@ -87,6 +88,8 @@ public class EventList {
 		else if(scrolled > 0){
 			scrolled = 0;
 		}
+		
+		
 		
 		rM.bounds.y = .675f*s.u.h+.2f*s.u.h+scrolled;
 		rM.draw(pic, fade);

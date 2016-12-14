@@ -175,8 +175,8 @@ public class MainScreen implements Screen, GestureListener {
 
 	public void refresh() {
 		//u.events.clear();
-		events.refresh = true;
-		events.scrolled = (int) (-.16f*u.h);
+		//events.refresh = true;
+		//events.scrolled = (int) (-.16f*u.h);
 		Refresh r = new Refresh();
 		r.e = u.myAcc.e;
 		r.lat = u.controller.getLat();
@@ -238,8 +238,8 @@ public class MainScreen implements Screen, GestureListener {
 			else if(velocityX < 0){
 				if(toolbar.sortState < 3){toolbar.sortState++;}
 			}
+			u.needUpdate=true;
 		}
-		u.needUpdate=true;
 		
 		return true;
 	}

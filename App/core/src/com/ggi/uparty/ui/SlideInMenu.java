@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.Group;
 import com.ggi.uparty.screens.CreateEventScreen;
+import com.ggi.uparty.screens.GroupScreen;
+import com.ggi.uparty.screens.GroupSettingsScreen;
 import com.ggi.uparty.screens.NewGroupScreen;
 import com.ggi.uparty.screens.SettingsScreen;
 
@@ -148,7 +150,7 @@ public class SlideInMenu {
 			u.nextScreen = new CreateEventScreen(u, g);
 		}
 		else if(Intersector.overlaps(touch, new Rectangle(groups.getX(),groups.getY(),groups.getWidth(),groups.getHeight()))){
-			//Make Group Screen
+			u.nextScreen = new GroupScreen(u);
 		}
 		else if(Intersector.overlaps(touch, new Rectangle(newGroup.getX(),newGroup.getY(),newGroup.getWidth(),newGroup.getHeight()))){
 			u.nextScreen = new NewGroupScreen(u);
