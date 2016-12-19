@@ -348,7 +348,6 @@ public class EventScreen implements Screen, GestureListener{
 		velocityY = u.h - velocityY;
 		if (Math.abs(velocityY) > Math.abs(velocityX)&& Math.abs(velocityY) > .01f*u.h) {
 			if(initTouch){
-				
 			}
 			else{
 			if(velocityY > 0){bar.select++;}

@@ -149,6 +149,7 @@ public class UPServer extends JFrame{
 		Network.register(server);
 		server.addListener(new ThreadedListener(new Listener(){
 			 public void received (Connection connection, Object object) {
+				 //System.out.println(connection.getRemoteAddressTCP().getHostString());
 				 long startTime = System.currentTimeMillis();
 				 if(object instanceof SignUp){
 					 SignUp o = (SignUp)object;

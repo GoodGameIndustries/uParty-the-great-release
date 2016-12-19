@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -72,7 +73,7 @@ public class LoginScreen implements Screen, InputProcessor {
 		loginB=new Rectangle(u.w/9,.31f*u.h,7*u.w/9,u.h/16);
 		backB=new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
 		forgotB=new Rectangle(.35f*u.w,.27f*u.h,.3f*u.w,u.h/60);
-		rememberB=new Rectangle(.6f*u.w,.386f*u.h,u.h/64,u.h/64);
+		rememberB=new Rectangle(.65f*u.w,.38f*u.h,u.h/32,u.h/32);
 		errorB = new Rectangle(u.w/9,.2f*u.h,7*u.w/9,u.h/16);
 		
 		email = new TextField(e, u.textFieldStyle);
@@ -100,6 +101,7 @@ public class LoginScreen implements Screen, InputProcessor {
 			
 		stage.addActor(email);
 		stage.addActor(pass);
+		stage.addActor(remember);
 		
 	}
 
@@ -129,13 +131,16 @@ public class LoginScreen implements Screen, InputProcessor {
 		login.draw(pic, fade);
 		back.draw(pic, fade);
 		forgot.draw(pic, fade);
-		remember.draw(pic, fade);
+		//remember.draw(pic, fade);
+		
+		pic.draw((remember.isChecked()?u.assets.get("UI/CheckBoxChecked.png",Texture.class):u.assets.get("UI/CheckBox.png",Texture.class)),rememberB.x,rememberB.y,rememberB.width,rememberB.height);
+		
 		error.draw(pic, fade);
 		
 		pic.setColor(1, 1, 1, fade);
 		layout .setText(u.smallFnt, "Remember me?      ");
 		u.smallFnt.setColor(new Color(.694f,.694f,.694f,fade));
-		u.smallFnt.draw(pic, "Remember me? ", u.w/2-layout.width/2, .4f*u.h);
+		u.smallFnt.draw(pic, "Remember me? ", u.w/2-layout.width/2, .405f*u.h);
 		
 		pic.end();
 		
