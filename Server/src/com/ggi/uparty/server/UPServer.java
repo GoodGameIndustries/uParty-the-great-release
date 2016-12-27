@@ -18,6 +18,7 @@ import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
+import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
@@ -29,6 +30,7 @@ import com.ggi.uparty.network.ChangePass;
 import com.ggi.uparty.network.ChangeUser;
 import com.ggi.uparty.network.Comment;
 import com.ggi.uparty.network.Confirm;
+import com.ggi.uparty.network.ConnectServ;
 import com.ggi.uparty.network.DeleteGroup;
 import com.ggi.uparty.network.DownVote;
 import com.ggi.uparty.network.ErrorMessage;
@@ -44,6 +46,7 @@ import com.ggi.uparty.network.Member;
 import com.ggi.uparty.network.Network;
 import com.ggi.uparty.network.NewGroup;
 import com.ggi.uparty.network.Refresh;
+import com.ggi.uparty.network.RefreshServ;
 import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.Resend;
 import com.ggi.uparty.network.SignUp;
@@ -65,6 +68,8 @@ public class UPServer extends JFrame{
 	private String htmlTemplate="",forgotTemplate="",inviteTemplate ="";
 
 	public long lastResponse=0;
+	
+	public Client client;
 
 	public boolean newReport=true;
 	
@@ -83,7 +88,7 @@ public class UPServer extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
-		
+		createClient();
 		
 		StringBuilder contentBuilder = new StringBuilder();
 		try {
@@ -148,6 +153,16 @@ public class UPServer extends JFrame{
 		
 		Network.register(server);
 		server.addListener(new ThreadedListener(new Listener(){
+			public void connected(Connection connection){
+				RefreshServ r = new RefreshServ();
+				r.cons=server.getConnections().length;
+				send(r);
+			}
+			public void disconnected(Connection connection){
+				RefreshServ r = new RefreshServ();
+				r.cons=server.getConnections().length;
+				send(r);
+			}
 			 public void received (Connection connection, Object object) {
 				 //System.out.println(connection.getRemoteAddressTCP().getHostString());
 				 long startTime = System.currentTimeMillis();
@@ -734,6 +749,51 @@ public class UPServer extends JFrame{
 		saveWorld(world);
 		
 		
+	}
+	
+	public void connect(){
+		if(!client.isConnected()){
+			try {
+				
+				client.start();
+				client.connect(5000, debug ?"localhost":"52.89.96.208", 36696);
+				Network.register(client);
+				send(new ConnectServ());
+			} catch (IOException e) {
+				right.printConsole("[ERROR]-Cannot connect to Load Balance.");
+				
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void send(Object o){
+		connect();
+		int t=0;
+		boolean noSend = true;
+		while(noSend&&t<=3){
+			try{
+				t++;
+				client.sendTCP(o);
+				noSend=false;
+			}catch (Exception e){
+				connect();
+			}
+		}
+	}
+	
+	public void createClient(){
+		client= new Client();
+		client.addListener(new ThreadedListener(new Listener(){
+			public void received (Connection connection, Object object) {
+				if(object instanceof RefreshServ){
+					RefreshServ r = new RefreshServ();
+					r.cons=server.getConnections().length;
+					send(r);
+				}
+			}
+		}));
+		connect();
 	}
 	
 }

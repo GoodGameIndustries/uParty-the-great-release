@@ -30,7 +30,9 @@ public class LoadScreen implements Screen {
 	
 	private int i = 0;
 	
-	float angle=0;
+	public float angle=0;
+	
+	public boolean sent = false;
 	
 	public LoadScreen(uParty u){
 		this.u=u;
@@ -43,15 +45,9 @@ public class LoadScreen implements Screen {
 	public void show() {
 		pic = new SpriteBatch();
 		u.loadFonts();
+		u.connect(null);
 		
-		if(!u.logout){
-		Login l = new Login();
-		l.e=u.prefs.getString("email", "");
-		l.p=u.prefs.getString("password","");
-		if(l.e.length()>0&&l.p.length()>0){
-			u.send(l);
-		}
-		}
+		
 		//System.out.println(l.e+":"+l.p);
 		
 
@@ -64,8 +60,17 @@ public class LoadScreen implements Screen {
 	public void render(float delta) {
 		u.assets.update();
 		
-		
-		
+		if(u.myIP != null && !sent){
+		if(!u.logout){
+			Login l = new Login();
+			l.e=u.prefs.getString("email", "");
+			l.p=u.prefs.getString("password","");
+			if(l.e.length()>0&&l.p.length()>0){
+				u.send(l);
+			}
+			}
+		sent = true;
+		}
 		i++;
 		angle = -(u.assets.getLoadedAssets()/(float)(u.assets.getLoadedAssets()+u.assets.getQueuedAssets()))*360f;
 		if(angle>i/50*360){/*angle=-i/50f*360f;*/}

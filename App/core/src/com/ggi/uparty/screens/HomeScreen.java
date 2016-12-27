@@ -134,6 +134,10 @@ public class HomeScreen implements Screen, InputProcessor{
 	 */
 	@Override
 	public void render(float delta) {
+		if(u.clientUpdate){
+			u.setScreen(new UpdateScreen(u));
+		}
+		
 		if(u.myAcc!=null){
 			if(!u.myAcc.confirmed){u.setScreen(new ConfirmationScreen(u));}
 			else{u.setScreen(new MainScreen(u));}

@@ -104,7 +104,7 @@ public class SlideInMenu {
 		u.mediumFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
 		
 		layout.setText(u.mediumFnt, u.myAcc.u);
-		u.mediumFnt.draw(pic,u.myAcc.u,bounds.x+theta*.75f*u.w+.14f*bounds.height,bounds.y+.93f*bounds.height+layout.height/2);
+		u.mediumFnt.draw(pic,u.myAcc.u,bounds.x+theta*.75f*u.w+.16f*bounds.height,bounds.y+.93f*bounds.height+layout.height/2);
 		
 		
 	}

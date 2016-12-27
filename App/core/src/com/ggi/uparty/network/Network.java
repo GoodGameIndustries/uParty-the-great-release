@@ -35,6 +35,10 @@ public class Network {
 		kryo.register(ChangeUser.class);
 		kryo.register(InviteNew.class);
 		kryo.register(Comment.class);
+		kryo.register(ConnectServ.class);
+		kryo.register(ConnectClient.class);
+		kryo.register(RefreshServ.class);
+		kryo.register(Authenticate.class);
 	}
 	
 }

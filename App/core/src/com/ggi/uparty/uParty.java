@@ -24,7 +24,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.ggi.uparty.network.Account;
+import com.ggi.uparty.network.Authenticate;
 import com.ggi.uparty.network.Comment;
+import com.ggi.uparty.network.ConnectClient;
 import com.ggi.uparty.network.DownVote;
 import com.ggi.uparty.network.ErrorMessage;
 import com.ggi.uparty.network.Event;
@@ -37,6 +39,7 @@ import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.UpVote;
 import com.ggi.uparty.screens.LoadScreen;
 import com.ggi.uparty.screens.NewGroupScreen;
+import com.ggi.uparty.screens.UpdateScreen;
 
 public class uParty extends Game {
 	
@@ -69,6 +72,8 @@ public class uParty extends Game {
 	
 	public Preferences prefs;
 	
+	public boolean clientUpdate = false;
+	
 	/**Colors*/
 	public Color orange = new Color(247f/255f,148f/255f,29f/255f,1f);
 	public Color dark = new Color(.05f,.05f,.05f,1);
@@ -92,6 +97,10 @@ public class uParty extends Game {
 	public boolean logout=false;
 	
 	public boolean groupRefresh=false;
+
+	public String myIP;
+
+	private String version = "2.1.2";
 	
 	public uParty(NativeController controller){
 		this.controller=controller;
@@ -329,6 +338,23 @@ public class uParty extends Game {
 					needUpdate =true;
 					System.out.println(events.size());
 				}
+				if(object instanceof Authenticate){
+					System.out.println("Authenticate received");
+					Authenticate o = (Authenticate) object;
+					System.out.println(o.vcheck);
+					if(!o.vcheck){
+						clientUpdate = true;
+					}
+					if(!(o.servIP.length()>0)){
+						error = "Cannot connect to server.";
+					}
+					
+					else{
+						myIP = o.servIP;
+						connect(myIP);
+					}
+					System.out.println("Need update: " + clientUpdate);
+				}
 			}
 
 			private Event searchId(String iD) {
@@ -349,13 +375,19 @@ public class uParty extends Game {
 		
 	
 
-	public void connect(){
+	public void connect(String ip){
 		if(!client.isConnected()){
 			try {
 				
 				client.start();
-				client.connect(5000, debug ?"localhost":"52.89.96.208", 36695);
+				if(ip == null){client.connect(5000, debug ?"localhost":"52.89.96.208", 36696);}
+				else{client.connect(5000, ip, 36695);}
 				Network.register(client);
+				if(ip == null){
+					ConnectClient c = new ConnectClient();
+					c.version = version ;
+					send(c);
+				}
 			} catch (IOException e) {
 				error="Cannot connect to server.\nMake sure your app is up to date\nand try again soon.";
 				
@@ -365,7 +397,7 @@ public class uParty extends Game {
 	}
 	
 	public void send(Object o){
-		connect();
+		connect(myIP);
 		int t=0;
 		boolean noSend = true;
 		while(noSend&&t<=3){
@@ -374,7 +406,7 @@ public class uParty extends Game {
 				client.sendTCP(o);
 				noSend=false;
 			}catch (Exception e){
-				connect();
+				connect(null);
 			}
 		}
 	}
