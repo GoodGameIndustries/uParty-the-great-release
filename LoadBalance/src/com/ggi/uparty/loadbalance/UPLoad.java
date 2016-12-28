@@ -32,7 +32,7 @@ public class UPLoad extends JFrame{
 	public String version = "2.1.1";
 	
 	public World world;
-	private boolean debug = true;
+	private boolean debug = false;
 	private String path = debug?"D:\\profiles\\":"C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
 	
 	public LeftPane left;
