@@ -17,123 +17,123 @@ import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.ChangeUser;
 import com.ggi.uparty.network.Refresh;
 
-public class ChangeUserScreen implements Screen, InputProcessor{
+public class ChangeUserScreen implements Screen, InputProcessor {
 
 	public uParty u;
-	
+
 	public TextField user;
-	
-	public TextButton change,back;
-	
-	public Rectangle userB,changeB,backB;
-	
+
+	public TextButton change, back;
+
+	public Rectangle userB, changeB, backB;
+
 	public Texture background;
-	
+
 	private SpriteBatch pic;
-	
+
 	public float fade = 0;
-	
+
 	public String g = "";
-	
+
 	public GlyphLayout layout = new GlyphLayout();
-	
+
 	public Stage stage;
 
 	public boolean changed = false;
 
 	private boolean goB = false;
-	
-	
-	
-	public ChangeUserScreen(uParty u){
-		this.u=u;
+
+	public ChangeUserScreen(uParty u) {
+		this.u = u;
 	}
-	
+
 	@Override
 	public void show() {
 		pic = new SpriteBatch();
-		
+
 		Gdx.input.setInputProcessor(this);
-		
+
 		background = u.assets.get("UI/Background.png");
-		
-		backB = new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
-		userB = new Rectangle(u.w/9,.5f*u.h,7*u.w/9,u.h/16);
-		changeB = new Rectangle(u.w/4,.42f*u.h,u.w/2,u.h/16);
-		
-		back = new TextButton("Back",u.standardButtonStyle);
-			back.setBounds(backB.x, backB.y, backB.width, backB.height);
-		
-		change = new TextButton("Change Username",u.standardButtonStyle);
-			change.setBounds(changeB.x, changeB.y, changeB.width, changeB.height);
-		
-		user = new TextField(g,u.textFieldStyle);
-			user.setBounds(userB.x, userB.y, userB.width, userB.height);
-			user.setAlignment(Align.center);
-			user.setMessageText("New Username");
-		
+
+		backB = new Rectangle(u.w / 36, .93f * u.h, .15f * u.w, .05f * u.h);
+		userB = new Rectangle(u.w / 9, .5f * u.h, 7 * u.w / 9, u.h / 16);
+		changeB = new Rectangle(u.w / 4, .42f * u.h, u.w / 2, u.h / 16);
+
+		back = new TextButton("Back", u.standardButtonStyle);
+		back.setBounds(backB.x, backB.y, backB.width, backB.height);
+
+		change = new TextButton("Change Username", u.standardButtonStyle);
+		change.setBounds(changeB.x, changeB.y, changeB.width, changeB.height);
+
+		user = new TextField(g, u.textFieldStyle);
+		user.setBounds(userB.x, userB.y, userB.width, userB.height);
+		user.setAlignment(Align.center);
+		user.setMessageText("New Username");
+
 		stage = new Stage();
 		stage.addActor(user);
-		
+
 	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		pic.begin();
 		pic.setColor(1, 1, 1, 1);
 		pic.draw(background, 0, 0, u.w, u.h);
-		
+
 		back.draw(pic, fade);
 		change.draw(pic, fade);
 		user.draw(pic, fade);
-		
-		u.largeFnt.setColor(247f/255f,148f/255f,29f/255f,fade);
+
+		u.largeFnt.setColor(247f / 255f, 148f / 255f, 29f / 255f, fade);
 		layout.setText(u.largeFnt, "Change Your Username");
-		u.largeFnt.draw(pic, "Change Your Username", u.w/2-layout.width/2, .7f*u.h-layout.height/2);
-		
-		
+		u.largeFnt.draw(pic, "Change Your Username", u.w / 2 - layout.width / 2, .7f * u.h - layout.height / 2);
+
 		pic.end();
-		
-		
-		
-		if((u.nextScreen==null && !goB)&&fade<1f){fade+=(1-fade)/2;}
-		else if((u.nextScreen!=null || goB)&&fade>.1f){fade+=(0-fade)/2;}
-		else if(u.nextScreen!=null){u.setScreen(u.nextScreen);}
-		else if(goB){u.goBack();}
-		
+
+		if ((u.nextScreen == null && !goB) && fade < 1f) {
+			fade += (1 - fade) / 2;
+		} else if ((u.nextScreen != null || goB) && fade > .1f) {
+			fade += (0 - fade) / 2;
+		} else if (u.nextScreen != null) {
+			u.setScreen(u.nextScreen);
+		} else if (goB) {
+			u.goBack();
+		}
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -150,67 +150,79 @@ public class ChangeUserScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean keyTyped(char character) {
-		if(stage.getKeyboardFocus().equals(user)){if(character == ''&&g.length()>0){
-			g=g.substring(0, g.length()-1);
+		if (stage.getKeyboardFocus().equals(user)) {
+			if (character == '' && g.length() > 0) {
+				g = g.substring(0, g.length() - 1);
+			} else if ((character == '\r' || character == '\n')) {
+			} else {
+				g += character;
+			}
 		}
-		else if((character == '\r' || character == '\n')){}
-		else{
-			g+=character;
-		}}
-		
-		g=g.replaceAll("\\p{Cntrl}","");
-		g=g.replaceAll("\\s+","");
-		
+
+		g = g.replaceAll("\\p{Cntrl}", "");
+		g = g.replaceAll("\\s+", "");
+
 		user.setText(g);
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		screenY=(int) (u.h-screenY);
-		Rectangle touch = new Rectangle(screenX,screenY,1,1);
-		
-		if(Intersector.overlaps(touch, backB)){back.toggle();}
-		else if(Intersector.overlaps(touch, changeB)){change.toggle();}
-		
+		screenY = (int) (u.h - screenY);
+		Rectangle touch = new Rectangle(screenX, screenY, 1, 1);
+
+		if (Intersector.overlaps(touch, backB)) {
+			back.toggle();
+		} else if (Intersector.overlaps(touch, changeB)) {
+			change.toggle();
+		}
+
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		screenY=(int) (u.h-screenY);
-		Rectangle touch = new Rectangle(screenX,screenY,1,1);
-		
+		screenY = (int) (u.h - screenY);
+		Rectangle touch = new Rectangle(screenX, screenY, 1, 1);
+
 		toggleOff();
-		
-		if(Intersector.overlaps(touch, backB)){goB = true;}
-		else if(Intersector.overlaps(touch, changeB)&&g.length()>0){
-			
+
+		if (Intersector.overlaps(touch, backB)) {
+			goB = true;
+		} else if (Intersector.overlaps(touch, changeB) && g.length() > 0) {
+
 			ChangeUser ch = new ChangeUser();
-			ch.e=u.myAcc.e;
-			ch.u=g;
-			
+			ch.e = u.myAcc.e;
+			ch.u = g;
+
 			u.send(ch);
-			u.nextScreen =(new SettingsScreen(u));
-			
+			u.nextScreen = (new SettingsScreen(u));
+
+		} else if (Intersector.overlaps(touch, userB)) {
+			stage.setKeyboardFocus(user);
+			Gdx.input.setOnscreenKeyboardVisible(true);
 		}
-		else if(Intersector.overlaps(touch, userB)){stage.setKeyboardFocus(user);Gdx.input.setOnscreenKeyboardVisible(true);}
-		
+
 		return true;
 	}
-	
-	private void toggleOff(){
+
+	private void toggleOff() {
 		Gdx.input.setOnscreenKeyboardVisible(false);
 		stage.setKeyboardFocus(null);
-		if(back.isChecked()){back.toggle();}
-		if(change.isChecked()){change.toggle();}
+		if (back.isChecked()) {
+			back.toggle();
+		}
+		if (change.isChecked()) {
+			change.toggle();
+		}
 	}
-	
-	public void refresh(){
+
+	public void refresh() {
 		Refresh r = new Refresh();
-		r.e=u.myAcc.e;
-		r.lat=u.controller.getLat();r.lng=u.controller.getLong();
+		r.e = u.myAcc.e;
+		r.lat = u.controller.getLat();
+		r.lng = u.controller.getLong();
 		u.send(r);
 	}
 
@@ -233,4 +245,3 @@ public class ChangeUserScreen implements Screen, InputProcessor{
 	}
 
 }
-

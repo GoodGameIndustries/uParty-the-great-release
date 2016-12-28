@@ -20,25 +20,27 @@ import com.ggi.uparty.ui.RadialSprite;
 public class LoadScreen implements Screen {
 
 	public uParty u;
-	
+
 	public SpriteBatch pic;
-	
+
 	private Texture background;
 	private Texture logo;
-	
+
 	private RadialSprite loadingBar;
-	
+
 	private int i = 0;
-	
-	public float angle=0;
-	
+
+	public float angle = 0;
+
 	public boolean sent = false;
-	
-	public LoadScreen(uParty u){
-		this.u=u;
+
+	public LoadScreen(uParty u) {
+		this.u = u;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#show()
 	 */
 	@Override
@@ -46,60 +48,65 @@ public class LoadScreen implements Screen {
 		pic = new SpriteBatch();
 		u.loadFonts();
 		u.connect(null);
-		
-		
-		//System.out.println(l.e+":"+l.p);
-		
+
+		// System.out.println(l.e+":"+l.p);
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#render(float)
 	 */
 	@Override
 	public void render(float delta) {
 		u.assets.update();
-		
-		if(u.myIP != null && !sent){
-		if(!u.logout){
-			Login l = new Login();
-			l.e=u.prefs.getString("email", "");
-			l.p=u.prefs.getString("password","");
-			if(l.e.length()>0&&l.p.length()>0){
-				u.send(l);
+
+		if (u.myIP != null && !sent) {
+			if (!u.logout) {
+				Login l = new Login();
+				l.e = u.prefs.getString("email", "");
+				l.p = u.prefs.getString("password", "");
+				if (l.e.length() > 0 && l.p.length() > 0) {
+					u.send(l);
+				}
 			}
-			}
-		sent = true;
+			sent = true;
 		}
 		i++;
-		angle = -(u.assets.getLoadedAssets()/(float)(u.assets.getLoadedAssets()+u.assets.getQueuedAssets()))*360f;
-		if(angle>i/50*360){/*angle=-i/50f*360f;*/}
+		angle = -(u.assets.getLoadedAssets() / (float) (u.assets.getLoadedAssets() + u.assets.getQueuedAssets()))
+				* 360f;
+		if (angle > i / 50 * 360) {
+			/* angle=-i/50f*360f; */}
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		//System.out.println(u.assets.getQueuedAssets());
-		if(logo!=null&&background!=null){
+		// System.out.println(u.assets.getQueuedAssets());
+		if (logo != null && background != null) {
 			loadingBar.setAngle(angle);
-		pic.begin();
-		pic.draw(background, 0, 0, u.w, u.h);
-		pic.draw(logo, .25f*u.w, .5f*u.h-u.w/4, u.w/2, u.w/2);
-		pic.draw(u.assets.get("Logos/Social.png",Texture.class),.25f*u.w,.005f*u.h,.5f*u.w,.25f*u.w);
-		loadingBar.draw(pic,.25f*u.w, .5f*u.h-u.w/4, u.w/2, u.w/2);
-		pic.end();}
-		else if(u.assets.isLoaded("UI/Background.png")&&u.assets.isLoaded("Logos/1024.png")&&u.assets.isLoaded("UI/CircleLoad.png")){
+			pic.begin();
+			pic.draw(background, 0, 0, u.w, u.h);
+			pic.draw(logo, .25f * u.w, .5f * u.h - u.w / 4, u.w / 2, u.w / 2);
+			pic.draw(u.assets.get("Logos/Social.png", Texture.class), .25f * u.w, .005f * u.h, .5f * u.w, .25f * u.w);
+			loadingBar.draw(pic, .25f * u.w, .5f * u.h - u.w / 4, u.w / 2, u.w / 2);
+			pic.end();
+		} else if (u.assets.isLoaded("UI/Background.png") && u.assets.isLoaded("Logos/1024.png")
+				&& u.assets.isLoaded("UI/CircleLoad.png")) {
 			background = u.assets.get("UI/Background.png");
 			logo = u.assets.get("Logos/1024.png");
-			loadingBar = new RadialSprite(new TextureRegion(u.assets.get("UI/CircleLoad.png",Texture.class)));
-			
+			loadingBar = new RadialSprite(new TextureRegion(u.assets.get("UI/CircleLoad.png", Texture.class)));
+
 		}
 
-		if(i>50&&u.assets.update()){
-			
+		if (i > 50 && u.assets.update()) {
+
 			u.setScreen(new HomeScreen(u));
 		}
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
@@ -108,7 +115,9 @@ public class LoadScreen implements Screen {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#pause()
 	 */
 	@Override
@@ -117,7 +126,9 @@ public class LoadScreen implements Screen {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#resume()
 	 */
 	@Override
@@ -126,7 +137,9 @@ public class LoadScreen implements Screen {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
@@ -135,7 +148,9 @@ public class LoadScreen implements Screen {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#dispose()
 	 */
 	@Override

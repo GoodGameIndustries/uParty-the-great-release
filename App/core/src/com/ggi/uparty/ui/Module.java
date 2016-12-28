@@ -6,25 +6,25 @@ import com.badlogic.gdx.math.Rectangle;
 public class Module {
 
 	public Rectangle bounds;
-	
-	public Module(){
-		
+
+	public Module() {
+
 	}
-	
-	public void draw(SpriteBatch pic, float fade){
-		
+
+	public void draw(SpriteBatch pic, float fade) {
+
 	}
-	
-	public void touchDown(Rectangle touch){
-		
+
+	public void touchDown(Rectangle touch) {
+
 	}
-	
-	public void touchUp(Rectangle touch){
-		
+
+	public void touchUp(Rectangle touch) {
+
 	}
-	
-	public void toggleOff(){
-		
+
+	public void toggleOff() {
+
 	}
-	
+
 }

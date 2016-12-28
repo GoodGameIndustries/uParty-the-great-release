@@ -26,132 +26,141 @@ import com.ggi.uparty.ui.RefreshModule;
  * @author Emmett
  *
  */
-public class SignUpScreen implements Screen, InputProcessor{
+public class SignUpScreen implements Screen, InputProcessor {
 
 	public uParty u;
-	
+
 	public SpriteBatch pic;
-	
-	public Texture logo,background;
-	
-	public float logoMoveAnim=0,fade=0;
-	
+
+	public Texture logo, background;
+
+	public float logoMoveAnim = 0, fade = 0;
+
 	public Stage stage = new Stage();
-	
-	public TextField user,email,pass,cpass;
-	
-	public TextButton tos,signUp,back,error;
-	
-	public Rectangle userB,emailB,passB,cpassB,tosB,tosBC,signUpB,backB,errorB;
-	
-	public String uN="",e="",p="",cp="";
-	
+
+	public TextField user, email, pass, cpass;
+
+	public TextButton tos, signUp, back, error;
+
+	public Rectangle userB, emailB, passB, cpassB, tosB, tosBC, signUpB, backB, errorB;
+
+	public String uN = "", e = "", p = "", cp = "";
+
 	public CheckBox tosC;
-	
+
 	public GlyphLayout layout = new GlyphLayout();
 
-	public float scr=0;
+	public float scr = 0;
 
 	public RefreshModule rM;
-	
+
 	public boolean loading = false;
-	
-	public SignUpScreen(uParty u){
-		this.u=u;
-		u.nextScreen=null;
+
+	public SignUpScreen(uParty u) {
+		this.u = u;
+		u.nextScreen = null;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#show()
 	 */
 	@Override
 	public void show() {
-		u.nextScreen=null;
-		
-		rM= new RefreshModule(u);
-		
-		//DIALOG EXAMPLE
-		//MyTextInputListener listener = new MyTextInputListener();
-		//Gdx.input.getTextInput(listener, "Dialog Title", "Initial Textfield Value", "");
-		
+		u.nextScreen = null;
+
+		rM = new RefreshModule(u);
+
+		// DIALOG EXAMPLE
+		// MyTextInputListener listener = new MyTextInputListener();
+		// Gdx.input.getTextInput(listener, "Dialog Title", "Initial Textfield
+		// Value", "");
+
 		pic = new SpriteBatch();
-		
+
 		logo = u.assets.get("Logos/1024.png");
 		background = u.assets.get("UI/Background.png");
-		
-		userB=new Rectangle(2*u.w/9,.55f*u.h,5*u.w/9,u.h/16);
-		emailB=new Rectangle(u.w/9,.47f*u.h,7*u.w/9,u.h/16);
-		passB=new Rectangle(u.w/9,.39f*u.h,7*u.w/9,u.h/16);
-		cpassB=new Rectangle(u.w/9,.31f*u.h,7*u.w/9,u.h/16);
-		tosB=new Rectangle(.45f*u.w,.267f*u.h,u.w/4,u.h/32);
-		tosBC=new Rectangle(.71f*u.w,.276f*u.h,u.h/64,u.h/64);
-		signUpB = new Rectangle(u.w/9,.195f*u.h,7*u.w/9,u.h/16);
-		backB = new Rectangle(u.w/36,.93f*u.h,.15f*u.w,.05f*u.h);
-		errorB = new Rectangle(u.w/9,.125f*u.h,7*u.w/9,u.h/16);
-		rM.bounds=new Rectangle(0,.05f*u.h,u.w,.17f*u.h);
-		
-		user = new TextField(uN,u.textFieldStyle);
-			user.setMessageText("Username");
-			user.setBounds(userB.x, userB.y, userB.width, userB.height);
-			user.setAlignment(Align.center);
-		email = new TextField(e,u.textFieldStyle);
-			email.setMessageText("Email (must be.edu)");
-			email.setBounds(emailB.x, emailB.y, emailB.width, emailB.height);
-			email.setAlignment(Align.center);
-		pass = new TextField(p,u.textFieldStyle);
-			pass.setMessageText("Password");
-			pass.setBounds(passB.x,passB.y,passB.width,passB.height);
-			pass.setAlignment(Align.center);
-			pass.setPasswordMode(true);
-			pass.setPasswordCharacter('*');
-		cpass = new TextField(cp,u.textFieldStyle);
-			cpass.setMessageText("Confirm Password");
-			cpass.setBounds(cpassB.x, cpassB.y, cpassB.width, cpassB.height);
-			cpass.setAlignment(Align.center);
-			cpass.setPasswordMode(true);
-			cpass.setPasswordCharacter('*');
-			
-		tosC = new CheckBox("",u.checkStyle);
-			tosC.setBounds(tosBC.x, tosBC.y, tosBC.width, tosBC.height);
-		
-		tos = new TextButton("terms of service",u.linkButtonStyle);
-			tos.setBounds(tosB.x, tosB.y, tosB.width, tosB.height);
-		signUp = new TextButton("Sign Up",u.standardButtonStyle);
-			signUp.setBounds(signUpB.x, signUpB.y, signUpB.width, signUpB.height);
-		back = new TextButton("Back",u.standardButtonStyle);
-			back.setBounds(backB.x, backB.y, backB.width, backB.height);
-		error = new TextButton(u.error,u.errorButtonStyle);
-			error.setBounds(errorB.x, errorB.y, errorB.width, errorB.height);
-			
-			stage.addActor(user);
-			stage.addActor(email);
-			stage.addActor(pass);
-			stage.addActor(cpass);
-			
-			Gdx.input.setInputProcessor(this);
+
+		userB = new Rectangle(2 * u.w / 9, .55f * u.h, 5 * u.w / 9, u.h / 16);
+		emailB = new Rectangle(u.w / 9, .47f * u.h, 7 * u.w / 9, u.h / 16);
+		passB = new Rectangle(u.w / 9, .39f * u.h, 7 * u.w / 9, u.h / 16);
+		cpassB = new Rectangle(u.w / 9, .31f * u.h, 7 * u.w / 9, u.h / 16);
+		tosB = new Rectangle(.45f * u.w, .267f * u.h, u.w / 4, u.h / 32);
+		tosBC = new Rectangle(.71f * u.w, .276f * u.h, u.h / 64, u.h / 64);
+		signUpB = new Rectangle(u.w / 9, .195f * u.h, 7 * u.w / 9, u.h / 16);
+		backB = new Rectangle(u.w / 36, .93f * u.h, .15f * u.w, .05f * u.h);
+		errorB = new Rectangle(u.w / 9, .125f * u.h, 7 * u.w / 9, u.h / 16);
+		rM.bounds = new Rectangle(0, .05f * u.h, u.w, .17f * u.h);
+
+		user = new TextField(uN, u.textFieldStyle);
+		user.setMessageText("Username");
+		user.setBounds(userB.x, userB.y, userB.width, userB.height);
+		user.setAlignment(Align.center);
+		email = new TextField(e, u.textFieldStyle);
+		email.setMessageText("Email (must be.edu)");
+		email.setBounds(emailB.x, emailB.y, emailB.width, emailB.height);
+		email.setAlignment(Align.center);
+		pass = new TextField(p, u.textFieldStyle);
+		pass.setMessageText("Password");
+		pass.setBounds(passB.x, passB.y, passB.width, passB.height);
+		pass.setAlignment(Align.center);
+		pass.setPasswordMode(true);
+		pass.setPasswordCharacter('*');
+		cpass = new TextField(cp, u.textFieldStyle);
+		cpass.setMessageText("Confirm Password");
+		cpass.setBounds(cpassB.x, cpassB.y, cpassB.width, cpassB.height);
+		cpass.setAlignment(Align.center);
+		cpass.setPasswordMode(true);
+		cpass.setPasswordCharacter('*');
+
+		tosC = new CheckBox("", u.checkStyle);
+		tosC.setBounds(tosBC.x, tosBC.y, tosBC.width, tosBC.height);
+
+		tos = new TextButton("terms of service", u.linkButtonStyle);
+		tos.setBounds(tosB.x, tosB.y, tosB.width, tosB.height);
+		signUp = new TextButton("Sign Up", u.standardButtonStyle);
+		signUp.setBounds(signUpB.x, signUpB.y, signUpB.width, signUpB.height);
+		back = new TextButton("Back", u.standardButtonStyle);
+		back.setBounds(backB.x, backB.y, backB.width, backB.height);
+		error = new TextButton(u.error, u.errorButtonStyle);
+		error.setBounds(errorB.x, errorB.y, errorB.width, errorB.height);
+
+		stage.addActor(user);
+		stage.addActor(email);
+		stage.addActor(pass);
+		stage.addActor(cpass);
+
+		Gdx.input.setInputProcessor(this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#render(float)
 	 */
 	@Override
 	public void render(float delta) {
 		error.setText(u.error);
-		if(u.error.length()>0){loading = false;}
-		if(u.myAcc!=null){
-			if(!u.myAcc.confirmed){u.nextScreen=new ConfirmationScreen(u);}
-			else{u.nextScreen=new MainScreen(u);}
+		if (u.error.length() > 0) {
+			loading = false;
 		}
-		
-		
+		if (u.myAcc != null) {
+			if (!u.myAcc.confirmed) {
+				u.nextScreen = new ConfirmationScreen(u);
+			} else {
+				u.nextScreen = new MainScreen(u);
+			}
+		}
+
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		pic.begin();
 		pic.setColor(1, 1, 1, 1);
 		pic.draw(background, 0, 0, u.w, u.h);
-		pic.draw(logo, .25f*u.w, .569f*u.h+(logoMoveAnim*u.h/16)+scr, u.w/2, u.w/2);
-		
+		pic.draw(logo, .25f * u.w, .569f * u.h + (logoMoveAnim * u.h / 16) + scr, u.w / 2, u.w / 2);
+
 		user.draw(pic, fade);
 		email.draw(pic, fade);
 		pass.draw(pic, fade);
@@ -161,34 +170,51 @@ public class SignUpScreen implements Screen, InputProcessor{
 		signUp.draw(pic, fade);
 		back.draw(pic, fade);
 		error.draw(pic, fade);
-		
-		if(loading){rM.forceDraw(pic, fade);}
-		
+
+		if (loading) {
+			rM.forceDraw(pic, fade);
+		}
+
 		pic.setColor(1, 1, 1, fade);
 		layout.setText(u.smallFnt, "I agree to the terms of service      ");
-		u.smallFnt.setColor(new Color(.694f,.694f,.694f,fade));
-		u.smallFnt.draw(pic, "I agree to the ", u.w/2-layout.width/2, .29f*u.h+scr);
+		u.smallFnt.setColor(new Color(.694f, .694f, .694f, fade));
+		u.smallFnt.draw(pic, "I agree to the ", u.w / 2 - layout.width / 2, .29f * u.h + scr);
 		pic.end();
-		
-		if(u.nextScreen!=null){
-			//System.out.println(u.nextScreen);
-			if(u.nextScreen instanceof HomeScreen){
-			HomeScreen hs = (HomeScreen)u.nextScreen;
-			if(fade>.1f){fade+=(0-fade)/2;}
-			if(fade<.5f&&logoMoveAnim>.1f){logoMoveAnim+=(0-logoMoveAnim)/2;}
-			else if(logoMoveAnim<.1f){hs.logoMoveAnim=.55f;u.setScreen(hs);}}
-			else{
-				if(fade>.1f){fade+=(0-fade)/2;}
-				else{u.setScreen(u.nextScreen);}
+
+		if (u.nextScreen != null) {
+			// System.out.println(u.nextScreen);
+			if (u.nextScreen instanceof HomeScreen) {
+				HomeScreen hs = (HomeScreen) u.nextScreen;
+				if (fade > .1f) {
+					fade += (0 - fade) / 2;
+				}
+				if (fade < .5f && logoMoveAnim > .1f) {
+					logoMoveAnim += (0 - logoMoveAnim) / 2;
+				} else if (logoMoveAnim < .1f) {
+					hs.logoMoveAnim = .55f;
+					u.setScreen(hs);
+				}
+			} else {
+				if (fade > .1f) {
+					fade += (0 - fade) / 2;
+				} else {
+					u.setScreen(u.nextScreen);
+				}
+			}
+		} else {
+			if (logoMoveAnim < 1f) {
+				logoMoveAnim += (1 - logoMoveAnim) / 2;
+			}
+			if (logoMoveAnim > .5f && fade < 1) {
+				fade += (1 - fade) / 2;
 			}
 		}
-		else{
-		if(logoMoveAnim<1f){logoMoveAnim+=(1-logoMoveAnim)/2;}
-		if(logoMoveAnim>.5f&&fade<1){fade+=(1-fade)/2;}}
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
@@ -197,7 +223,9 @@ public class SignUpScreen implements Screen, InputProcessor{
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#pause()
 	 */
 	@Override
@@ -206,7 +234,9 @@ public class SignUpScreen implements Screen, InputProcessor{
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#resume()
 	 */
 	@Override
@@ -215,7 +245,9 @@ public class SignUpScreen implements Screen, InputProcessor{
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
@@ -224,7 +256,9 @@ public class SignUpScreen implements Screen, InputProcessor{
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#dispose()
 	 */
 	@Override
@@ -247,47 +281,51 @@ public class SignUpScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean keyTyped(char character) {
-		if(stage.getKeyboardFocus().equals(user)){if(character == ''&&uN.length()>0){
-			uN=uN.substring(0, uN.length()-1);
+		if (stage.getKeyboardFocus().equals(user)) {
+			if (character == '' && uN.length() > 0) {
+				uN = uN.substring(0, uN.length() - 1);
+			} else if ((character == '\r' || character == '\n')) {
+			} else {
+				uN += character;
+			}
 		}
-		else if((character == '\r' || character == '\n')){}
-		else{
-			uN+=character;
-		}}
-		
-		if(stage.getKeyboardFocus().equals(email)){if(character == ''&&e.length()>0){
-			e=e.substring(0, e.length()-1);
+
+		if (stage.getKeyboardFocus().equals(email)) {
+			if (character == '' && e.length() > 0) {
+				e = e.substring(0, e.length() - 1);
+			} else if ((character == '\r' || character == '\n')) {
+			} else {
+				e += character;
+			}
 		}
-		else if((character == '\r' || character == '\n')){}
-		else{
-			e+=character;
-		}}
-		
-		if(stage.getKeyboardFocus().equals(pass)){if(character == ''&&p.length()>0){
-			p=p.substring(0, p.length()-1);
+
+		if (stage.getKeyboardFocus().equals(pass)) {
+			if (character == '' && p.length() > 0) {
+				p = p.substring(0, p.length() - 1);
+			} else if ((character == '\r' || character == '\n')) {
+			} else {
+				p += character;
+			}
 		}
-		else if((character == '\r' || character == '\n')){}
-		else{
-			p+=character;
-		}}
-		
-		if(stage.getKeyboardFocus().equals(cpass)){if(character == ''&&cp.length()>0){
-			cp=cp.substring(0, cp.length()-1);
+
+		if (stage.getKeyboardFocus().equals(cpass)) {
+			if (character == '' && cp.length() > 0) {
+				cp = cp.substring(0, cp.length() - 1);
+			} else if ((character == '\r' || character == '\n')) {
+			} else {
+				cp += character;
+			}
 		}
-		else if((character == '\r' || character == '\n')){}
-		else{
-			cp+=character;
-		}}
-		
-		uN=uN.replaceAll("\\p{Cntrl}","");
-		uN=uN.replaceAll("\\s+","");
-		e=e.replaceAll("\\p{Cntrl}","");
-		e=e.replaceAll("\\s+","");
-		p=p.replaceAll("\\p{Cntrl}","");
-		p=p.replaceAll("\\s+","");
-		cp=cp.replaceAll("\\p{Cntrl}","");
-		cp=cp.replaceAll("\\s+","");
-		
+
+		uN = uN.replaceAll("\\p{Cntrl}", "");
+		uN = uN.replaceAll("\\s+", "");
+		e = e.replaceAll("\\p{Cntrl}", "");
+		e = e.replaceAll("\\s+", "");
+		p = p.replaceAll("\\p{Cntrl}", "");
+		p = p.replaceAll("\\s+", "");
+		cp = cp.replaceAll("\\p{Cntrl}", "");
+		cp = cp.replaceAll("\\s+", "");
+
 		user.setText(uN);
 		email.setText(e);
 		pass.setText(p);
@@ -297,56 +335,81 @@ public class SignUpScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		screenY = (int) (u.h-screenY);
-		Rectangle touch = new Rectangle(screenX,screenY,1,1);
-		
-		if(Intersector.overlaps(touch, signUpB)){signUp.toggle();}
-		if(Intersector.overlaps(touch, backB)){back.toggle();}
-		if(Intersector.overlaps(touch, tosB)){tos.toggle();}
-		
+		screenY = (int) (u.h - screenY);
+		Rectangle touch = new Rectangle(screenX, screenY, 1, 1);
+
+		if (Intersector.overlaps(touch, signUpB)) {
+			signUp.toggle();
+		}
+		if (Intersector.overlaps(touch, backB)) {
+			back.toggle();
+		}
+		if (Intersector.overlaps(touch, tosB)) {
+			tos.toggle();
+		}
+
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		screenY = (int) (u.h-screenY);
-		Rectangle touch = new Rectangle(screenX,screenY,1,1);
+		screenY = (int) (u.h - screenY);
+		Rectangle touch = new Rectangle(screenX, screenY, 1, 1);
 		toggleOff();
-		
-		if(Intersector.overlaps(touch, signUpB)){
-			if(e.length()>4&&uN.length()>0&&p.length()>0&&p.equals(cp)&&tosC.isChecked()&&e.endsWith(".edu")){
-			SignUp s = new SignUp();
-			s.e=e;
-			s.u=uN;
-			s.p=p;
-			u.send(s);
-			loading=true;
+
+		if (Intersector.overlaps(touch, signUpB)) {
+			if (e.length() > 4 && uN.length() > 0 && p.length() > 0 && p.equals(cp) && tosC.isChecked()
+					&& e.endsWith(".edu")) {
+				SignUp s = new SignUp();
+				s.e = e;
+				s.u = uN;
+				s.p = p;
+				u.send(s);
+				loading = true;
+			} else {
+				u.error = "Please make sure all fields are \nfilled out and your passwords match";
 			}
-			else{
-				u.error="Please make sure all fields are \nfilled out and your passwords match";
-			}
+		} else if (Intersector.overlaps(touch, tosBC)) {
+			tosC.toggle();
+		} else if (Intersector.overlaps(touch, backB)) {
+			u.nextScreen = new HomeScreen(u);
+		} else if (Intersector.overlaps(touch, userB)) {
+			stage.setKeyboardFocus(user);
+			Gdx.input.setOnscreenKeyboardVisible(true);
+		} else if (Intersector.overlaps(touch, emailB)) {
+			stage.setKeyboardFocus(email);
+			Gdx.input.setOnscreenKeyboardVisible(true);
+		} else if (Intersector.overlaps(touch, passB)) {
+			stage.setKeyboardFocus(pass);
+			Gdx.input.setOnscreenKeyboardVisible(true);
+			scr = .06f * u.h;
+		} else if (Intersector.overlaps(touch, cpassB)) {
+			stage.setKeyboardFocus(cpass);
+			Gdx.input.setOnscreenKeyboardVisible(true);
+			scr = .14f * u.h;
+		} else if (Intersector.overlaps(touch, tosB)) {
+			Gdx.net.openURI("http://upartyapp.com/terms-and-conditions/");
 		}
-		else if(Intersector.overlaps(touch, tosBC)){tosC.toggle();}
-		else if(Intersector.overlaps(touch, backB)){u.nextScreen = new HomeScreen(u);}
-		else if(Intersector.overlaps(touch, userB)){stage.setKeyboardFocus(user);Gdx.input.setOnscreenKeyboardVisible(true);}
-		else if(Intersector.overlaps(touch, emailB)){stage.setKeyboardFocus(email);Gdx.input.setOnscreenKeyboardVisible(true);}
-		else if(Intersector.overlaps(touch, passB)){stage.setKeyboardFocus(pass);Gdx.input.setOnscreenKeyboardVisible(true);scr=.06f*u.h;}
-		else if(Intersector.overlaps(touch, cpassB)){stage.setKeyboardFocus(cpass);Gdx.input.setOnscreenKeyboardVisible(true);scr=.14f*u.h;}
-		else if(Intersector.overlaps(touch, tosB)){Gdx.net.openURI("http://upartyapp.com/terms-and-conditions/");}
-		
+
 		setB();
-		
+
 		return true;
 	}
 
 	private void toggleOff() {
-		scr=0;
+		scr = 0;
 		Gdx.input.setOnscreenKeyboardVisible(false);
 		stage.setKeyboardFocus(null);
-		if(signUp.isChecked()){signUp.toggle();}
-		if(back.isChecked()){back.toggle();}
-		if(tos.isChecked()){tos.toggle();}
-		
+		if (signUp.isChecked()) {
+			signUp.toggle();
+		}
+		if (back.isChecked()) {
+			back.toggle();
+		}
+		if (tos.isChecked()) {
+			tos.toggle();
+		}
+
 	}
 
 	@Override
@@ -366,36 +429,34 @@ public class SignUpScreen implements Screen, InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	public void setB(){
-		userB=new Rectangle(2*u.w/9,.55f*u.h+scr,5*u.w/9,u.h/16);
-		emailB=new Rectangle(u.w/9,.47f*u.h+scr,7*u.w/9,u.h/16);
-		passB=new Rectangle(u.w/9,.39f*u.h+scr,7*u.w/9,u.h/16);
-		cpassB=new Rectangle(u.w/9,.31f*u.h+scr,7*u.w/9,u.h/16);
-		tosB=new Rectangle(.45f*u.w,.267f*u.h+scr,u.w/4,u.h/32);
-		tosBC=new Rectangle(.71f*u.w,.276f*u.h+scr,u.h/64,u.h/64);
-		signUpB = new Rectangle(u.w/9,.195f*u.h+scr,7*u.w/9,u.h/16);
-		backB = new Rectangle(u.w/36,.93f*u.h+scr,.15f*u.w,.05f*u.h);
-		errorB = new Rectangle(u.w/9,.125f*u.h+scr,7*u.w/9,u.h/16);
-		
-	
+
+	public void setB() {
+		userB = new Rectangle(2 * u.w / 9, .55f * u.h + scr, 5 * u.w / 9, u.h / 16);
+		emailB = new Rectangle(u.w / 9, .47f * u.h + scr, 7 * u.w / 9, u.h / 16);
+		passB = new Rectangle(u.w / 9, .39f * u.h + scr, 7 * u.w / 9, u.h / 16);
+		cpassB = new Rectangle(u.w / 9, .31f * u.h + scr, 7 * u.w / 9, u.h / 16);
+		tosB = new Rectangle(.45f * u.w, .267f * u.h + scr, u.w / 4, u.h / 32);
+		tosBC = new Rectangle(.71f * u.w, .276f * u.h + scr, u.h / 64, u.h / 64);
+		signUpB = new Rectangle(u.w / 9, .195f * u.h + scr, 7 * u.w / 9, u.h / 16);
+		backB = new Rectangle(u.w / 36, .93f * u.h + scr, .15f * u.w, .05f * u.h);
+		errorB = new Rectangle(u.w / 9, .125f * u.h + scr, 7 * u.w / 9, u.h / 16);
+
 		user.setBounds(userB.x, userB.y, userB.width, userB.height);
-		
-	
+
 		email.setBounds(emailB.x, emailB.y, emailB.width, emailB.height);
-		
-		pass.setBounds(passB.x,passB.y,passB.width,passB.height);
-		
+
+		pass.setBounds(passB.x, passB.y, passB.width, passB.height);
+
 		cpass.setBounds(cpassB.x, cpassB.y, cpassB.width, cpassB.height);
-		
+
 		tosC.setBounds(tosBC.x, tosBC.y, tosBC.width, tosBC.height);
 
 		tos.setBounds(tosB.x, tosB.y, tosB.width, tosB.height);
-	
+
 		signUp.setBounds(signUpB.x, signUpB.y, signUpB.width, signUpB.height);
-	
+
 		back.setBounds(backB.x, backB.y, backB.width, backB.height);
-	
+
 		error.setBounds(errorB.x, errorB.y, errorB.width, errorB.height);
 	}
 

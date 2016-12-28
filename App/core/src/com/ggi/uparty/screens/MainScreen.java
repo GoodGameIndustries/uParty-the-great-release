@@ -51,27 +51,25 @@ public class MainScreen implements Screen, GestureListener {
 		menu = new SlideInMenu(u, g);
 		events = new EventList(this);
 
-		bBounds = new Rectangle(u.w-.12375f*u.h, .03f*u.h, .09375f*u.h, .09375f*u.h);
-		
+		bBounds = new Rectangle(u.w - .12375f * u.h, .03f * u.h, .09375f * u.h, .09375f * u.h);
+
 		ButtonStyle s = new ButtonStyle();
-			s.up = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/newPostUp.png", Texture.class)));
-			s.down = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/newPostDown.png", Texture.class)));
-			s.checked = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/newPostDown.png",Texture.class)));
+		s.up = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/newPostUp.png", Texture.class)));
+		s.down = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/newPostDown.png", Texture.class)));
+		s.checked = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/newPostDown.png", Texture.class)));
 		b = new Button(s);
 		b.setBounds(bBounds.x, bBounds.y, bBounds.width, bBounds.height);
-			
-		events.scrolled = (int) (-.16f*u.h);
+
+		events.scrolled = (int) (-.16f * u.h);
 
 		events.refresh = true;
-		events.scrolled = (int) (-.16f*u.h);
+		events.scrolled = (int) (-.16f * u.h);
 		refresh();
 	}
 
 	@Override
 	public void show() {
 
-		
-		
 		pic = new SpriteBatch();
 		background = u.assets.get("UI/Background.png");
 		GestureDetector gd = new GestureDetector(this);
@@ -138,7 +136,7 @@ public class MainScreen implements Screen, GestureListener {
 			/* menu.open=false; */fade += (0 - fade) / 2;
 		} else if (u.nextScreen != null) {
 			u.setScreen(u.nextScreen);
-			
+
 		}
 
 	}
@@ -174,9 +172,9 @@ public class MainScreen implements Screen, GestureListener {
 	}
 
 	public void refresh() {
-		//u.events.clear();
-		//events.refresh = true;
-		//events.scrolled = (int) (-.16f*u.h);
+		// u.events.clear();
+		// events.refresh = true;
+		// events.scrolled = (int) (-.16f*u.h);
 		Refresh r = new Refresh();
 		r.e = u.myAcc.e;
 		r.lat = u.controller.getLat();
@@ -191,9 +189,8 @@ public class MainScreen implements Screen, GestureListener {
 		if (1 - menu.theta < .05) {
 			// System.out.println("Menu touched");
 			menu.down(touch);
-		}
-		else{
-			if(Intersector.overlaps(touch, bBounds)){
+		} else {
+			if (Intersector.overlaps(touch, bBounds)) {
 				b.setChecked(true);
 			}
 		}
@@ -211,8 +208,8 @@ public class MainScreen implements Screen, GestureListener {
 			events.touch(touch, touch);
 			toolbar.touchUp(touch);
 			toolbar.touchDown(touch);
-			if(Intersector.overlaps(touch, bBounds)){
-				u.nextScreen = new CreateEventScreen(u,g);
+			if (Intersector.overlaps(touch, bBounds)) {
+				u.nextScreen = new CreateEventScreen(u, g);
 			}
 		}
 		// menu.touchDown(touch);
@@ -231,16 +228,19 @@ public class MainScreen implements Screen, GestureListener {
 		velocityY = u.h - velocityY;
 		if (Math.abs(velocityY) > Math.abs(velocityX)) {
 			events.velocity = (int) velocityY;
-		} else if (Math.abs(velocityY) < Math.abs(velocityX) && Math.abs(velocityX) > .1f*u.h) {
-			if(velocityX > 0){
-				if(toolbar.sortState > 0){toolbar.sortState--;}
+		} else if (Math.abs(velocityY) < Math.abs(velocityX) && Math.abs(velocityX) > .1f * u.h) {
+			if (velocityX > 0) {
+				if (toolbar.sortState > 0) {
+					toolbar.sortState--;
+				}
+			} else if (velocityX < 0) {
+				if (toolbar.sortState < 3) {
+					toolbar.sortState++;
+				}
 			}
-			else if(velocityX < 0){
-				if(toolbar.sortState < 3){toolbar.sortState++;}
-			}
-			u.needUpdate=true;
+			u.needUpdate = true;
 		}
-		
+
 		return true;
 	}
 
