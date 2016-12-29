@@ -61,6 +61,7 @@ public class ReportPane extends JPanel{
 
 				@Override
 				public void actionPerformed(ActionEvent arg) {
+					p.u.world = p.u.loadWorld();
 					p.u.world.reported.remove(e);
 					p.u.removeEvent(e);
 					p.u.saveWorld(p.u.world);

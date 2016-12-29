@@ -81,11 +81,14 @@ public class EventScreen implements Screen, GestureListener {
 	public boolean isPan = false;
 
 	private boolean goB = false;
+	
+	private MainScreen bScreen;
 
-	public EventScreen(uParty u, Event e, Group g) {
+	public EventScreen(uParty u, Event e, Group g, MainScreen s) {
 		this.u = u;
 		this.e = e;
 		this.g = g;
+		this.bScreen = s;
 
 		list = new List(u);
 
@@ -223,7 +226,7 @@ public class EventScreen implements Screen, GestureListener {
 		} else if (u.nextScreen != null) {
 			u.setScreen(u.nextScreen);
 		} else if (goB) {
-			u.goBack();
+			u.setScreen(bScreen);
 		}
 	}
 
@@ -374,7 +377,7 @@ public class EventScreen implements Screen, GestureListener {
 			o.lat = e.lat;
 			u.send(o);
 		} else if (Intersector.overlaps(touch, replyB)) {
-			u.nextScreen = new CommentScreen(u, e, g);
+			u.nextScreen = new CommentScreen(u, e, g, bScreen);
 		}
 
 		if (Intersector.overlaps(touch, list.bounds)) {

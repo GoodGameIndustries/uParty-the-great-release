@@ -136,7 +136,7 @@ public class EventModule {
 				o.group = e.group;
 				l.s.u.send(o);
 			} else {
-				l.s.u.nextScreen = new EventScreen(l.s.u, e, l.s.g);
+				l.s.u.nextScreen = new EventScreen(l.s.u, e, l.s.g,l.s);
 			}
 		}
 	}

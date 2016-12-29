@@ -48,11 +48,14 @@ public class CommentScreen implements Screen, InputProcessor {
 	public Group group;
 
 	private boolean goB = false;
+	
+	public MainScreen s;
 
-	public CommentScreen(uParty u, Event e, Group group) {
+	public CommentScreen(uParty u, Event e, Group group, MainScreen s) {
 		this.u = u;
 		this.e = e;
 		this.group = group;
+		this.s=s;
 	}
 
 	@Override
@@ -218,7 +221,7 @@ public class CommentScreen implements Screen, InputProcessor {
 
 				e.comments.add(u.myAcc.xp + ":" + g);
 			}
-			u.nextScreen = new EventScreen(u, e, group);
+			u.nextScreen = new EventScreen(u, e, group,s);
 		} else if (Intersector.overlaps(touch, commentB)) {
 			stage.setKeyboardFocus(comment);
 			Gdx.input.setOnscreenKeyboardVisible(true);

@@ -64,7 +64,7 @@ public class uParty extends Game {
 
 	public String error = "";
 
-	public boolean debug = true;
+	public boolean debug = false;
 
 	public Screen nextScreen;
 
@@ -378,7 +378,7 @@ public class uParty extends Game {
 
 				client.start();
 				if (ip == null) {
-					client.connect(5000, debug ? "localhost" : "52.89.96.208", 36696);
+					client.connect(5000, debug ? "localhost" : "35.164.43.2", 36696);
 				} else {
 					client.connect(5000, ip, 36695);
 				}
