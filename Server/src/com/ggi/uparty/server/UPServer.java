@@ -58,7 +58,7 @@ public class UPServer extends JFrame{
 	
 	public Server server;
 	
-	private boolean debug = true;
+	private boolean debug = false;
 	private String path = debug?"D:\\profiles\\":"C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
 	private RightPane right;
 	private LeftPane left;
@@ -756,7 +756,7 @@ public class UPServer extends JFrame{
 			try {
 				
 				client.start();
-				client.connect(5000, debug ?"localhost":"52.89.96.208", 36696);
+				client.connect(5000, debug ?"localhost":"35.164.43.2", 36696);
 				Network.register(client);
 				send(new ConnectServ());
 			} catch (IOException e) {
