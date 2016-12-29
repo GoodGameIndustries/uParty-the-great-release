@@ -137,6 +137,15 @@ public class UPServer extends JFrame{
 		       }
 		  };
 		  timer.schedule(task, 0,1000);
+		  
+		  Timer t2 = new Timer();
+		  TimerTask ta2 = new TimerTask() {
+		      @Override
+		   public void run() {
+		    world = loadWorld();
+		       }
+		  };
+		  t2.schedule(ta2, 0,30000);
 
 		
 		runServer();
