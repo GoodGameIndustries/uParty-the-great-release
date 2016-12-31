@@ -158,11 +158,13 @@ public class UPLoad extends JFrame{
 		File f = new File(path+"world.uPWorld");
 		
 		if(f.exists()){
+			System.out.println("WORLD EXISTS");
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			result = (World) ois.readObject();
 			ois.close();
 		}else{
+			System.out.println("WORLD DNE");
 			result = new World();
 			result.init();
 			saveWorld(result);
@@ -170,8 +172,10 @@ public class UPLoad extends JFrame{
 		
 		}catch(Exception e){
 			
-		//right.printConsole("[Error]-World load error");
+		e.printStackTrace();
 		}
+		
+		System.out.println(result);
 		return result;
 	}
 	
