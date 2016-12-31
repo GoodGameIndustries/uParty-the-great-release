@@ -497,6 +497,8 @@ public class UPServer extends JFrame{
 					connection.sendTCP(new Refresh());
 				}
 				
+				saveWorld(world);
+				
 			 lastResponse = System.currentTimeMillis()-startTime;}
 
 			private void giveXp(String e, int i) {
