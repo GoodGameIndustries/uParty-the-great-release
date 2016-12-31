@@ -170,7 +170,7 @@ public class UPLoad extends JFrame{
 		
 		}catch(Exception e){
 			
-		//right.printConsole("[Error]-World load error");
+		e.printStackTrace();
 		}
 		return result;
 	}
