@@ -63,7 +63,7 @@ public class LeftPane extends JPanel{
 		stats.setText(sts);}
 		
 		if(scroll!=null){
-			//u.world = u.loadWorld();
+			u.world = u.loadWorld();
 			if(u.world == null){System.out.println("WORLD NULL");}
 		scroll.removeAll();
 		GridPanel g = new GridPanel();
