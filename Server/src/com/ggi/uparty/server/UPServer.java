@@ -150,7 +150,7 @@ public class UPServer extends JFrame{
 		    right.printConsole("[LOAD]-Loading World");
 		       }
 		  };
-		  t2.schedule(ta2, 0,30000);
+		  t2.schedule(ta2, 0,300000);
 
 		
 		runServer();
