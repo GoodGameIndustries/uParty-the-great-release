@@ -177,6 +177,7 @@ public class UPServer extends JFrame{
 			 public void received (Connection connection, Object object) {
 				 //System.out.println(connection.getRemoteAddressTCP().getHostString());
 				 long startTime = System.currentTimeMillis();
+				 world = loadWorld();
 				 if(object instanceof SignUp){
 					 SignUp o = (SignUp)object;
 					 if(loadAccount(o.e)==null){
@@ -255,7 +256,7 @@ public class UPServer extends JFrame{
 								if(!world.reported.contains(e)){world.reported.add(e);}
 							}
 						}
-					saveWorld(world);
+					
 					saveGroup(g);
 					}
 					else{
@@ -269,7 +270,6 @@ public class UPServer extends JFrame{
 								if(!world.reported.contains(e)){world.reported.add(e);}
 							}
 						}
-					saveWorld(world);
 					}
 				}
 				
@@ -308,7 +308,7 @@ public class UPServer extends JFrame{
 					Event o = (Event)object;
 					if(o.group.length()==0){
 					world.addToClosest(o);
-					saveWorld(world);
+					
 					}else{
 						Group g = loadGroup(o.group);
 						g.events.add(o);
@@ -408,7 +408,7 @@ public class UPServer extends JFrame{
 						}
 					}
 					
-					saveWorld(world);
+					
 					}
 				}
 				
@@ -440,7 +440,7 @@ public class UPServer extends JFrame{
 						}
 					}
 					
-					saveWorld(world);
+					
 					}
 				}
 				
@@ -473,7 +473,7 @@ public class UPServer extends JFrame{
 						}
 					}
 					
-					saveWorld(world);
+					
 					}
 				}
 				
@@ -489,7 +489,7 @@ public class UPServer extends JFrame{
 							else {events.add(p.events.get(i));}
 						}
 					}
-					saveWorld(world);
+					
 					for(Event e:events){
 						sendEvent(connection,e,o.e);
 					}

@@ -200,7 +200,6 @@ public class UPLoad extends JFrame{
 			}
 		}
 		
-		saveWorld(world);
 		
 		
 	}
