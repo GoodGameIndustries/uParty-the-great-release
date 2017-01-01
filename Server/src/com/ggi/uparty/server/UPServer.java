@@ -71,7 +71,9 @@ public class UPServer extends JFrame{
 	
 	public Client client;
 	
-	public boolean isOpen = false;
+	
+	public boolean isLoad = false;
+	public boolean isSave = false;
 
 	public boolean newReport=true;
 	
@@ -145,6 +147,7 @@ public class UPServer extends JFrame{
 		      @Override
 		   public void run() {
 		    world = loadWorld();
+		    right.printConsole("[LOAD]-Loading World");
 		       }
 		  };
 		  t2.schedule(ta2, 0,30000);
@@ -177,7 +180,6 @@ public class UPServer extends JFrame{
 			 public void received (Connection connection, Object object) {
 				 //System.out.println(connection.getRemoteAddressTCP().getHostString());
 				 long startTime = System.currentTimeMillis();
-				 world = loadWorld();
 				 if(object instanceof SignUp){
 					 SignUp o = (SignUp)object;
 					 if(loadAccount(o.e)==null){
@@ -664,14 +666,14 @@ public class UPServer extends JFrame{
 		File directory = new File(path);
 		if(!directory.exists()){directory.mkdir();}
 		File f = new File(path+"world.uPWorld");
-		while(isOpen){}
+		while(isLoad){}
 		try{
-			isOpen = true;
+			isSave = true;
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(w);
 			oos.close();
-			isOpen = false;
+			isSave = false;
 		}catch(Exception e){
 			e.printStackTrace();
 			right.printConsole("[Error]-World save error");
@@ -682,14 +684,14 @@ public class UPServer extends JFrame{
 		World result = null;
 		try{
 		File f = new File(path+"world.uPWorld");
-		while(isOpen){}
+		while(isSave){}
 		if(f.exists()){
-			isOpen = true;
+			isLoad = true;
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			result = (World) ois.readObject();
 			ois.close();
-			isOpen = false;
+			isLoad = false;
 		}else{
 			result = new World();
 			result.init();
