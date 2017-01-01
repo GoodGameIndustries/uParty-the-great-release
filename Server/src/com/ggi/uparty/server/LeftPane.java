@@ -34,7 +34,7 @@ public class LeftPane extends JPanel{
 		
 		this.setLayout(new BorderLayout());
 		this.add(stats,BorderLayout.NORTH);
-		//this.add(scroll,BorderLayout.SOUTH);
+		this.add(scroll,BorderLayout.SOUTH);
 	}
 	
 	private void buildStats(){
@@ -57,7 +57,7 @@ public class LeftPane extends JPanel{
 			buildStats();
 		stats.setText(sts);}
 		
-		/*if(scroll!=null&&u.newReport){
+		if(scroll!=null&&u.newReport){
 		scroll.removeAll();
 		GridPanel g = new GridPanel();
 		for(int i = 0; i <u.world.reported.size();i++){
@@ -65,6 +65,6 @@ public class LeftPane extends JPanel{
 		}
 		scroll.add(g);
 		u.newReport=false;
-		}*/
+		}
 	}
 }

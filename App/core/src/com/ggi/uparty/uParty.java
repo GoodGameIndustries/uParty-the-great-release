@@ -64,7 +64,7 @@ public class uParty extends Game {
 
 	public String error = "";
 
-	public boolean debug = false;
+	public boolean debug = true;
 
 	public Screen nextScreen;
 
@@ -333,6 +333,7 @@ public class uParty extends Game {
 				}
 
 				if (object instanceof Refresh) {
+					if(refreshing == false){events.clear();}
 					refreshing = false;
 					needUpdate = true;
 					System.out.println(events.size());

@@ -35,7 +35,7 @@ public class UPLoad extends JFrame{
 	private boolean debug = false;
 	private String path = debug?"D:\\profiles\\":"C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
 	
-	public LeftPane left;
+	//public LeftPane left;
 	
 	public boolean isSave = false;
 	public boolean isLoad = false;
@@ -48,7 +48,7 @@ public class UPLoad extends JFrame{
 	
 	public UPLoad(){
 		world = loadWorld();
-		left = new LeftPane(this);
+		//left = new LeftPane(this);
 		setTitle("uParty Load Balancer");
 		setSize(800,400);
 		super.setBackground(Color.black);
@@ -56,8 +56,8 @@ public class UPLoad extends JFrame{
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		sp = new ServPanel(this);
-		this.add(left,BorderLayout.CENTER);
-		this.add(sp, BorderLayout.EAST);
+		//this.add(left,BorderLayout.CENTER);
+		this.add(sp, BorderLayout.CENTER);
 		setVisible(true);
 		runServer();
 		
@@ -84,7 +84,7 @@ public class UPLoad extends JFrame{
 						break;
 					}
 				}
-				left.repaint();
+				//left.repaint();
 				sp.repaint();
 				repaint();
 			}
@@ -127,7 +127,7 @@ public class UPLoad extends JFrame{
 						}
 					}
 				}
-				left.repaint();
+				//left.repaint();
 				sp.repaint();
 				repaint();
 			}
@@ -142,12 +142,14 @@ public class UPLoad extends JFrame{
 		File directory = new File(path);
 		if(!directory.exists()){directory.mkdir();}
 		File f = new File(path+"world.uPWorld");
-		
+		while(isLoad || isSave){}
 		try{
+			isSave=true;
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(w);
 			oos.close();
+			isSave = false;
 		}catch(Exception e){
 			e.printStackTrace();
 			//right.printConsole("[Error]-World save error");
@@ -158,13 +160,15 @@ public class UPLoad extends JFrame{
 		World result = null;
 		try{
 		File f = new File(path+"world.uPWorld");
-		
+		while(isSave || isLoad){}
 		if(f.exists()){
+			isLoad = true;
 			System.out.println("WORLD EXISTS");
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			result = (World) ois.readObject();
 			ois.close();
+			isLoad = false;
 		}else{
 			System.out.println("WORLD DNE");
 			result = new World();
@@ -174,7 +178,7 @@ public class UPLoad extends JFrame{
 		
 		}catch(Exception e){
 			
-		e.printStackTrace();
+		//e.printStackTrace();
 		}
 		
 		System.out.println(result);
@@ -210,14 +214,11 @@ public class UPLoad extends JFrame{
 		if(!directory.exists()){directory.mkdir();}
 		File f = new File(path+"Groups\\"+g.name.replace(" ", "")+g.owner.replace(".", "_").replace("@", "_")+".uPGroup");
 		
-		while(isLoad){}
 		try{
-			isSave = true;
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(g);
 			oos.close();
-			isSave = false;
 		}catch(Exception e){
 			e.printStackTrace();
 			//right.printConsole("[Error]-Group save error");
@@ -229,15 +230,12 @@ public class UPLoad extends JFrame{
 		try{
 		File f = new File(path+"Groups\\"+id+".uPGroup");
 		
-		while(isSave){}
 		
 		if(f.exists()){
-			isLoad = true;
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			result = (Group) ois.readObject();
 			ois.close();
-			isLoad = false;
 		}
 		
 		}catch(Exception e){
