@@ -70,6 +70,8 @@ public class UPServer extends JFrame{
 	public long lastResponse=0;
 	
 	public Client client;
+	
+	public boolean isOpen = false;
 
 	public boolean newReport=true;
 	
@@ -662,12 +664,14 @@ public class UPServer extends JFrame{
 		File directory = new File(path);
 		if(!directory.exists()){directory.mkdir();}
 		File f = new File(path+"world.uPWorld");
-		
+		while(isOpen){}
 		try{
+			isOpen = true;
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(w);
 			oos.close();
+			isOpen = false;
 		}catch(Exception e){
 			e.printStackTrace();
 			right.printConsole("[Error]-World save error");
@@ -678,12 +682,14 @@ public class UPServer extends JFrame{
 		World result = null;
 		try{
 		File f = new File(path+"world.uPWorld");
-		
+		while(isOpen){}
 		if(f.exists()){
+			isOpen = true;
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			result = (World) ois.readObject();
 			ois.close();
+			isOpen = false;
 		}else{
 			result = new World();
 			result.init();

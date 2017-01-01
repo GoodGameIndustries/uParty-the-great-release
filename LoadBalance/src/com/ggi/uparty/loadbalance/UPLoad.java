@@ -37,6 +37,7 @@ public class UPLoad extends JFrame{
 	
 	public LeftPane left;
 	
+	public boolean isOpen = false;
 	
 	public ArrayList<ServData> servs = new ArrayList<ServData>();
 	
@@ -209,11 +210,14 @@ public class UPLoad extends JFrame{
 		if(!directory.exists()){directory.mkdir();}
 		File f = new File(path+"Groups\\"+g.name.replace(" ", "")+g.owner.replace(".", "_").replace("@", "_")+".uPGroup");
 		
+		while(isOpen){}
 		try{
+			isOpen = true;
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(g);
 			oos.close();
+			isOpen = false;
 		}catch(Exception e){
 			e.printStackTrace();
 			//right.printConsole("[Error]-Group save error");
@@ -225,12 +229,15 @@ public class UPLoad extends JFrame{
 		try{
 		File f = new File(path+"Groups\\"+id+".uPGroup");
 		
+		while(isOpen){}
+		
 		if(f.exists()){
+			isOpen = true;
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			result = (Group) ois.readObject();
 			ois.close();
-			
+			isOpen = false;
 		}
 		
 		}catch(Exception e){
