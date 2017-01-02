@@ -48,7 +48,7 @@ public class ReportPane extends JPanel{
 				public void actionPerformed(ActionEvent arg) {
 					p.u.world.reported.remove(e);
 					p.u.newReport=true;
-					p.u.saveWorld(p.u.world);
+					//p.u.saveWorld(p.u.world);
 					
 				}
 				
@@ -66,7 +66,7 @@ public class ReportPane extends JPanel{
 					p.u.removeEvent(e,p.u.world);
 					p.u.stuffToDo.add(new Remove(e));
 					p.u.newReport=true;
-					p.u.saveWorld(p.u.world);
+					//p.u.saveWorld(p.u.world);
 					
 				}
 				
