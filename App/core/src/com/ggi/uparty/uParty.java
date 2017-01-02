@@ -64,7 +64,7 @@ public class uParty extends Game {
 
 	public String error = "";
 
-	public boolean debug = false;
+	public boolean debug = true;
 
 	public Screen nextScreen;
 
