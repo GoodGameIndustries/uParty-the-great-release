@@ -319,6 +319,11 @@ public class UPServer extends JFrame {
 
 						}
 					}
+					
+					if(object instanceof Remove){
+						Remove o = (Remove)object;
+						removeEvent(o.e,world);
+					}
 
 				}
 				stuffToDo.clear();
@@ -992,7 +997,7 @@ public class UPServer extends JFrame {
 		new UPServer();
 	}
 
-	public void removeEvent(Event e) {
+	public void removeEvent(Event e,World world) {
 		if (e.group.length() > 0) {
 			Group group = loadGroup(e.group);
 			for (int i = 0; i < group.events.size(); i++) {
