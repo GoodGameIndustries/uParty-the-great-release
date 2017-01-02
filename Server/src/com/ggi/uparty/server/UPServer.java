@@ -323,6 +323,7 @@ public class UPServer extends JFrame {
 				}
 				stuffToDo.clear();
 				saveWorld(world);
+				setWorld(world);
 				
 				right.printConsole("[LOAD]-World Loaded");
 				
@@ -331,6 +332,12 @@ public class UPServer extends JFrame {
 		t2.schedule(ta2, 0, 30000);
 
 		runServer();
+	}
+
+
+	protected void setWorld(World world2) {
+		this.world=world2;
+		
 	}
 
 
@@ -895,7 +902,7 @@ public class UPServer extends JFrame {
 	}
 
 	public void saveWorld(World w) {
-		world = w;
+		//world = w;
 		File directory = new File(path);
 		if (!directory.exists()) {
 			directory.mkdir();
