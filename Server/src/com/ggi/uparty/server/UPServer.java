@@ -147,8 +147,11 @@ public class UPServer extends JFrame {
 		TimerTask ta2 = new TimerTask() {
 			@Override
 			public void run() {
+				right.printConsole("[LOAD]-Start Loading");
+				right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				World world = loadWorld();
 				while(stuffToDo.size()>0){
+					right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 					Object object = stuffToDo.get(0);
 
 					if (object instanceof Report) {
@@ -336,7 +339,7 @@ public class UPServer extends JFrame {
 					}
 					
 					stuffToDo.remove(0);
-
+					right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				}
 				saveWorld(world);
 				setWorld(world);
