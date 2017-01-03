@@ -151,7 +151,7 @@ public class UPServer extends JFrame {
 				right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				World world = loadWorld();
 				while(stuffToDo.size()>0){
-					right.printConsole("\t-Stuff to do: " + stuffToDo.size());
+					//right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 					Object object = stuffToDo.get(0);
 
 					if (object instanceof Report) {
