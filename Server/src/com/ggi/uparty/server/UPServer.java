@@ -366,13 +366,13 @@ public class UPServer extends JFrame {
 
 	protected void setWorld(World world2) {
 		world.eventsInStorage=world2.eventsInStorage;
-		ArrayList<Datapoint> pts = new ArrayList<Datapoint>();
+		ArrayList<Datapoint> pts = (ArrayList<Datapoint>) world2.points.clone();
 		Collections.copy(pts, world2.points);
 		world.points=pts;
 		world.radius=new Float(world2.radius);
 		world.refX = new Float(world2.refX);
 		world.refY = new Float(world2.refY);
-		ArrayList<Event> rep = new ArrayList<Event>();
+		ArrayList<Event> rep = (ArrayList<Event>) world2.reported.clone();
 		Collections.copy(rep, world2.reported);
 		world.reported = rep;
 		
