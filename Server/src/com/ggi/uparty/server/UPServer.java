@@ -364,7 +364,12 @@ public class UPServer extends JFrame {
 
 
 	protected void setWorld(World world2) {
-		this.world=world2;
+		world.eventsInStorage=world2.eventsInStorage;
+		world.points=world2.points;
+		world.radius=world2.radius;
+		world.refX = world2.refX;
+		world.refY = world2.refY;
+		world.reported = world2.reported;
 		
 	}
 
