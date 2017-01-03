@@ -86,8 +86,8 @@ public class SignUpScreen implements Screen, InputProcessor {
 		emailB = new Rectangle(u.w / 9, .47f * u.h, 7 * u.w / 9, u.h / 16);
 		passB = new Rectangle(u.w / 9, .39f * u.h, 7 * u.w / 9, u.h / 16);
 		cpassB = new Rectangle(u.w / 9, .31f * u.h, 7 * u.w / 9, u.h / 16);
-		tosB = new Rectangle(.45f * u.w, .267f * u.h, u.w / 4, u.h / 32);
-		tosBC = new Rectangle(.71f * u.w, .276f * u.h, u.h / 64, u.h / 64);
+		tosB = new Rectangle(.49f * u.w, .265f * u.h, u.w / 4, u.h / 32);
+		tosBC = new Rectangle(.8f * u.w, .265f * u.h, u.h / 32, u.h / 32);
 		signUpB = new Rectangle(u.w / 9, .195f * u.h, 7 * u.w / 9, u.h / 16);
 		backB = new Rectangle(u.w / 36, .93f * u.h, .15f * u.w, .05f * u.h);
 		errorB = new Rectangle(u.w / 9, .125f * u.h, 7 * u.w / 9, u.h / 16);
@@ -166,10 +166,15 @@ public class SignUpScreen implements Screen, InputProcessor {
 		pass.draw(pic, fade);
 		cpass.draw(pic, fade);
 		tos.draw(pic, fade);
-		tosC.draw(pic, fade);
+		//tosC.draw(pic, fade);
 		signUp.draw(pic, fade);
 		back.draw(pic, fade);
 		error.draw(pic, fade);
+		
+		pic.draw(
+				(tosC.isChecked() ? u.assets.get("UI/CheckBoxChecked.png", Texture.class)
+						: u.assets.get("UI/CheckBox.png", Texture.class)),
+				tosBC.x, tosBC.y, tosBC.width, tosBC.height);
 
 		if (loading) {
 			rM.forceDraw(pic, fade);
@@ -435,8 +440,8 @@ public class SignUpScreen implements Screen, InputProcessor {
 		emailB = new Rectangle(u.w / 9, .47f * u.h + scr, 7 * u.w / 9, u.h / 16);
 		passB = new Rectangle(u.w / 9, .39f * u.h + scr, 7 * u.w / 9, u.h / 16);
 		cpassB = new Rectangle(u.w / 9, .31f * u.h + scr, 7 * u.w / 9, u.h / 16);
-		tosB = new Rectangle(.45f * u.w, .267f * u.h + scr, u.w / 4, u.h / 32);
-		tosBC = new Rectangle(.71f * u.w, .276f * u.h + scr, u.h / 64, u.h / 64);
+		tosB = new Rectangle(.49f * u.w, .265f * u.h, u.w / 4, u.h / 32);
+		tosBC = new Rectangle(.8f * u.w, .265f * u.h, u.h / 32, u.h / 32);
 		signUpB = new Rectangle(u.w / 9, .195f * u.h + scr, 7 * u.w / 9, u.h / 16);
 		backB = new Rectangle(u.w / 36, .93f * u.h + scr, .15f * u.w, .05f * u.h);
 		errorB = new Rectangle(u.w / 9, .125f * u.h + scr, 7 * u.w / 9, u.h / 16);

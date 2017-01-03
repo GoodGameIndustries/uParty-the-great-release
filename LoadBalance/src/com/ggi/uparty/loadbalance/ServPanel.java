@@ -58,8 +58,10 @@ public class ServPanel extends JPanel{
 			System.out.println(u.servs.size());
 			if(u.servs!=null &&u.servs.size()>0){
 		for(int i = 0; i < u.servs.size(); i++){
+			if(u.servs.get(i).c != null){
 			sts += "\n" + u.servs.get(i).c.getRemoteAddressTCP().toString()+" has " + u.servs.get(i).cons +" connections.";
-		}
+			}
+			}
 			}
 		}
 		if(stats!=null){
