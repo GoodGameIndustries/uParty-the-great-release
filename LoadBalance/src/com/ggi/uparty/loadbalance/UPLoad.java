@@ -99,6 +99,7 @@ public class UPLoad extends JFrame{
 						}
 						if(i == servs.size()-1){
 							servs.add(new ServData(connection));
+							break;
 						}
 					}
 					if(servs.size()==0){
