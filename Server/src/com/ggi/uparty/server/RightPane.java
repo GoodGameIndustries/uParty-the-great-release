@@ -41,10 +41,12 @@ public class RightPane extends JPanel{
 		super.repaint();
 		if(logField!=null){
 		logField.setText(log);}
+		
+		
 	}
 	
 	public void printConsole(String s){
-		log+="\n"+s;
+		log=s+"\n"+log;
 	}
 	
 }

@@ -352,7 +352,7 @@ public class UPServer extends JFrame {
 				
 			}
 		};
-		t2.schedule(ta2, 0, 30000);
+		t2.schedule(ta2, 0, 60000);
 
 		runServer();
 	}
