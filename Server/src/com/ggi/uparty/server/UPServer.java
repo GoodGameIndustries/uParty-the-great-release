@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
@@ -365,11 +366,15 @@ public class UPServer extends JFrame {
 
 	protected void setWorld(World world2) {
 		world.eventsInStorage=world2.eventsInStorage;
-		world.points=world2.points;
-		world.radius=world2.radius;
-		world.refX = world2.refX;
-		world.refY = world2.refY;
-		world.reported = world2.reported;
+		ArrayList<Datapoint> pts = new ArrayList<Datapoint>();
+		Collections.copy(pts, world2.points);
+		world.points=pts;
+		world.radius=new Float(world2.radius);
+		world.refX = new Float(world2.refX);
+		world.refY = new Float(world2.refY);
+		ArrayList<Event> rep = new ArrayList<Event>();
+		Collections.copy(rep, world2.reported);
+		world.reported = rep;
 		
 	}
 
