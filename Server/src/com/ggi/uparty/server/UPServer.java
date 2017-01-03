@@ -341,14 +341,18 @@ public class UPServer extends JFrame {
 					stuffToDo.remove(0);
 					right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				}
+				right.printConsole("\t-Saving World");
+				long st = System.currentTimeMillis();
 				saveWorld(world);
+				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
+				right.printConsole("\t-Setting World");
 				setWorld(world);
 				
 				right.printConsole("[LOAD]-World Loaded");
 				
 			}
 		};
-		t2.schedule(ta2, 0, 10000);
+		t2.schedule(ta2, 0, 30000);
 
 		runServer();
 	}
