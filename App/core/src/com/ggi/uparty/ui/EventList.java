@@ -49,8 +49,8 @@ public class EventList {
 		System.out.println(this.evs.size());
 		focus = 0;
 
-		for (Event e : evs) {
-			modules.add(new EventModule(e, this));
+		for(int i = 0; i <evs.size();i++){
+			modules.add(new EventModule(evs.get(i), this));
 		}
 
 		sort();
@@ -90,10 +90,10 @@ public class EventList {
 			}
 		}
 
-		if (modules.size() * .2f * s.u.h + scrolled > .15f * s.u.h && modules.size() * .2f * s.u.h > .675f * s.u.h) {
-			scrolled = (int) (.15f * s.u.h - modules.size() * .2f * s.u.h);
+		if (modules.size() * .2f * s.u.h > .675f * s.u.h && scrolled > (int) (modules.size() * .2f * s.u.h - .675f * s.u.h)) {
+			scrolled = (int) (modules.size() * .2f * s.u.h - .675f * s.u.h);
 		} else if (scrolled > 0) {
-			scrolled = 0;
+			//scrolled = 0;
 		}
 
 		rM.bounds.y = .675f * s.u.h + .2f * s.u.h + scrolled;
