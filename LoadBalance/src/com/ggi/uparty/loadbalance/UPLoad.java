@@ -91,6 +91,7 @@ public class UPLoad extends JFrame{
 			public void received (Connection connection, Object object) {
 				System.out.println("Received");
 				if(object instanceof ConnectServ){
+					System.out.println("Connect Server");
 					for(int i = 0; i < servs.size(); i++){
 						if(servs.get(i).c.equals(new ServData(connection))){
 							//servs.remove(i);
