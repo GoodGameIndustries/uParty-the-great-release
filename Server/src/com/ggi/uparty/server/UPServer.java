@@ -323,6 +323,16 @@ public class UPServer extends JFrame {
 					if(object instanceof Remove){
 						Remove o = (Remove)object;
 						removeEvent(o.e,world);
+						if(world.reported.contains(o.e)){
+							world.reported.remove(o.e);
+						}
+					}
+					
+					if(object instanceof Allow){
+						Allow o = (Allow)object;
+						if(world.reported.contains(o.e)){
+							world.reported.remove(o.e);
+						}
 					}
 
 				}

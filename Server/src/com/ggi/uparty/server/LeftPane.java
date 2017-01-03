@@ -15,6 +15,7 @@ public class LeftPane extends JPanel{
 	public JTextArea stats = new JTextArea();
 	public String sts="";
 	public int mb = 1024*1024;
+	int repaint = 0;
 	
 	public ScrollPane scroll = new ScrollPane();
 	
@@ -52,12 +53,14 @@ public class LeftPane extends JPanel{
 	}
 
 	public void repaint(){
+		repaint++;
 		super.repaint();
 		if(stats!=null){
 			buildStats();
 		stats.setText(sts);}
 		
-		if(scroll!=null&&u.newReport){
+		if(scroll!=null && repaint == 5){
+			repaint = 0;
 		scroll.removeAll();
 		GridPanel g = new GridPanel();
 		for(int i = 0; i <u.world.reported.size();i++){

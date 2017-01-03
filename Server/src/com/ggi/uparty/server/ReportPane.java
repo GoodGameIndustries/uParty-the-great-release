@@ -46,10 +46,12 @@ public class ReportPane extends JPanel{
 
 				@Override
 				public void actionPerformed(ActionEvent arg) {
+					if(p.u.world.reported.contains(e)){
 					p.u.world.reported.remove(e);
-					p.u.newReport=true;
+					p.u.stuffToDo.add(new Allow(e));
+					p.u.newReport=true;}
 					//p.u.saveWorld(p.u.world);
-					
+					p.repaint();
 				}
 				
 			});
@@ -62,12 +64,13 @@ public class ReportPane extends JPanel{
 
 				@Override
 				public void actionPerformed(ActionEvent arg) {
+					if(p.u.world.reported.contains(e)){
 					p.u.world.reported.remove(e);
 					p.u.removeEvent(e,p.u.world);
 					p.u.stuffToDo.add(new Remove(e));
-					p.u.newReport=true;
+					p.u.newReport=true;}
 					//p.u.saveWorld(p.u.world);
-					
+					p.repaint();
 				}
 				
 			});
