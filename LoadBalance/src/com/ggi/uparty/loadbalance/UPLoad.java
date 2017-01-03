@@ -94,7 +94,7 @@ public class UPLoad extends JFrame{
 					for(int i = 0; i < servs.size(); i++){
 						if(servs.get(i).c.equals(new ServData(connection))){
 							//servs.remove(i);
-							break;
+							continue;
 						}
 						if(i == servs.size()-1){
 							servs.add(new ServData(connection));
