@@ -150,6 +150,7 @@ public class UPServer extends JFrame {
 				right.printConsole("[LOAD]-Start Loading");
 				right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				World world = loadWorld();
+				long st = System.currentTimeMillis();
 				while(stuffToDo.size()>0){
 					//right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 					Object object = stuffToDo.get(0);
@@ -341,10 +342,13 @@ public class UPServer extends JFrame {
 					stuffToDo.remove(0);
 					right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				}
+				right.printConsole("\t-Stuff took: "+ (System.currentTimeMillis()-st)+" ms");
 				right.printConsole("\t-Setting World");
+				st = System.currentTimeMillis();
 				setWorld(world);
+				right.printConsole("\t-Set took: " + (System.currentTimeMillis()-st)+" ms");
 				right.printConsole("\t-Saving World");
-				long st = System.currentTimeMillis();
+				st = System.currentTimeMillis();
 				saveWorld(world);
 				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
 			
