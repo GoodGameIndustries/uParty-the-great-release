@@ -951,8 +951,9 @@ public class UPServer extends JFrame {
 			oos.close();
 			isSave = false;
 		} catch (Exception e) {
+			e.printStackTrace();
 			right.printConsole("[Error]-World save error");
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 
