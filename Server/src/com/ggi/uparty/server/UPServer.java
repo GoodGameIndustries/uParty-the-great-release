@@ -148,8 +148,8 @@ public class UPServer extends JFrame {
 			@Override
 			public void run() {
 				World world = loadWorld();
-				for (int k = 0; k < stuffToDo.size(); k++) {
-					Object object = stuffToDo.get(k);
+				while(stuffToDo.size()>0){
+					Object object = stuffToDo.get(0);
 
 					if (object instanceof Report) {
 
@@ -334,9 +334,10 @@ public class UPServer extends JFrame {
 							world.reported.remove(o.e);
 						}
 					}
+					
+					stuffToDo.remove(0);
 
 				}
-				stuffToDo.clear();
 				saveWorld(world);
 				setWorld(world);
 				
@@ -344,7 +345,7 @@ public class UPServer extends JFrame {
 				
 			}
 		};
-		t2.schedule(ta2, 0, 30000);
+		t2.schedule(ta2, 0, 10000);
 
 		runServer();
 	}
