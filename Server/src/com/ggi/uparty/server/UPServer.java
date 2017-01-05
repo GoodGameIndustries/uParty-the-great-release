@@ -151,6 +151,7 @@ public class UPServer extends JFrame {
 				right.printConsole("[LOAD]-Start Loading");
 				right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				World world = loadWorld();
+				if(world != null){
 				long st = System.currentTimeMillis();
 				while(stuffToDo.size()>0){
 					//right.printConsole("\t-Stuff to do: " + stuffToDo.size());
@@ -352,9 +353,10 @@ public class UPServer extends JFrame {
 				st = System.currentTimeMillis();
 				saveWorld(world);
 				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
-			
-				
-				right.printConsole("[LOAD]-World Loaded");
+				right.printConsole("[LOAD]-World Loaded");}
+				else{
+					right.printConsole("[ERROR]-World Loading FAILED world was null");
+				}
 				
 			}
 		};
@@ -365,6 +367,7 @@ public class UPServer extends JFrame {
 
 
 	protected void setWorld(World world2) {
+		if(world2 != null){
 		world.eventsInStorage=world2.eventsInStorage;
 		ArrayList<Datapoint> pts = (ArrayList<Datapoint>) world2.points.clone();
 		Collections.copy(pts, world2.points);
@@ -375,7 +378,7 @@ public class UPServer extends JFrame {
 		ArrayList<Event> rep = (ArrayList<Event>) world2.reported.clone();
 		Collections.copy(rep, world2.reported);
 		world.reported = rep;
-		
+		}
 	}
 
 
