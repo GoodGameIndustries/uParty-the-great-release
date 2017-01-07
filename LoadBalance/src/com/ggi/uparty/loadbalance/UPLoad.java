@@ -95,9 +95,9 @@ public class UPLoad extends JFrame{
 					for(int i = 0; i < servs.size(); i++){
 						if(servs.get(i).c.getRemoteAddressTCP().getHostString().equals(connection.getRemoteAddressTCP().getHostString())){
 							//servs.remove(i);
-							continue;
+							break;
 						}
-						if(i == servs.size()-1){
+						else if(i == servs.size()-1){
 							servs.add(new ServData(connection));
 							break;
 						}
