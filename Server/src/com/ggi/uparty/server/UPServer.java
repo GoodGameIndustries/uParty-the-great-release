@@ -353,7 +353,9 @@ public class UPServer extends JFrame {
 				st = System.currentTimeMillis();
 				saveWorld(world);
 				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
-				right.printConsole("[LOAD]-World Loaded");}
+				right.printConsole("[LOAD]-World Loaded");
+				send(new ConnectServ());
+				}
 				else{
 					right.printConsole("[ERROR]-World Loading FAILED world was null");
 				}
@@ -957,6 +959,7 @@ public class UPServer extends JFrame {
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(w);
 			oos.close();
+			fos.close();
 			isSave = false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -977,6 +980,7 @@ public class UPServer extends JFrame {
 				ObjectInputStream ois = new ObjectInputStream(fis);
 				result = (World) ois.readObject();
 				ois.close();
+				fis.close();
 				isLoad = false;
 			} else {
 				result = new World();
