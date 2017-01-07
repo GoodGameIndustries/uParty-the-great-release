@@ -93,7 +93,7 @@ public class UPLoad extends JFrame{
 				if(object instanceof ConnectServ){
 					System.out.println("Connect Server");
 					for(int i = 0; i < servs.size(); i++){
-						if(servs.get(i).c.equals(new ServData(connection))){
+						if(servs.get(i).c.equals(connection)){
 							//servs.remove(i);
 							continue;
 						}
