@@ -143,15 +143,27 @@ public class UPServer extends JFrame {
 		};
 		timer.schedule(task, 0, 1000);
 		
+		Timer timer2 = new Timer();
+		TimerTask task2 = new TimerTask() {
+			@Override
+			public void run() {
+				while(isSave || isLoad){}
+				System.exit(0);
+			}
+		};
+		timer2.schedule(task2, 0, 1800000);
+		
 
 		Timer t2 = new Timer();
 		TimerTask ta2 = new TimerTask() {
 			@Override
 			public void run() {
+				boolean needSave = false;
 				right.printConsole("[LOAD]-Start Loading");
 				right.printConsole("\t-Stuff to do: " + stuffToDo.size());
 				World world = loadWorld();
 				if(world != null){
+					if(stuffToDo.size() >0){needSave = true;}
 				long st = System.currentTimeMillis();
 				while(stuffToDo.size()>0){
 					//right.printConsole("\t-Stuff to do: " + stuffToDo.size());
@@ -349,17 +361,22 @@ public class UPServer extends JFrame {
 				st = System.currentTimeMillis();
 				setWorld(world);
 				right.printConsole("\t-Set took: " + (System.currentTimeMillis()-st)+" ms");
+				if(needSave){
 				right.printConsole("\t-Saving World");
 				st = System.currentTimeMillis();
 				saveWorld(world);
 				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
+				}
 				right.printConsole("[LOAD]-World Loaded");
+				if((System.currentTimeMillis()-st)>45000){
+					System.exit(0);
+				}
+
 				send(new ConnectServ());
 				}
 				else{
 					right.printConsole("[ERROR]-World Loading FAILED world was null");
 				}
-				
 			}
 		};
 		t2.schedule(ta2, 0, 60000);
