@@ -143,16 +143,6 @@ public class UPServer extends JFrame {
 		};
 		timer.schedule(task, 0, 1000);
 		
-		Timer timer2 = new Timer();
-		TimerTask task2 = new TimerTask() {
-			@Override
-			public void run() {
-				while(isSave || isLoad){}
-				System.exit(0);
-			}
-		};
-		timer2.schedule(task2, 0, 1800000);
-		
 
 		Timer t2 = new Timer();
 		TimerTask ta2 = new TimerTask() {
