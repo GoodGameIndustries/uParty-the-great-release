@@ -376,6 +376,10 @@ public class UPServer extends JFrame {
 				}
 				else{
 					right.printConsole("[ERROR]-World Loading FAILED world was null");
+					right.printConsole("\t-Saving World to cover up null");
+					long st = System.currentTimeMillis();
+					saveWorld(world);
+					right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
 				}
 			}
 		};
