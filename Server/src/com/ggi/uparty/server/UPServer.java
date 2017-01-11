@@ -366,11 +366,12 @@ public class UPServer extends JFrame {
 				st = System.currentTimeMillis();
 				saveWorld(world);
 				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
-				}
-				right.printConsole("[LOAD]-World Loaded");
 				if((System.currentTimeMillis()-st)>45000){
 					System.exit(0);
 				}
+				}
+				right.printConsole("[LOAD]-World Loaded");
+				
 
 				send(new ConnectServ());
 				}
