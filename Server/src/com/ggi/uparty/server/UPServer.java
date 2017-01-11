@@ -367,6 +367,7 @@ public class UPServer extends JFrame {
 				saveWorld(world);
 				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
 				if((System.currentTimeMillis()-st)>45000){
+					System.out.println("Exiting because slow save");
 					System.exit(0);
 				}
 				}
