@@ -50,7 +50,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		6xbnVRq7XcH68vt9o4OFi8atHkc=
+		PQFRDC+O0UBoj/pwmWRrt+AzA7E=
 		</data>
 		<key>Logos/1024.png</key>
 		<data>
@@ -262,13 +262,13 @@
 		</data>
 		<key>lib/boot/robovm-cacerts-full.jar</key>
 		<data>
-		b3vPrAhuU4LIeC5iJ+hssNXb+1E=
+		sS87hFveqJS6d4U3oYHIeV2sHL8=
 		</data>
 		<key>lib/boot/robovm-rt.jar</key>
 		<data>
-		JvChOOa5Wfk+DixSYi7grePoZuQ=
+		5RqUS3aq959E8HIRCmq3Gb8f4Ek=
 		</data>
-		<key>lib/classes13.jar</key>
+		<key>lib/classes14.jar</key>
 		<data>
 		sE8+6PXkP6OxYpgbULty/hrKuzM=
 		</data>
@@ -276,61 +276,61 @@
 		<data>
 		sE8+6PXkP6OxYpgbULty/hrKuzM=
 		</data>
-		<key>lib/gdx-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-1.9.5.jar</key>
 		<data>
-		NQVO68E/zpvzLHmX8B2bTWgu1YA=
+		F2mFCCGty+Ch0+eAQ9rI5D/1SUA=
 		</data>
-		<key>lib/gdx-backend-robovm-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-backend-robovm-1.9.5.jar</key>
 		<data>
-		yT9EGDc26ZxIZ3ngbvsQg76ysOc=
+		ZMP5kemt6sNQngLwmLLj1aaPob0=
 		</data>
-		<key>lib/gdx-box2d-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-box2d-1.9.5.jar</key>
 		<data>
-		hCGns+9HXPepKWJxBNkDcn5mvdM=
+		33HspHH3aAtplNXroydHtOn7Ou8=
 		</data>
-		<key>lib/gdx-box2d-platform-1.9.5-SNAPSHOT-natives-ios.jar</key>
+		<key>lib/gdx-box2d-platform-1.9.5-natives-ios.jar</key>
 		<data>
-		YM/Gsb27V//CGyJ2rdQ+2fMQmMk=
+		C4XLK/dMQFOmGYXxzVIsXpjko7E=
 		</data>
-		<key>lib/gdx-freetype-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-freetype-1.9.5.jar</key>
 		<data>
-		ANOZtXpebBx3z601KGdZOnPQyq8=
+		D2ePoG7YqFGu1BNkKgXL8IIRnsk=
 		</data>
-		<key>lib/gdx-freetype-platform-1.9.5-SNAPSHOT-natives-ios.jar</key>
+		<key>lib/gdx-freetype-platform-1.9.5-natives-ios.jar</key>
 		<data>
-		HmE/euNtS0wbdkeakmVrkR+naPA=
+		lkRHDggY1UBDpLsshLyPO+FnqfQ=
 		</data>
-		<key>lib/gdx-platform-1.9.5-SNAPSHOT-natives-ios.jar</key>
+		<key>lib/gdx-platform-1.9.5-natives-ios.jar</key>
 		<data>
-		sXc2nKZxQNtkvNjDtDCyrhA1pAU=
+		uCwPKZAKDv9YYs0eoZFzxyK6vdY=
 		</data>
 		<key>lib/kryo-2.23.1-SNAPSHOT-all-debug.jar</key>
 		<data>
-		B/rpWowfU/ltzCi6rDQVaKk6TTg=
+		v2kWLNIuMP+eZyP5gzUOMbseD2o=
 		</data>
 		<key>lib/kryonet-2.18.jar</key>
 		<data>
 		sE8+6PXkP6OxYpgbULty/hrKuzM=
 		</data>
-		<key>lib/robovm-cocoatouch-2.2.1-SNAPSHOT.jar</key>
+		<key>lib/robovm-cocoatouch-2.3.0.jar</key>
 		<data>
-		4fPGFDDRL2cejfiCU2bj9ZfeqE4=
+		dziboI6hyEK5nHmpZdhM7dEtkHI=
 		</data>
 		<key>lib/robovm-cocoatouch.jar</key>
 		<data>
-		QlBCmJ6JE6FxHngiujc92Tb/YTc=
+		OGJW92u5cig51ncjM2N/F5xyYVE=
 		</data>
-		<key>lib/robovm-objc-2.2.1-SNAPSHOT.jar</key>
+		<key>lib/robovm-objc-2.3.0.jar</key>
 		<data>
-		Eo3p5hBQve022cCPfKtvWCVIKzk=
+		LsojoLNPLXvXGaZ2tYkIS6H5OzA=
 		</data>
 		<key>lib/robovm-objc.jar</key>
 		<data>
-		/JyIRMv0wTkxRFX2dS+oyJL8qOg=
+		A44PCLgnxtBT/8d49p0OyQY8E+w=
 		</data>
-		<key>lib/robovm-rt-2.2.1-SNAPSHOT.jar</key>
+		<key>lib/robovm-rt-2.3.0.jar</key>
 		<data>
-		Lbdj4e8v3y451FeNpIfSeeS3Xds=
+		IwFfFlv89XNI+okx6dX1mW/7Dqg=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -1032,25 +1032,25 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			b3vPrAhuU4LIeC5iJ+hssNXb+1E=
+			sS87hFveqJS6d4U3oYHIeV2sHL8=
 			</data>
 			<key>hash2</key>
 			<data>
-			l90XCnKalj/B3+rZZG0vlOfcfMCteJkum0bHiF8s1u4=
+			PALD+F633LRxLY7qXW10RFVookFYWVQYlGQvjkjV8QI=
 			</data>
 		</dict>
 		<key>lib/boot/robovm-rt.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			JvChOOa5Wfk+DixSYi7grePoZuQ=
+			5RqUS3aq959E8HIRCmq3Gb8f4Ek=
 			</data>
 			<key>hash2</key>
 			<data>
-			8dDcpil4Gk6hyZXkPP3DUaE39ypUR3fhKjyu+kmkP/w=
+			bC3+K8EbYfAfKDQTjUAUsoJCblJtzBSWantm7ihzvP0=
 			</data>
 		</dict>
-		<key>lib/classes13.jar</key>
+		<key>lib/classes14.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -1072,92 +1072,92 @@
 			hznHbmgfkAkjuQDJ3w73XPQh05yrtUZQxLmtGbanbYU=
 			</data>
 		</dict>
-		<key>lib/gdx-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-1.9.5.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			NQVO68E/zpvzLHmX8B2bTWgu1YA=
+			F2mFCCGty+Ch0+eAQ9rI5D/1SUA=
 			</data>
 			<key>hash2</key>
 			<data>
-			XU/DxUu/3WDAAbDWYO7fFLqEYzPdr9ECFxJCBAmpUQE=
+			nlcWbn83JqX4D+GsHJQutk/2GFMcxSLDxPFiwYuRIZg=
 			</data>
 		</dict>
-		<key>lib/gdx-backend-robovm-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-backend-robovm-1.9.5.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			yT9EGDc26ZxIZ3ngbvsQg76ysOc=
+			ZMP5kemt6sNQngLwmLLj1aaPob0=
 			</data>
 			<key>hash2</key>
 			<data>
-			BPKreWJwW6SpW+RBDKa6+Y1Y065+LJIGAP8Wp7awQEI=
+			EMljMOqX31ml+tMi/oi4XdzsP9bVEEiGt/oPmn0q4bE=
 			</data>
 		</dict>
-		<key>lib/gdx-box2d-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-box2d-1.9.5.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			hCGns+9HXPepKWJxBNkDcn5mvdM=
+			33HspHH3aAtplNXroydHtOn7Ou8=
 			</data>
 			<key>hash2</key>
 			<data>
-			NPR6k5SuzU8eOamoMiASxKckzSjGot7mVAAXljQmzDw=
+			DIFRl6p4L+9t2K6RjTc2RDAFcTzCtBZRs/M7031fkEE=
 			</data>
 		</dict>
-		<key>lib/gdx-box2d-platform-1.9.5-SNAPSHOT-natives-ios.jar</key>
+		<key>lib/gdx-box2d-platform-1.9.5-natives-ios.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			YM/Gsb27V//CGyJ2rdQ+2fMQmMk=
+			C4XLK/dMQFOmGYXxzVIsXpjko7E=
 			</data>
 			<key>hash2</key>
 			<data>
-			gzm1R3kiktpK2UCt7KARhRSO2UEYWNhURe7wTb2GLeU=
+			YuuTdRIvz7ZWPaDpxUvpCc+GaaSWJVn30aIGILo0rPI=
 			</data>
 		</dict>
-		<key>lib/gdx-freetype-1.9.5-SNAPSHOT.jar</key>
+		<key>lib/gdx-freetype-1.9.5.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ANOZtXpebBx3z601KGdZOnPQyq8=
+			D2ePoG7YqFGu1BNkKgXL8IIRnsk=
 			</data>
 			<key>hash2</key>
 			<data>
-			rxp4sWpYez8NFZ3lZrlPB9HU9CbQQN4NcKEvctOevmg=
+			9reeAsfAVIdQ+OVpppDul8d/Rng12dXA/1GxlG3CXcw=
 			</data>
 		</dict>
-		<key>lib/gdx-freetype-platform-1.9.5-SNAPSHOT-natives-ios.jar</key>
+		<key>lib/gdx-freetype-platform-1.9.5-natives-ios.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			HmE/euNtS0wbdkeakmVrkR+naPA=
+			lkRHDggY1UBDpLsshLyPO+FnqfQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			23umGdnQCu58aHk+53p/Ptab3wiKbxcUZZ6/EgN4JK8=
+			mqm7oKTSaGHOQ3WVCklyBEzD6oYDUJjG/rp+xefVJfw=
 			</data>
 		</dict>
-		<key>lib/gdx-platform-1.9.5-SNAPSHOT-natives-ios.jar</key>
+		<key>lib/gdx-platform-1.9.5-natives-ios.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			sXc2nKZxQNtkvNjDtDCyrhA1pAU=
+			uCwPKZAKDv9YYs0eoZFzxyK6vdY=
 			</data>
 			<key>hash2</key>
 			<data>
-			LlGfeI2dUW9ZJcYJhagn0dTUp9IQo/GZfTSrYni/EXM=
+			GCfS+YqDEoQ+5s+ttj4rqG7ugNufy1xj89jnB5RjJPQ=
 			</data>
 		</dict>
 		<key>lib/kryo-2.23.1-SNAPSHOT-all-debug.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			B/rpWowfU/ltzCi6rDQVaKk6TTg=
+			v2kWLNIuMP+eZyP5gzUOMbseD2o=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZolhKlNAg904CKt7pt1g0PmY9/yaKkhWlOV86WrA9PQ=
+			fU4Yo5I4sS1GqV7s34bb3/4DWJj/xUyqeWzbJXw8+7Q=
 			</data>
 		</dict>
 		<key>lib/kryonet-2.18.jar</key>
@@ -1171,59 +1171,59 @@
 			hznHbmgfkAkjuQDJ3w73XPQh05yrtUZQxLmtGbanbYU=
 			</data>
 		</dict>
-		<key>lib/robovm-cocoatouch-2.2.1-SNAPSHOT.jar</key>
+		<key>lib/robovm-cocoatouch-2.3.0.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			4fPGFDDRL2cejfiCU2bj9ZfeqE4=
+			dziboI6hyEK5nHmpZdhM7dEtkHI=
 			</data>
 			<key>hash2</key>
 			<data>
-			oTUoZM98J7dKKpiqiA6OxJESrJJ1eDngAMBObiF4/QI=
+			0uFgfutX2qoY1IjY8I+ggeaB21ls843s+KTxt5qQ+ro=
 			</data>
 		</dict>
 		<key>lib/robovm-cocoatouch.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QlBCmJ6JE6FxHngiujc92Tb/YTc=
+			OGJW92u5cig51ncjM2N/F5xyYVE=
 			</data>
 			<key>hash2</key>
 			<data>
-			B1cMWwl5gPdTEytXuMI8vn3QRPGOOB5dlALit8nP5PE=
+			QD+m+m/KQ+k6PACLnJVRgWr0GL0uJWknaZ2E2s0tnnA=
 			</data>
 		</dict>
-		<key>lib/robovm-objc-2.2.1-SNAPSHOT.jar</key>
+		<key>lib/robovm-objc-2.3.0.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Eo3p5hBQve022cCPfKtvWCVIKzk=
+			LsojoLNPLXvXGaZ2tYkIS6H5OzA=
 			</data>
 			<key>hash2</key>
 			<data>
-			cXGByxpXL1Di6Ukb6KpXhn5a/STvMWBHmLsHVMlnzM8=
+			ZAd0n0T3GjBszVwQsxRpj+Af6s2nH9CJw936pMz/1jo=
 			</data>
 		</dict>
 		<key>lib/robovm-objc.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			/JyIRMv0wTkxRFX2dS+oyJL8qOg=
+			A44PCLgnxtBT/8d49p0OyQY8E+w=
 			</data>
 			<key>hash2</key>
 			<data>
-			8eWulNMB0v6pPcyRCQainxW7SxkZwBRSEly9mtt3b3M=
+			4uz7MkEypoqcWK1ob4ZA8XO32jL5wEF7d8RAaGZp9Wg=
 			</data>
 		</dict>
-		<key>lib/robovm-rt-2.2.1-SNAPSHOT.jar</key>
+		<key>lib/robovm-rt-2.3.0.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Lbdj4e8v3y451FeNpIfSeeS3Xds=
+			IwFfFlv89XNI+okx6dX1mW/7Dqg=
 			</data>
 			<key>hash2</key>
 			<data>
-			VSbY4Uu6KXVUbqwa4cUHb1/3Xo6Kp5pad04MQftL4U4=
+			KayvgV7V8M9M5j1pIC81HTSXIkTDLfXIiEfrLQvIgCQ=
 			</data>
 		</dict>
 	</dict>

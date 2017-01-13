@@ -34,7 +34,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements NativeContro
 
 		manager = new CLLocationManager();
 		manager.setDelegate(this);
-		
+		locationMeasurements = new ArrayList<CLLocation>();
 		//Needed for ios8+
 				if (manager.respondsToSelector(Selector.register("requestWhenInUseAuthorization"))) {
 				   manager.requestWhenInUseAuthorization();
@@ -56,7 +56,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements NativeContro
 
 	@Override
 	public float getLong() {
-		if(locationMeasurements.size()>0){
+		if(locationMeasurements!=null && locationMeasurements.size()>0){
 		return (float) locationMeasurements.get(locationMeasurements.size()-1).getCoordinate().getLongitude();
 		}
 		createApplication();
@@ -66,7 +66,7 @@ public class IOSLauncher extends IOSApplication.Delegate implements NativeContro
 
 	@Override
 	public float getLat() {
-		if(locationMeasurements.size()>0){
+		if(locationMeasurements!=null && locationMeasurements.size()>0){
 			return (float) locationMeasurements.get(locationMeasurements.size()-1).getCoordinate().getLatitude();
 			}
 			createApplication();
