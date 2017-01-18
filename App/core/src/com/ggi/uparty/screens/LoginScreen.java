@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.Login;
+import com.ggi.uparty.ui.RefreshModule;
 
 /**
  * @author Emmett
@@ -49,6 +49,10 @@ public class LoginScreen implements Screen, InputProcessor {
 	private GlyphLayout layout = new GlyphLayout();
 
 	public Stage stage = new Stage();
+	
+	public RefreshModule rM;
+	
+	public boolean loading = false;
 
 	public LoginScreen(uParty u) {
 		this.u = u;
@@ -62,6 +66,7 @@ public class LoginScreen implements Screen, InputProcessor {
 	 */
 	@Override
 	public void show() {
+		rM = new RefreshModule(u);
 		Gdx.input.setInputProcessor(this);
 		u.nextScreen = null;
 		pic = new SpriteBatch();
@@ -75,7 +80,8 @@ public class LoginScreen implements Screen, InputProcessor {
 		backB = new Rectangle(u.w / 36, .93f * u.h, .15f * u.w, .05f * u.h);
 		forgotB = new Rectangle(.35f * u.w, .27f * u.h, .3f * u.w, u.h / 60);
 		rememberB = new Rectangle(.65f * u.w, .38f * u.h, u.h / 32, u.h / 32);
-		errorB = new Rectangle(u.w / 9, .2f * u.h, 7 * u.w / 9, u.h / 16);
+		errorB = new Rectangle(u.w / 9, .19f * u.h, 7 * u.w / 9, u.h / 16);
+		rM.bounds = new Rectangle(0, .05f * u.h, u.w, .17f * u.h);
 
 		email = new TextField(e, u.textFieldStyle);
 		email.setMessageText("Email");
@@ -114,6 +120,7 @@ public class LoginScreen implements Screen, InputProcessor {
 	@Override
 	public void render(float delta) {
 		error.setText(u.error);
+		if(u.error.length()>0){loading = false;}
 
 		if (u.myAcc != null) {
 			if (!u.myAcc.confirmed) {
@@ -150,6 +157,10 @@ public class LoginScreen implements Screen, InputProcessor {
 		layout.setText(u.smallFnt, "Remember me?      ");
 		u.smallFnt.setColor(new Color(.694f, .694f, .694f, fade));
 		u.smallFnt.draw(pic, "Remember me? ", u.w / 2 - layout.width / 2, .405f * u.h);
+		
+		if (loading) {
+			rM.forceDraw(pic, fade);
+		}
 
 		pic.end();
 
@@ -319,6 +330,9 @@ public class LoginScreen implements Screen, InputProcessor {
 					u.prefs.flush();
 				}
 
+				u.error="";
+				loading = true;
+				
 				u.send(l);
 			} else {
 				u.error = "Invalid email or password";
