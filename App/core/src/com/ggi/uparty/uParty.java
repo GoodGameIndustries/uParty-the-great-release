@@ -379,7 +379,7 @@ public class uParty extends Game {
 
 				client.start();
 				if (ip == null) {
-					client.connect(5000, debug ? "localhost" : "35.164.43.2", 36696);
+					client.connect(5000, debug ? "localhost" : "ec2-35-164-43-2.us-west-2.compute.amazonaws.com", 36696);
 				} else {
 					client.connect(5000, ip, 36695);
 				}
