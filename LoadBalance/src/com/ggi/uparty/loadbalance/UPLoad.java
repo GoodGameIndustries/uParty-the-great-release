@@ -113,8 +113,12 @@ public class UPLoad extends JFrame{
 						Collections.sort(servs);
 						auth.vcheck=true;
 						if(servs.size()>0){
+							System.out.println("Selecting Server to send:");
+							System.out.println(servs.get(0).c.getRemoteAddressTCP().getHostString());
 							String split[] = servs.get(0).c.getRemoteAddressTCP().getHostString().split(".");
-						auth.servIP="ec2-"+split[0]+"-"+split[1]+"-"+split[2]+"-"+split[3]+".us-west-2.compute.amazonaws.com";
+							auth.servIP="ec2-"+split[0]+"-"+split[1]+"-"+split[2]+"-"+split[3]+".us-west-2.compute.amazonaws.com";
+							System.out.println("Converting to DNS");
+							System.out.println(auth.servIP);
 						}
 						
 					}

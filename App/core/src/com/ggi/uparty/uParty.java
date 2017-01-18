@@ -342,6 +342,7 @@ public class uParty extends Game {
 					System.out.println("Authenticate received");
 					Authenticate o = (Authenticate) object;
 					System.out.println(o.vcheck);
+					System.out.println(o.servIP);
 					if (!o.vcheck) {
 						clientUpdate = true;
 					}
