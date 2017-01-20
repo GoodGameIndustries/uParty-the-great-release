@@ -32,6 +32,14 @@
 		<data>
 		Z0sR4clKzlXvs/faBU6dbL0HSkg=
 		</data>
+		<key>Icon-120.png</key>
+		<data>
+		YqzjRJPZ92DpAVuj5BlQ1qbIgQo=
+		</data>
+		<key>Icon-152.png</key>
+		<data>
+		CMmxJJAJf9WpYbKzFc/GMG76DYo=
+		</data>
 		<key>Icon-72.png</key>
 		<data>
 		IjAIGngGEIo4S8fK3N525JdjHE4=
@@ -39,6 +47,10 @@
 		<key>Icon-72@2x.png</key>
 		<data>
 		1d3r+b1RHJtICbsa4YqqrQEGvMY=
+		</data>
+		<key>Icon-76.png</key>
+		<data>
+		g1/jPA/Gu20Q5BE7Ye7QmwOQdsg=
 		</data>
 		<key>Icon.png</key>
 		<data>
@@ -50,7 +62,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		PQFRDC+O0UBoj/pwmWRrt+AzA7E=
+		bhTE9RuEd/7tk0ETzrdnJ0rScXI=
 		</data>
 		<key>Logos/1024.png</key>
 		<data>
@@ -268,7 +280,7 @@
 		<data>
 		5RqUS3aq959E8HIRCmq3Gb8f4Ek=
 		</data>
-		<key>lib/classes14.jar</key>
+		<key>lib/classes13.jar</key>
 		<data>
 		sE8+6PXkP6OxYpgbULty/hrKuzM=
 		</data>
@@ -308,7 +320,7 @@
 		<data>
 		v2kWLNIuMP+eZyP5gzUOMbseD2o=
 		</data>
-		<key>lib/kryonet-2.18.jar</key>
+		<key>lib/kryonet-2.21.jar</key>
 		<data>
 		sE8+6PXkP6OxYpgbULty/hrKuzM=
 		</data>
@@ -412,6 +424,28 @@
 			jMWMjWlyDgUegmMxMdx1BUPCWnNo/++M/vmxwn2LgPI=
 			</data>
 		</dict>
+		<key>Icon-120.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			YqzjRJPZ92DpAVuj5BlQ1qbIgQo=
+			</data>
+			<key>hash2</key>
+			<data>
+			KOLKZ2Nm2SZRtUZz1fHbZmkzsjRYJKQQi1OkMJROQC4=
+			</data>
+		</dict>
+		<key>Icon-152.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			CMmxJJAJf9WpYbKzFc/GMG76DYo=
+			</data>
+			<key>hash2</key>
+			<data>
+			I0MHans20uuiW3c82gbkTQffUqrpdWPbWbCAgf3fpEY=
+			</data>
+		</dict>
 		<key>Icon-72.png</key>
 		<dict>
 			<key>hash</key>
@@ -432,6 +466,17 @@
 			<key>hash2</key>
 			<data>
 			QqL/3hRClNIuNEopcqujSfeFgibU3FkaFFKveVyBN34=
+			</data>
+		</dict>
+		<key>Icon-76.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			g1/jPA/Gu20Q5BE7Ye7QmwOQdsg=
+			</data>
+			<key>hash2</key>
+			<data>
+			Y2UFOjy0ztO19Y0C3jyRbdfo9dfDrIQLEZISCg2q+zI=
 			</data>
 		</dict>
 		<key>Icon.png</key>
@@ -1050,7 +1095,7 @@
 			bC3+K8EbYfAfKDQTjUAUsoJCblJtzBSWantm7ihzvP0=
 			</data>
 		</dict>
-		<key>lib/classes14.jar</key>
+		<key>lib/classes13.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -1160,7 +1205,7 @@
 			fU4Yo5I4sS1GqV7s34bb3/4DWJj/xUyqeWzbJXw8+7Q=
 			</data>
 		</dict>
-		<key>lib/kryonet-2.18.jar</key>
+		<key>lib/kryonet-2.21.jar</key>
 		<dict>
 			<key>hash</key>
 			<data>
