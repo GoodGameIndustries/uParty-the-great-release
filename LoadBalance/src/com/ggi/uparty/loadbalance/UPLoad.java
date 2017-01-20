@@ -30,6 +30,7 @@ public class UPLoad extends JFrame{
 
 	public Server server;
 	public String version = "2.1.1";
+	public String version2 = "2.1.2";
 	
 	public World world;
 	private boolean debug = false;
@@ -109,7 +110,7 @@ public class UPLoad extends JFrame{
 				else if(object instanceof ConnectClient){
 					ConnectClient o = (ConnectClient) object;
 					Authenticate auth = new Authenticate();
-					if(o.version.equals(version)){
+					if(o.version.equals(version) || o.version.equals(version2)){
 						Collections.sort(servs);
 						auth.vcheck=true;
 						if(servs.size()>0){

@@ -90,10 +90,12 @@ public class EventList {
 			}
 		}
 
+		
+		
 		if (modules.size() * .2f * s.u.h > .675f * s.u.h && scrolled > (int) (modules.size() * .2f * s.u.h - .675f * s.u.h)) {
 			scrolled = (int) (modules.size() * .2f * s.u.h - .675f * s.u.h);
-		} else if (scrolled > 0) {
-			//scrolled = 0;
+		} else if (scrolled > 0 && modules.size() * .2f * s.u.h < .675f * s.u.h) {
+			scrolled = 0;
 		}
 
 		rM.bounds.y = .675f * s.u.h + .2f * s.u.h + scrolled;

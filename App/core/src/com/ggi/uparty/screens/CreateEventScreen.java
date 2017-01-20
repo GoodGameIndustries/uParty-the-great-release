@@ -219,7 +219,8 @@ public class CreateEventScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		if (!Character.isAlphabetic(character) && !Character.isDigit(character) && !Character.isSpaceChar(character)
+		String punctuation = ".,:;'!@#$%^&*()-_+=/";
+		if (!Character.isAlphabetic(character) && !Character.isDigit(character) && !Character.isSpaceChar(character) && !punctuation.contains(""+character)
 				&& character != '') {
 			return true;
 		}

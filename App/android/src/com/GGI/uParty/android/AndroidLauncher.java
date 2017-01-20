@@ -1,4 +1,5 @@
-package com.ggi.uparty.android;
+package com.GGI.uParty.android;
+
 
 
 import com.badlogic.gdx.backends.android.AndroidApplication;

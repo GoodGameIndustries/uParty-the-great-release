@@ -100,7 +100,7 @@ public class uParty extends Game {
 
 	public String myIP;
 
-	private String version = "2.1.1";
+	private String version = "2.1.2";
 
 	public uParty(NativeController controller) {
 		this.controller = controller;

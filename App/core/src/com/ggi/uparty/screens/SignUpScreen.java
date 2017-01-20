@@ -440,8 +440,8 @@ public class SignUpScreen implements Screen, InputProcessor {
 		emailB = new Rectangle(u.w / 9, .47f * u.h + scr, 7 * u.w / 9, u.h / 16);
 		passB = new Rectangle(u.w / 9, .39f * u.h + scr, 7 * u.w / 9, u.h / 16);
 		cpassB = new Rectangle(u.w / 9, .31f * u.h + scr, 7 * u.w / 9, u.h / 16);
-		tosB = new Rectangle(.49f * u.w, .265f * u.h, u.w / 4, u.h / 32);
-		tosBC = new Rectangle(.8f * u.w, .265f * u.h, u.h / 32, u.h / 32);
+		tosB = new Rectangle(.49f * u.w, .265f * u.h + scr, u.w / 4, u.h / 32);
+		tosBC = new Rectangle(.8f * u.w, .265f * u.h + scr, u.h / 32, u.h / 32);
 		signUpB = new Rectangle(u.w / 9, .195f * u.h + scr, 7 * u.w / 9, u.h / 16);
 		backB = new Rectangle(u.w / 36, .93f * u.h + scr, .15f * u.w, .05f * u.h);
 		errorB = new Rectangle(u.w / 9, .125f * u.h + scr, 7 * u.w / 9, u.h / 16);
