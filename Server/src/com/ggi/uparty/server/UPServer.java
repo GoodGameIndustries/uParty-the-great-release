@@ -401,10 +401,12 @@ public class UPServer extends JFrame {
 
 	protected void giveXp(String e, int i) {
 		Account a = loadAccount(e);
+		if(a!=null){
 		a.xp += i;
 		if (a.xp < 5)
 			a.xp = 5;
 		saveAccount(a);
+		}
 
 	}
 
@@ -905,22 +907,25 @@ public class UPServer extends JFrame {
 
 	public void saveAccount(Account a) {
 
-		String loc = a.e;
-		String dir = "";
-		// System.out.println(a.e);
-		String[] split = loc.split("@")[1].split("\\.");
-		// System.out.println(split.length);
-		dir = split[split.length - 2] + "_" + split[split.length - 1];
-		loc = loc.replace('.', '_');
-		loc = loc.replace('@', '_');
-		loc += ".profile";
-		File directory = new File(path + dir);
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
-		File f = new File(path + dir + "\\" + loc);
+		
 
 		try {
+			
+			String loc = a.e;
+			String dir = "";
+			// System.out.println(a.e);
+			String[] split = loc.split("@")[1].split("\\.");
+			// System.out.println(split.length);
+			dir = split[split.length - 2] + "_" + split[split.length - 1];
+			loc = loc.replace('.', '_');
+			loc = loc.replace('@', '_');
+			loc += ".profile";
+			File directory = new File(path + dir);
+			if (!directory.exists()) {
+				directory.mkdir();
+			}
+			File f = new File(path + dir + "\\" + loc);
+			
 			f.createNewFile();
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
