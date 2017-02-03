@@ -107,6 +107,7 @@ public class HomeScreen implements Screen, InputProcessor {
 		u.plainTextStyle.font = u.mediumFnt;
 		u.plainTextStyle.fontColor = u.orange;
 		u.plainTextStyle.focusedFontColor = new Color(1, .8f, .2f, 1);
+		//u.plainTextStyle.cursor = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/cursor.png",Texture.class)));
 		u.textFieldStyle = new TextFieldStyle();
 		u.textFieldStyle.font = u.mediumFnt;
 		u.textFieldStyle.fontColor = u.orange;
@@ -114,9 +115,12 @@ public class HomeScreen implements Screen, InputProcessor {
 				new TextureRegion(u.assets.get("UI/TextField.png", Texture.class)));
 		u.textFieldStyle.focusedBackground = new TextureRegionDrawable(
 				new TextureRegion(u.assets.get("UI/TextFieldChecked.png", Texture.class)));
+		u.textFieldStyle.cursor = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/cursor.png",Texture.class)));
 		u.textAreaStyle = new TextFieldStyle();
 		u.textAreaStyle.font = u.smallFnt;
 		u.textAreaStyle.fontColor = Color.WHITE;
+		u.textAreaStyle.cursor = new TextureRegionDrawable(new TextureRegion(u.assets.get("UI/cursor.png",Texture.class)));
+		u.textAreaStyle.cursor.setMinWidth(2f);
 		// u.textAreaStyle.background=new TextureRegionDrawable(new
 		// TextureRegion(u.assets.get("UI/TextField.png", Texture.class)));
 		// u.textAreaStyle.focusedBackground=new TextureRegionDrawable(new

@@ -180,6 +180,8 @@ public class CommentScreen implements Screen, InputProcessor {
 		// g=g.replaceAll("\\s+","");
 
 		comment.setText(g);
+		
+		comment.setCursorPosition(g.length());
 
 		return true;
 	}

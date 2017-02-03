@@ -120,14 +120,22 @@ public class MainScreen implements Screen, GestureListener {
 			}
 			u.needUpdate = false;
 		}
-
+		
+		
+		
 		pic.begin();
 		pic.setColor(1, 1, 1, 1);
 		pic.draw(background, 0, 0, u.w, u.h);
 		events.draw(pic, fade);
+		if(events.modules.size()>0){
+			pic.draw(u.assets.get("UI/Filled.png",Texture.class),.99f*u.w,.775f*u.h - (events.scrolled/(events.modules.size() * .2f)),.01f*u.w,(1f/(float)events.modules.size())*.2f*u.h);
+			}
 		toolbar.draw(pic, fade);
 		b.draw(pic, fade);
 		menu.draw(pic, fade);
+		
+		
+		
 		pic.end();
 
 		if (u.nextScreen == null && fade < 1f) {
@@ -205,12 +213,16 @@ public class MainScreen implements Screen, GestureListener {
 		if (1 - menu.theta < .05) {
 			menu.tap(touch);
 		} else {
-			events.touch(touch, touch);
-			toolbar.touchUp(touch);
-			toolbar.touchDown(touch);
-			if (Intersector.overlaps(touch, bBounds)) {
+			if(Intersector.overlaps(touch, toolbar.bounds)){
+				toolbar.touchUp(touch);
+				toolbar.touchDown(touch);
+			}
+			else if (Intersector.overlaps(touch, bBounds)) {
 				u.nextScreen = new CreateEventScreen(u, g);
 			}
+			else{
+				events.touch(touch, touch);
+				}
 		}
 		// menu.touchDown(touch);
 		// menu.touchUp(touch);

@@ -29,8 +29,8 @@ import com.ggi.uparty.network.RefreshServ;
 public class UPLoad extends JFrame{
 
 	public Server server;
-	public String version = "2.1.1";
-	public String version2 = "2.1.2";
+	public String version = "2.1.2";
+	public String version2 = "2.1.3";
 	
 	public World world;
 	private boolean debug = false;
@@ -44,6 +44,8 @@ public class UPLoad extends JFrame{
 	public ArrayList<ServData> servs = new ArrayList<ServData>();
 	
 	public ServPanel sp;
+	
+	public Tracker track = new Tracker();
 	
 	//public boolean newReport=true;
 	
@@ -60,6 +62,7 @@ public class UPLoad extends JFrame{
 		//this.add(left,BorderLayout.CENTER);
 		this.add(sp, BorderLayout.CENTER);
 		setVisible(true);
+		Thread t = new Thread(track);
 		runServer();
 		
 	}
@@ -108,6 +111,7 @@ public class UPLoad extends JFrame{
 					}
 				}
 				else if(object instanceof ConnectClient){
+					track.newClient();
 					ConnectClient o = (ConnectClient) object;
 					Authenticate auth = new Authenticate();
 					if(o.version.equals(version) || o.version.equals(version2)){

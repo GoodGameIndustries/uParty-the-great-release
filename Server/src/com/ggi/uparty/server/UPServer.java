@@ -171,8 +171,17 @@ public class UPServer extends JFrame {
 								Event e = events.get(i);
 								if (e.ID.equals(o.ID)) {
 									e.reporters.add(o.e);
-									if (!world.reported.contains(e)) {
+									if(e.owner.equals(o.e)){
+										removeEvent(e,world);
+									}
+									else if (!world.reported.contains(e)) {
 										world.reported.add(e);
+										try {
+											new SendMailSSL().send("goodgameindustries@gmail.com","Report",e.name+"\n"+e.description+"\n"+e.location);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
 									}
 								}
 							}
@@ -186,8 +195,17 @@ public class UPServer extends JFrame {
 								if (e.ID.equals(o.ID)) {
 
 									e.reporters.add(o.e);
-									if (!world.reported.contains(e)) {
+									if(e.owner.equals(o.e)){
+										removeEvent(e,world);
+									}
+									else if (!world.reported.contains(e)) {
 										world.reported.add(e);
+										try {
+											new SendMailSSL().send("goodgameindustries@gmail.com","Report",e.name+"\n"+e.description+"\n"+e.location);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
 									}
 								}
 							}

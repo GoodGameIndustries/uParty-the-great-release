@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -19,12 +18,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Align;
 import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.DownVote;
 import com.ggi.uparty.network.Event;
 import com.ggi.uparty.network.Group;
-import com.ggi.uparty.network.Report;
 import com.ggi.uparty.network.UpVote;
 import com.ggi.uparty.ui.CommentModule;
 import com.ggi.uparty.ui.EventBar;
@@ -110,6 +107,7 @@ public class EventScreen implements Screen, GestureListener {
 
 		GestureDetector gd = new GestureDetector(this);
 		Gdx.input.setInputProcessor(gd);
+		
 
 		getLv();
 
@@ -134,7 +132,7 @@ public class EventScreen implements Screen, GestureListener {
 
 		back = new TextButton("Back", u.standardButtonStyle);
 		back.setBounds(backB.x, backB.y, backB.width, backB.height);
-		report = new TextButton("Report", u.redButtonStyle);
+		report = new TextButton(u.myAcc.e.equals(e.owner)?"Delete":"Report", u.redButtonStyle);
 		report.setBounds(reportB.x, reportB.y, reportB.width, reportB.height);
 		reply = new TextButton("Tap to Reply", u.standardButtonStyle);
 		reply.setBounds(replyB.x, replyB.y, replyB.width, replyB.height);
@@ -156,6 +154,8 @@ public class EventScreen implements Screen, GestureListener {
 
 	@Override
 	public void render(float delta) {
+		
+		reply.setText((bar.select==1?"Open in Maps":"Tap to Reply"));
 
 		list.move(veloc);
 
@@ -194,6 +194,26 @@ public class EventScreen implements Screen, GestureListener {
 		description.draw(pic, fade);
 		location.draw(pic, fade);
 		time.draw(pic, fade);
+		
+		//leftOverXP = 2000;
+		
+		float ratio = -(leftOverXP / neededToLvXP) * 360;
+		if (lvAngle != ratio) {
+			lvAngle += (ratio - lvAngle) / 32;
+		}
+		lvBar.setAngle(lvAngle);
+
+		lvBar.setColor(new Color(1, 1, 1, fade));
+		if (leftOverXP != 0 && lvAngle != 0) {
+			lvBar.draw(pic, .2f * u.w, .7584375f * u.h - .05f * u.h - .025f * u.h - .378750f * u.h + scrolled,
+					.075f * u.h, .075f * u.h);
+		}
+
+		layout.setText(u.supersmallFnt, "" + lv);
+		u.supersmallFnt.setColor(1, 1, 1, fade);
+		u.supersmallFnt.draw(pic, "" + lv, .2f * u.w + .075f *u.h/2-layout.width/2,
+				 .7584375f * u.h - .05f * u.h - .025f * u.h - .378750f * u.h + scrolled + .075f*u.h/2 + layout.height / 2);
+		
 		pic.draw(u.assets.get("UI/EventScreenBG.png", Texture.class), 0, 0, u.w, u.h);
 		pic.draw(u.assets.get("Logos/1024.png", Texture.class), u.w / 2 - .025f * u.h, .93f * u.h, .05f * u.h,
 				.05f * u.h);
@@ -337,18 +357,7 @@ public class EventScreen implements Screen, GestureListener {
 		if (Intersector.overlaps(touch, backB)) {
 			goB = true;
 		} else if (Intersector.overlaps(touch, reportB)) {
-			Report r = new Report();
-			r.ID = e.ID;
-			r.lat = e.lat;
-			r.lng = e.lng;
-			r.e = u.myAcc.e;
-			r.group = e.group;
-			u.send(r);
-			System.out.println("Report sent");
-			MainScreen s = new MainScreen(u);
-			s.g = g;
-
-			u.nextScreen = s;
+			u.nextScreen = (u.myAcc.e.equals(e.owner)?new ConfirmDeleteEventScreen(u,g,e):new ConfirmReportScreen(u,g,e));
 
 		} else if (Intersector.overlaps(touch, upB)) {
 			if (e.downVote.contains(u.myAcc.e)) {
@@ -377,7 +386,13 @@ public class EventScreen implements Screen, GestureListener {
 			o.lat = e.lat;
 			u.send(o);
 		} else if (Intersector.overlaps(touch, replyB)) {
+			if(bar.select==1){
+				String toSearch = location.getText().replace(" ", "+");
+			Gdx.net.openURI("http://maps.google.com/?q="+toSearch);	
+			}
+			else{
 			u.nextScreen = new CommentScreen(u, e, g, bScreen);
+			}
 		}
 
 		if (Intersector.overlaps(touch, list.bounds)) {

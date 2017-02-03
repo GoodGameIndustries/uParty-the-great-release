@@ -215,6 +215,10 @@ public class ChangePasswordScreen implements Screen, InputProcessor {
 		pass.setText(g);
 		npass.setText(n);
 		cnpass.setText(cn);
+		
+		pass.setCursorPosition(g.length());
+		npass.setCursorPosition(n.length());
+		cnpass.setCursorPosition(cn.length());
 
 		return true;
 	}

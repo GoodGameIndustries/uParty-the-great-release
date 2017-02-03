@@ -163,6 +163,7 @@ public class ChangeUserScreen implements Screen, InputProcessor {
 		g = g.replaceAll("\\s+", "");
 
 		user.setText(g);
+		user.setCursorPosition(g.length());
 
 		return true;
 	}

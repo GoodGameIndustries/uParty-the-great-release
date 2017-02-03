@@ -172,6 +172,7 @@ public class InviteScreen implements Screen, InputProcessor {
 		g = g.replaceAll("\\s+", "");
 
 		group.setText(g);
+		group.setCursorPosition(g.length());
 
 		return true;
 	}

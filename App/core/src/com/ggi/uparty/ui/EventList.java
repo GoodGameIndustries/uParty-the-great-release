@@ -66,6 +66,9 @@ public class EventList {
 		case 1:
 			Collections.sort(modules, new NextComparator());
 			break;
+		case 0:
+			Collections.sort(modules, new NextComparator());
+			break;
 		case 3:
 			Collections.sort(modules, new NewComparator());
 			break;

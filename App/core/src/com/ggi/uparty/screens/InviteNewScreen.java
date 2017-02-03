@@ -163,6 +163,8 @@ public class InviteNewScreen implements Screen, InputProcessor {
 		g = g.replaceAll("\\s+", "");
 
 		user.setText(g);
+		
+		user.setCursorPosition(g.length());
 
 		return true;
 	}

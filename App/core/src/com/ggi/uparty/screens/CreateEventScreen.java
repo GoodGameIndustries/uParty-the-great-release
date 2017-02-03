@@ -399,6 +399,10 @@ public class CreateEventScreen implements Screen, InputProcessor {
 		name.setText(n);
 		description.setText(d);
 		location.setText(l);
+		
+		name.setCursorPosition(n.length());
+		description.setCursorPosition(d.length());
+		location.setCursorPosition(l.length());
 
 		return true;
 	}
@@ -452,12 +456,24 @@ public class CreateEventScreen implements Screen, InputProcessor {
 				if (g != null) {
 					event.group = g.name.replace(" ", "") + g.owner.replace(".", "_").replace("@", "_");
 				}
-				u.send(event);
+				
+				Date curr = new Date();
+				if(!end.after(start)){
+					u.error = "Your event ends before it starts";
+				}
+				else if(end.getTime()-curr.getTime() > 31540000000l){
+					u.error = "Your event ends over a \nyear from now please post later";
+				}
+				
+				else{
+					
+					u.send(event);
 
-				MainScreen s = new MainScreen(u);
-				s.g = g;
+					MainScreen s = new MainScreen(u);
+					s.g = g;
 
-				u.nextScreen = s;
+					u.nextScreen = s;
+				}
 
 			} else {
 				u.error = "Please fill out all fields";

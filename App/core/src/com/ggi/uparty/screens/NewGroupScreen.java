@@ -166,6 +166,8 @@ public class NewGroupScreen implements Screen, InputProcessor {
 		g = g.replaceAll("\\p{Cntrl}", "");
 
 		group.setText(g);
+		
+		group.setCursorPosition(g.length());
 
 		return true;
 	}

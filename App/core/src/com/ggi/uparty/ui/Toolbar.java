@@ -82,17 +82,17 @@ public class Toolbar {
 	}
 
 	public void touchUp(Rectangle touch) {
-		if (Intersector.overlaps(touch, new Rectangle(bounds.x + .125f * bounds.width - .125f * bounds.height,
-				bounds.y + .125f * bounds.height, .25f * bounds.height, .25f * bounds.height))) {
+		if (Intersector.overlaps(touch, new Rectangle(bounds.x + 0 * bounds.width ,
+				bounds.y, .25f * bounds.width, bounds.height))) {
 			sortState = 0;
-		} else if (Intersector.overlaps(touch, new Rectangle(bounds.x + .375f * bounds.width - .125f * bounds.height,
-				bounds.y + .125f * bounds.height, .25f * bounds.height, .25f * bounds.height))) {
+		} else if (Intersector.overlaps(touch, new Rectangle(bounds.x + .25f * bounds.width,
+				bounds.y, .25f * bounds.width, bounds.height))) {
 			sortState = 1;
-		} else if (Intersector.overlaps(touch, new Rectangle(bounds.x + .625f * bounds.width - .125f * bounds.height,
-				bounds.y + .125f * bounds.height, .25f * bounds.height, .25f * bounds.height))) {
+		} else if (Intersector.overlaps(touch, new Rectangle(bounds.x + .5f * bounds.width,
+				bounds.y, .25f * bounds.width, bounds.height))) {
 			sortState = 2;
-		} else if (Intersector.overlaps(touch, new Rectangle(bounds.x + .875f * bounds.width - .125f * bounds.height,
-				bounds.y + .125f * bounds.height, .25f * bounds.height, .25f * bounds.height))) {
+		} else if (Intersector.overlaps(touch, new Rectangle(bounds.x + .75f * bounds.width,
+				bounds.y, .25f * bounds.width, bounds.height))) {
 			sortState = 3;
 		}
 		s.events.sort();

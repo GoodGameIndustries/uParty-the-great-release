@@ -289,6 +289,9 @@ public class LoginScreen implements Screen, InputProcessor {
 
 		email.setText(e);
 		pass.setText(p);
+		
+		email.setCursorPosition(e.length());
+		pass.setCursorPosition(p.length());
 		return true;
 	}
 

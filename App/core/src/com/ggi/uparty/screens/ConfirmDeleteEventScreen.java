@@ -12,9 +12,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.ggi.uparty.uParty;
 import com.ggi.uparty.network.DeleteGroup;
+import com.ggi.uparty.network.Event;
 import com.ggi.uparty.network.Group;
+import com.ggi.uparty.network.Report;
 
-public class ConfirmDeleteScreen implements Screen, InputProcessor {
+public class ConfirmDeleteEventScreen implements Screen, InputProcessor {
 
 	public uParty u;
 
@@ -31,10 +33,13 @@ public class ConfirmDeleteScreen implements Screen, InputProcessor {
 	public Rectangle yesB, noB;
 
 	public TextButton yes, no;
+	
+	public Event e;
 
-	public ConfirmDeleteScreen(uParty u, Group g) {
+	public ConfirmDeleteEventScreen(uParty u, Group g, Event e) {
 		this.u = u;
 		this.g = g;
+		this.e=e;
 	}
 
 	@Override
@@ -65,8 +70,8 @@ public class ConfirmDeleteScreen implements Screen, InputProcessor {
 		pic.draw(background, 0, 0, u.w, u.h);
 
 		u.mediumFnt.setColor(247f / 255f, 148f / 255f, 29f / 255f, fade);
-		layout.setText(u.mediumFnt, "Are you sure you want to delete this group?");
-		u.mediumFnt.draw(pic, "Are you sure you want to delete this group?", u.w / 2 - layout.width / 2,
+		layout.setText(u.mediumFnt, "Are you sure you want to delete this event?");
+		u.mediumFnt.draw(pic, "Are you sure you want to delete this event?", u.w / 2 - layout.width / 2,
 				.55f * u.h - layout.height / 2);
 
 		yes.draw(pic, fade);
@@ -150,10 +155,18 @@ public class ConfirmDeleteScreen implements Screen, InputProcessor {
 		Rectangle touch = new Rectangle(screenX, screenY, 1, 1);
 		toggleOff();
 		if (Intersector.overlaps(touch, yesB)) {
-			DeleteGroup d = new DeleteGroup();
-			d.group = g.name.replace(" ", "") + g.owner.replace(".", "_").replace("@", "_");
-			u.send(d);
-			u.nextScreen = new MainScreen(u);
+			Report r = new Report();
+			r.ID = e.ID;
+			r.lat = e.lat;
+			r.lng = e.lng;
+			r.e = u.myAcc.e;
+			r.group = e.group;
+			u.send(r);
+			System.out.println("Report sent");
+			MainScreen s = new MainScreen(u);
+			s.g = g;
+
+			u.nextScreen = s;
 		} else if (Intersector.overlaps(touch, noB)) {
 			u.goBack();
 			//u.nextScreen = new GroupSettingsScreen(u, g);

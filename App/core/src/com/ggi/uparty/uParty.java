@@ -41,6 +41,10 @@ import com.ggi.uparty.screens.LoadScreen;
 import com.ggi.uparty.screens.NewGroupScreen;
 import com.ggi.uparty.screens.UpdateScreen;
 
+/**
+ * @author Emmett
+ * @description This is the class that manages the running of the app
+ */
 public class uParty extends Game {
 
 	public AssetManager assets = new AssetManager();
@@ -106,6 +110,9 @@ public class uParty extends Game {
 		this.controller = controller;
 	}
 
+	// Creates the app instance, loads assets and if there is an account in
+	// remember me(preferences)
+	// Calls create client and sets the first screen
 	@Override
 	public void create() {
 		load();
@@ -117,6 +124,7 @@ public class uParty extends Game {
 
 	}
 
+	// Loads all of the assets used in uParty
 	private void load() {
 		assets.load("Logos/Social.png", Texture.class);
 		assets.load("UI/Background.png", Texture.class);
@@ -167,11 +175,13 @@ public class uParty extends Game {
 		assets.load("UI/Toolbar/DescC.png", Texture.class);
 		assets.load("UI/Toolbar/Loc.png", Texture.class);
 		assets.load("UI/Toolbar/LocC.png", Texture.class);
+		assets.load("UI/cursor.png",Texture.class);
 
 		assets.update();
 
 	}
 
+	// Loads the fonts and generates there sizes
 	public void loadFonts() {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -190,6 +200,7 @@ public class uParty extends Game {
 
 	}
 
+	// Creates the client for server connections
 	public void createClient() {
 		client = new Client();
 		client.addListener(new ThreadedListener(new Listener() {
@@ -333,7 +344,9 @@ public class uParty extends Game {
 				}
 
 				if (object instanceof Refresh) {
-					if(refreshing == false){events.clear();}
+					if (refreshing == false) {
+						events.clear();
+					}
 					refreshing = false;
 					needUpdate = true;
 					System.out.println(events.size());
@@ -374,13 +387,15 @@ public class uParty extends Game {
 		}));
 	}
 
+	// Tries to connect to one of the servers or the load balancer
 	public void connect(String ip) {
 		if (!client.isConnected()) {
 			try {
 
 				client.start();
 				if (ip == null) {
-					client.connect(5000, debug ? "localhost" : "ec2-35-164-43-2.us-west-2.compute.amazonaws.com", 36696);
+					client.connect(5000, debug ? "localhost" : "ec2-35-164-43-2.us-west-2.compute.amazonaws.com",
+							36696);
 				} else {
 					client.connect(5000, ip, 36695);
 				}
@@ -398,6 +413,8 @@ public class uParty extends Game {
 		}
 	}
 
+	// Send an object to the server (must be in listed in
+	// com.ggi.uParty.network.Network)
 	public void send(Object o) {
 		connect(myIP);
 		int t = 0;
@@ -413,6 +430,7 @@ public class uParty extends Game {
 		}
 	}
 
+	// Go back 1 screen
 	public void goBack() {
 		error = "";
 		nextScreen = null;
@@ -420,6 +438,7 @@ public class uParty extends Game {
 
 	}
 
+	// Set the new screen
 	public void setScreen(Screen s) {
 		error = "";
 		screens.push(getScreen());

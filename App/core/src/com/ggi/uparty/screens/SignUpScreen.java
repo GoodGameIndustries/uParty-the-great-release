@@ -335,6 +335,11 @@ public class SignUpScreen implements Screen, InputProcessor {
 		email.setText(e);
 		pass.setText(p);
 		cpass.setText(cp);
+		
+		user.setCursorPosition(uN.length());
+		email.setCursorPosition(e.length());
+		pass.setCursorPosition(p.length());
+		cpass.setCursorPosition(cp.length());
 		return true;
 	}
 

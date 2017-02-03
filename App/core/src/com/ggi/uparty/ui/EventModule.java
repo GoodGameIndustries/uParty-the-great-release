@@ -97,6 +97,9 @@ public class EventModule {
 		layout.setText(l.s.u.mediumFnt, "" + (e.upVote.size() - e.downVote.size()));
 		l.s.u.mediumFnt.draw(pic, "" + (e.upVote.size() - e.downVote.size()),
 				bounds.x + .9f * bounds.width - layout.width / 2, bounds.y + .5f * bounds.height + layout.height / 2);
+		layout.setText(l.s.u.supersmallFnt, "Comments: "+e.comments.size());
+		l.s.u.supersmallFnt.setColor(.5f, .5f, .5f, fade);
+		l.s.u.supersmallFnt.draw(pic, "Comments: "+e.comments.size(), bounds.x+bounds.width/2 - layout.width/2,bounds.y+.1f*bounds.height+layout.height/2);
 
 	}
 
