@@ -41,6 +41,7 @@ public class LeftPane extends JPanel{
 	private void buildStats(){
 		Runtime instance = Runtime.getRuntime();
 		
+		try{
 		sts="Stats:"
 			+ "\nMemory Used: "+ (instance.totalMemory() - instance.freeMemory()) / mb +"MB ("+(int)((instance.totalMemory() - instance.freeMemory())*1.0/instance.totalMemory()*100.0)+"%)"
 			+ "\nTime: "+new Date().toString()
@@ -49,6 +50,9 @@ public class LeftPane extends JPanel{
 			+ "\nTotal Data Points: " + u.world.points.size()
 			+ "\nEvents in Storage: " + u.world.eventsInStorage
 			+ "\nReported Events: " + u.world.reported.size();
+		}catch(Exception e){
+			u.saveWorld(u.world);
+		}
 		//System.out.println((instance.totalMemory() - instance.freeMemory()) / mb);
 	}
 
