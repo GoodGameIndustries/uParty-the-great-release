@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="kryo-2.23.1-SNAPSHOT-all-debug.jar"/>
 	<classpathentry kind="lib" path="kryonet-2.18.jar"/>
+	<classpathentry kind="lib" path="D:/Downloads/javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
