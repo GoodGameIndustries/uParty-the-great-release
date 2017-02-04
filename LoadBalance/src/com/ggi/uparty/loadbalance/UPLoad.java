@@ -146,6 +146,7 @@ public class UPLoad extends JFrame{
 				}
 				//left.repaint();
 				sp.repaint();
+				up.repaint();
 				repaint();
 			}
 		}));
