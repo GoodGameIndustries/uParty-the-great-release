@@ -44,6 +44,7 @@ public class UPLoad extends JFrame{
 	public ArrayList<ServData> servs = new ArrayList<ServData>();
 	
 	public ServPanel sp;
+	public UsagePane up;
 	
 	public Tracker track = new Tracker();
 	
@@ -51,6 +52,7 @@ public class UPLoad extends JFrame{
 	
 	public UPLoad(){
 		world = loadWorld();
+		Thread t = new Thread(track);
 		//left = new LeftPane(this);
 		setTitle("uParty Load Balancer");
 		setSize(800,400);
@@ -59,10 +61,12 @@ public class UPLoad extends JFrame{
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		sp = new ServPanel(this);
+		up = new UsagePane(this);
 		//this.add(left,BorderLayout.CENTER);
 		this.add(sp, BorderLayout.CENTER);
+		this.add(up, BorderLayout.EAST);
 		setVisible(true);
-		Thread t = new Thread(track);
+		
 		runServer();
 		
 	}
