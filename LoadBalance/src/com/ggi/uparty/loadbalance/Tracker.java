@@ -12,6 +12,14 @@ public class Tracker implements Runnable{
 	@Override
 	public void run() {
 		while (true){
+			
+			try {
+				Thread.sleep(60000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			Date d = new Date();
 			if(d.getMinutes()==0 && !added){
 				added = true;
