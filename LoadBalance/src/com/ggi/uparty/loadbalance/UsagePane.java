@@ -17,7 +17,7 @@ public class UsagePane extends JPanel{
 		this.u=u;
 		this.setBackground(Color.black);
 		this.setForeground(Color.orange);
-		this.setSize(400,400);
+		this.setSize(600,400);
 		
 		stats.setBackground(Color.black);
 		stats.setForeground(Color.orange);
@@ -25,7 +25,7 @@ public class UsagePane extends JPanel{
 		
 		scroll.setBackground(Color.black);
 		scroll.setForeground(Color.orange);
-		scroll.setSize(400, 400);
+		scroll.setSize(600, 400);
 		
 		scroll.add(stats);
 		

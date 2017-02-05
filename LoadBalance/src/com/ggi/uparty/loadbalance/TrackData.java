@@ -7,7 +7,7 @@ public class TrackData {
 	public int c;
 	
 	public String toString(){
-		Date d2 = d;
+		Date d2 = (Date) d.clone();
 		d2.setHours(d.getHours()-1);
 		return d2.toString()+" - "+d.toString()+" users connected: " + c;
 		

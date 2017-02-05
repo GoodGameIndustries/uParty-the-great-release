@@ -24,7 +24,7 @@ public class ServPanel extends JPanel{
 		this.u=u;
 		this.setBackground(Color.black);
 		this.setForeground(Color.orange);
-		this.setSize(400,400);
+		this.setSize(200,400);
 		
 		stats.setBackground(Color.black);
 		stats.setForeground(Color.orange);
@@ -32,7 +32,7 @@ public class ServPanel extends JPanel{
 		
 		scroll.setBackground(Color.black);
 		scroll.setForeground(Color.orange);
-		scroll.setSize(400, 400);
+		scroll.setSize(200, 400);
 		
 		scroll.add(stats);
 		
