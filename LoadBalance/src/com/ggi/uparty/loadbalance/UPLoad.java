@@ -69,7 +69,7 @@ public class UPLoad extends JFrame{
 		setVisible(true);
 		
 		runServer();
-		//t.start();
+		t.start();
 		
 	}
 	
