@@ -53,6 +53,7 @@ public class UPLoad extends JFrame{
 	public UPLoad(){
 		world = loadWorld();
 		Thread t = new Thread(track);
+		t.start();
 		//left = new LeftPane(this);
 		setTitle("uParty Load Balancer");
 		setSize(800,400);
