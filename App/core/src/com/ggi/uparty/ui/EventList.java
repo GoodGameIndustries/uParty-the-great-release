@@ -77,14 +77,22 @@ public class EventList {
 	}
 
 	public void draw(SpriteBatch pic, float fade) {
+		if(isPan){velocity=0;}
+		else{velocity /=1.1f;
+		
+		scrolled += velocity;
+		}
+		
 		if (!refresh) {
 			sentRef = false;
 		}
 		if (!isPan && scrolled < 0 && !refresh) {
+			velocity = 0;
 			scrolled /= 2;
 		}
 
 		if (scrolled < -.15f * s.u.h) {
+			velocity = 0;
 			scrolled = (int) (-.15f * s.u.h);
 			refresh = true;
 			if (!sentRef) {

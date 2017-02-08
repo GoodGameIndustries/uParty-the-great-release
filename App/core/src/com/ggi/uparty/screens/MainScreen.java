@@ -237,9 +237,10 @@ public class MainScreen implements Screen, GestureListener {
 
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) {
-		velocityY = u.h - velocityY;
-		if (Math.abs(velocityY) > Math.abs(velocityX)) {
-			events.velocity = (int) velocityY;
+		velocityY =  -velocityY;
+		if (Math.abs(velocityY) > Math.abs(velocityX) && Math.abs(velocityY) > u.h && !events.isPan) {
+			//System.out.println(velocityY);
+			events.velocity += (int) velocityY/(u.h/100);
 		} else if (Math.abs(velocityY) < Math.abs(velocityX) && Math.abs(velocityX) > .1f * u.h) {
 			if (velocityX > 0) {
 				if (toolbar.sortState > 0) {
@@ -259,6 +260,7 @@ public class MainScreen implements Screen, GestureListener {
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
 		if (Math.abs(deltaY) > Math.abs(deltaX)) {
+			events.velocity=0;
 			events.isPan = true;
 			events.scrolled -= (int) deltaY;
 		} else if (Math.abs(deltaY) < Math.abs(deltaX)) {
