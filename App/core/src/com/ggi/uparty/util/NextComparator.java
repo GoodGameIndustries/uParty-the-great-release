@@ -8,8 +8,13 @@ public class NextComparator implements Comparator<EventModule>{
 
 	@Override
 	public int compare(EventModule o1, EventModule o2) {
-		// TODO Auto-generated method stub
-		return (int) (o1.e.start.getTime()-o2.e.start.getTime());
+		if(o1.e.start.after(o2.e.start)){
+			return 1;
+		}
+		else{
+			return -1;
+		}
+		//return (int) (o1.e.start.getTime()-o2.e.start.getTime());
 	}
 
 }

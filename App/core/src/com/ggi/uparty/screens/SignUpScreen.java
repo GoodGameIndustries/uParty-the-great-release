@@ -98,7 +98,7 @@ public class SignUpScreen implements Screen, InputProcessor {
 		user.setBounds(userB.x, userB.y, userB.width, userB.height);
 		user.setAlignment(Align.center);
 		email = new TextField(e, u.textFieldStyle);
-		email.setMessageText("Email (must be.edu)");
+		email.setMessageText("Email (must be college email)");
 		email.setBounds(emailB.x, emailB.y, emailB.width, emailB.height);
 		email.setAlignment(Align.center);
 		pass = new TextField(p, u.textFieldStyle);
@@ -368,8 +368,7 @@ public class SignUpScreen implements Screen, InputProcessor {
 		toggleOff();
 
 		if (Intersector.overlaps(touch, signUpB)) {
-			if (e.length() > 4 && uN.length() > 0 && p.length() > 0 && p.equals(cp) && tosC.isChecked()
-					&& e.endsWith(".edu")) {
+			if (e.length() > 4 && uN.length() > 0 && p.length() > 0 && p.equals(cp) && tosC.isChecked()) {
 				SignUp s = new SignUp();
 				s.e = e;
 				s.u = uN;

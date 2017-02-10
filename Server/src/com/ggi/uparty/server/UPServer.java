@@ -61,6 +61,8 @@ public class UPServer extends JFrame {
 	private String path = debug ? "D:\\profiles\\" : "C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
 	private RightPane right;
 	private LeftPane left;
+	
+	private ArrayList<String> endings;
 
 	public World world;
 
@@ -93,6 +95,10 @@ public class UPServer extends JFrame {
 		this.add(left, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		
+		endings = new ArrayList<String>();
+		endings.add(".edu");
+		endings.add("mymdc.net");
 
 		createClient();
 
@@ -457,6 +463,7 @@ public class UPServer extends JFrame {
 				long startTime = System.currentTimeMillis();
 				if (object instanceof SignUp) {
 					SignUp o = (SignUp) object;
+					if(isAllowed(o.e)){
 					if (loadAccount(o.e) == null) {
 						right.printConsole("[Sign Up]-" + o.u + ":" + o.e);
 						Account a = new Account();
@@ -479,6 +486,10 @@ public class UPServer extends JFrame {
 					} else {
 						right.printConsole("[Warning]-Duplicate sign up attempt");
 						connection.sendTCP(new ErrorMessage("Email in use"));
+					}
+					}
+					else{
+						connection.sendTCP(new ErrorMessage("Must end in .edu or be approved!"));
 					}
 				}
 
@@ -922,6 +933,18 @@ public class UPServer extends JFrame {
 		}));
 
 	}
+
+	protected boolean isAllowed(String e) {
+		boolean result = false;
+		for(int i = 0; i < endings.size(); i++){
+			if(e.endsWith(endings.get(i))){
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
+
 
 	public void saveAccount(Account a) {
 
