@@ -54,6 +54,7 @@ public class World implements Comparator<Datapoint>, Serializable{
 	public ArrayList<Datapoint> getAround(float x, float y){
 		ArrayList<Datapoint> result = new ArrayList<Datapoint>();
 		refX=x; refY=y;
+		distCalc();
 		points.sort(this);
 		for(Datapoint p: points){
 			if(result.size()<8){
@@ -64,10 +65,18 @@ public class World implements Comparator<Datapoint>, Serializable{
 	}
 	
 	public void addToClosest(Event e){
+		distCalc();
 		refX=e.lat; refY=e.lng;
 		points.sort(this);
 		points.get(0).events.add(e);
 		eventsInStorage++;
+	}
+
+	private void distCalc() {
+		for(int i = 0; i < points.size(); i++){
+			points.get(i).getDistance();
+		}
+		
 	}
 
 	@Override

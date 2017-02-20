@@ -11,6 +11,7 @@ public class Datapoint implements Comparable, Serializable{
 	public double dist=0;
 	public World w=null;
 	public ArrayList<Event> events = new ArrayList<Event>();
+
 	
 	public Datapoint(){}
 	
@@ -23,15 +24,15 @@ public class Datapoint implements Comparable, Serializable{
 	@Override
 	public int compareTo(Object o) {
 		Datapoint d = (Datapoint)(o);
-		double dist = getDistance()-d.getDistance();
+		double dist = this.dist-d.dist;
 		if(dist>0){return 1;}
 		else if(dist<0){return -1;}
 		else{return 0;}
 	}
 
 	public double getDistance() {
-		dist = Math.sqrt(Math.pow(x-w.refX, 2)+Math.pow(y-w.refY, 2));
-		//dist = Haversine.distance(y, x, w.refY, w.refX);
+		//dist = Math.sqrt(Math.pow(x-w.refX, 2)+Math.pow(y-w.refY, 2));
+		dist = Haversine.distance(x, y, w.refX, w.refY);
 		return dist;
 	}
 	
