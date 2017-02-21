@@ -10,9 +10,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,8 +26,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.esotericsoftware.kryonet.Server;
-import com.ggi.uparty.data.Datapoint;
-import com.ggi.uparty.data.World;
+import com.ggi.uparty.data.Haversine;
 import com.ggi.uparty.network.Account;
 import com.ggi.uparty.network.ChangePass;
 import com.ggi.uparty.network.ChangeUser;
@@ -58,13 +59,11 @@ public class UPServer extends JFrame {
 	public Server server;
 
 	private boolean debug = false;
-	private String path = debug ? "D:\\profiles\\" : "C:\\Users\\Administrator\\Google Drive\\uParty\\DATA\\";
+	public String path = debug ? "D:\\profiles\\" : "C:\\Users\\Administrator\\Google Drive\\uParty\\UP_DATA\\";
 	private RightPane right;
 	private LeftPane left;
 	
 	private ArrayList<String> endings;
-
-	public World world;
 
 	private String htmlTemplate = "", forgotTemplate = "", inviteTemplate = "";
 
@@ -77,13 +76,7 @@ public class UPServer extends JFrame {
 
 	public boolean newReport = true;
 
-	public ArrayList<Object> stuffToDo = new ArrayList<Object>();
-
 	public UPServer() {
-		world = loadWorld();
-		if (world == null) {
-			System.out.println("world null");
-		}
 		right = new RightPane(this);
 		left = new LeftPane(this);
 		setTitle("uParty Server");
@@ -150,277 +143,10 @@ public class UPServer extends JFrame {
 		timer.schedule(task, 0, 1000);
 		
 
-		Timer t2 = new Timer();
-		TimerTask ta2 = new TimerTask() {
-			@Override
-			public void run() {
-				boolean needSave = false;
-				right.printConsole("[LOAD]-Start Loading");
-				right.printConsole("\t-Stuff to do: " + stuffToDo.size());
-				World world = loadWorld();
-				if(world != null){
-					if(stuffToDo.size() >0){needSave = true;}
-				long st = System.currentTimeMillis();
-				while(stuffToDo.size()>0){
-					//right.printConsole("\t-Stuff to do: " + stuffToDo.size());
-					Object object = stuffToDo.get(0);
-
-					if (object instanceof Report) {
-
-						newReport = true;
-						Report o = (Report) object;
-
-						if (o.group.length() > 0) {
-							Group g = loadGroup(o.group);
-							ArrayList<Event> events = g.events;
-							for (int i = 0; i < events.size(); i++) {
-								Event e = events.get(i);
-								if (e.ID.equals(o.ID)) {
-									e.reporters.add(o.e);
-									if(e.owner.equals(o.e)){
-										removeEvent(e,world);
-									}
-									else if (!world.reported.contains(e)) {
-										world.reported.add(e);
-										try {
-											new SendMailSSL().send("goodgameindustries@gmail.com","Report",e.name+"\n"+e.description+"\n"+e.location);
-										} catch (Exception e1) {
-											// TODO Auto-generated catch block
-											e1.printStackTrace();
-										}
-									}
-								}
-							}
-
-							saveGroup(g);
-						} else {
-							ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-							for (int i = 0; i < events.size(); i++) {
-								System.out.println("Searching");
-								Event e = events.get(i);
-								if (e.ID.equals(o.ID)) {
-
-									e.reporters.add(o.e);
-									if(e.owner.equals(o.e)){
-										removeEvent(e,world);
-									}
-									else if (!world.reported.contains(e)) {
-										world.reported.add(e);
-										try {
-											new SendMailSSL().send("goodgameindustries@gmail.com","Report",e.name+"\n"+e.description+"\n"+e.location);
-										} catch (Exception e1) {
-											// TODO Auto-generated catch block
-											e1.printStackTrace();
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					if (object instanceof Event) {
-						Event o = (Event) object;
-						if (o.group.length() == 0) {
-							world.addToClosest(o);
-
-						} else {
-							Group g = loadGroup(o.group);
-							g.events.add(o);
-							saveGroup(g);
-						}
-
-						giveXp(o.owner, 2);
-
-					}
-					
-					if (object instanceof Comment) {
-						Comment o = (Comment) object;
-						if (o.group.length() > 0) {
-							Group g = loadGroup(o.group);
-							ArrayList<Event> events = g.events;
-							for (int i = 0; i < events.size(); i++) {
-								if (events.get(i).ID.equals(o.ID)) {
-									Event e = events.get(i);
-									e.comments.add(o.c);
-									giveXp(o.e, 2);
-								}
-							}
-							saveGroup(g);
-						} else {
-							ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-							for (int i = 0; i < events.size(); i++) {
-								if (events.get(i).ID.equals(o.ID)) {
-									Event e = events.get(i);
-									e.comments.add(o.c);
-									giveXp(o.e, 2);
-								}
-							}
-
-						}
-					}
-
-					if (object instanceof UpVote) {
-						UpVote o = (UpVote) object;
-						if (o.group.length() > 0) {
-							Group g = loadGroup(o.group);
-							ArrayList<Event> events = g.events;
-							for (int i = 0; i < events.size(); i++) {
-								if (events.get(i).ID.equals(o.ID)) {
-									Event e = events.get(i);
-									if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-										giveXp(o.e, 1);
-									}
-
-									if (e.downVote.contains(o.e)) {
-										e.downVote.remove(o.e);
-										giveXp(e.owner, 1);
-									}
-									if (!e.upVote.contains(o.e)) {
-										e.upVote.add(o.e);
-										giveXp(e.owner, 1);
-									}
-								}
-							}
-							saveGroup(g);
-						} else {
-							ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-							for (int i = 0; i < events.size(); i++) {
-								if (events.get(i).ID.equals(o.ID)) {
-									Event e = events.get(i);
-									if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-										giveXp(o.e, 1);
-									}
-
-									if (e.downVote.contains(o.e)) {
-										e.downVote.remove(o.e);
-										giveXp(e.owner, 1);
-									}
-									if (!e.upVote.contains(o.e)) {
-										e.upVote.add(o.e);
-										giveXp(e.owner, 1);
-									}
-								}
-							}
-
-						}
-					}
-
-					if (object instanceof DownVote) {
-						DownVote o = (DownVote) object;
-						if (o.group.length() > 0) {
-							Group g = loadGroup(o.group);
-							ArrayList<Event> events = g.events;
-
-							for (int i = 0; i < events.size(); i++) {
-								if (events.get(i).ID.equals(o.ID)) {
-									Event e = events.get(i);
-									if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-										giveXp(o.e, 1);
-									}
-
-									if (!e.downVote.contains(o.e)) {
-										e.downVote.add(o.e);
-										giveXp(e.owner, -1);
-									}
-									if (e.upVote.contains(o.e)) {
-										e.upVote.remove(o.e);
-										giveXp(e.owner, -1);
-									}
-								}
-							}
-							saveGroup(g);
-						} else {
-							ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-							for (int i = 0; i < events.size(); i++) {
-								if (events.get(i).ID.equals(o.ID)) {
-									Event e = events.get(i);
-									if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-										giveXp(o.e, 1);
-									}
-
-									if (!e.downVote.contains(o.e)) {
-										e.downVote.add(o.e);
-										giveXp(e.owner, -1);
-									}
-									if (e.upVote.contains(o.e)) {
-										e.upVote.remove(o.e);
-										giveXp(e.owner, -1);
-									}
-								}
-							}
-
-						}
-					}
-					
-					if(object instanceof Remove){
-						Remove o = (Remove)object;
-						removeEvent(o.e,world);
-						if(world.reported.contains(o.e)){
-							world.reported.remove(o.e);
-						}
-					}
-					
-					if(object instanceof Allow){
-						Allow o = (Allow)object;
-						if(world.reported.contains(o.e)){
-							world.reported.remove(o.e);
-						}
-					}
-					
-					stuffToDo.remove(0);
-					right.printConsole("\t-Stuff to do: " + stuffToDo.size());
-				}
-				right.printConsole("\t-Stuff took: "+ (System.currentTimeMillis()-st)+" ms");
-				right.printConsole("\t-Setting World");
-				st = System.currentTimeMillis();
-				setWorld(world);
-				right.printConsole("\t-Set took: " + (System.currentTimeMillis()-st)+" ms");
-				if(needSave){
-				right.printConsole("\t-Saving World");
-				st = System.currentTimeMillis();
-				saveWorld(world);
-				right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
-				if((System.currentTimeMillis()-st)>45000){
-					System.out.println("Exiting because slow save");
-					System.exit(0);
-				}
-				}
-				right.printConsole("[LOAD]-World Loaded");
-				
-
-				send(new ConnectServ());
-				}
-				else{
-					right.printConsole("[ERROR]-World Loading FAILED world was null");
-					right.printConsole("[ERROR]-Exiting due to world null");
-					System.exit(0);
-					//right.printConsole("\t-Saving World to cover up null");
-					//long st = System.currentTimeMillis();
-					//saveWorld(world);
-					//right.printConsole("\t-Save took: " + (System.currentTimeMillis()-st)+" ms");
-				}
-			}
-		};
-		t2.schedule(ta2, 0, 60000);
-
 		runServer();
 	}
 
 
-	protected void setWorld(World world2) {
-		if(world2 != null){
-		world.eventsInStorage=world2.eventsInStorage;
-		ArrayList<Datapoint> pts = (ArrayList<Datapoint>) world2.points.clone();
-		Collections.copy(pts, world2.points);
-		world.points=pts;
-		world.radius=new Float(world2.radius);
-		world.refX = new Float(world2.refX);
-		world.refY = new Float(world2.refY);
-		ArrayList<Event> rep = (ArrayList<Event>) world2.reported.clone();
-		Collections.copy(rep, world2.reported);
-		world.reported = rep;
-		}
-	}
 
 
 	protected void giveXp(String e, int i) {
@@ -531,36 +257,15 @@ public class UPServer extends JFrame {
 					
 					newReport = true;
 					Report o = (Report) object;
-
-					if (o.group.length() > 0) {
-						Group g = loadGroup(o.group);
-						ArrayList<Event> events = g.events;
-						for (int i = 0; i < events.size(); i++) {
-							Event e = events.get(i);
-							if (e.ID.equals(o.ID)) {
-								e.reporters.add(o.e);
-								if (!world.reported.contains(e)) {
-									world.reported.add(e);
-								}
-							}
-						}
-
-						saveGroup(g);
-					} else {
-						stuffToDo.add(object);
-						ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-						for (int i = 0; i < events.size(); i++) {
-							System.out.println("Searching");
-							Event e = events.get(i);
-							if (e.ID.equals(o.ID)) {
-
-								e.reporters.add(o.e);
-								if (!world.reported.contains(e)) {
-									world.reported.add(e);
-								}
-							}
+					
+					Event e = find(o.lat,o.lng,o.ID);
+					if(e!=null){
+						e.reporters.add(o.e);
+						if(!isReported(e)){
+							report (e);
 						}
 					}
+					
 				}
 
 				if (object instanceof Resend) {
@@ -597,12 +302,12 @@ public class UPServer extends JFrame {
 				if (object instanceof Event) {
 					Event o = (Event) object;
 					if (o.group.length() == 0) {
-						stuffToDo.add(object);
-						world.addToClosest(o);
+						saveEvent(o);
 
 					} else {
 						Group g = loadGroup(o.group);
 						g.events.add(o);
+						saveEvent(o);
 						saveGroup(g);
 					}
 
@@ -681,145 +386,71 @@ public class UPServer extends JFrame {
 
 				if (object instanceof Comment) {
 					Comment o = (Comment) object;
-					if (o.group.length() > 0) {
-						Group g = loadGroup(o.group);
-						ArrayList<Event> events = g.events;
-						for (int i = 0; i < events.size(); i++) {
-							if (events.get(i).ID.equals(o.ID)) {
-								Event e = events.get(i);
-								e.comments.add(o.c);
-								giveXp(o.e, 2);
-							}
-						}
-						saveGroup(g);
-					} else {
-						stuffToDo.add(object);
-						ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-						for (int i = 0; i < events.size(); i++) {
-							if (events.get(i).ID.equals(o.ID)) {
-								Event e = events.get(i);
-								e.comments.add(o.c);
-								giveXp(o.e, 2);
-							}
-						}
-
+					
+					Event e = find(o.lat,o.lng,o.ID);
+					if(e!=null){
+						e.comments.add(o.c);
+						giveXp(o.e,2);
 					}
+					saveEvent(e);
+					
 				}
 
 				if (object instanceof UpVote) {
 					UpVote o = (UpVote) object;
-					if (o.group.length() > 0) {
-						Group g = loadGroup(o.group);
-						ArrayList<Event> events = g.events;
-						for (int i = 0; i < events.size(); i++) {
-							if (events.get(i).ID.equals(o.ID)) {
-								Event e = events.get(i);
-								if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-									giveXp(o.e, 1);
-								}
-
-								if (e.downVote.contains(o.e)) {
-									e.downVote.remove(o.e);
-									giveXp(e.owner, 1);
-								}
-								if (!e.upVote.contains(o.e)) {
-									e.upVote.add(o.e);
-									giveXp(e.owner, 1);
-								}
-							}
-						}
-						saveGroup(g);
-					} else {
-						stuffToDo.add(object);
-						ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-						for (int i = 0; i < events.size(); i++) {
-							if (events.get(i).ID.equals(o.ID)) {
-								Event e = events.get(i);
-								if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-									giveXp(o.e, 1);
-								}
-
-								if (e.downVote.contains(o.e)) {
-									e.downVote.remove(o.e);
-									giveXp(e.owner, 1);
-								}
-								if (!e.upVote.contains(o.e)) {
-									e.upVote.add(o.e);
-									giveXp(e.owner, 1);
-								}
-							}
+					Event e = find(o.lat,o.lng,o.ID);
+					if(e != null){
+						if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
+							giveXp(o.e, 1);
 						}
 
+						if (e.downVote.contains(o.e)) {
+							e.downVote.remove(o.e);
+							giveXp(e.owner, 1);
+						}
+						if (!e.upVote.contains(o.e)) {
+							e.upVote.add(o.e);
+							giveXp(e.owner, 1);
+						}
 					}
+					saveEvent(e);
+					
 				}
 
 				if (object instanceof DownVote) {
 					DownVote o = (DownVote) object;
-					if (o.group.length() > 0) {
-						Group g = loadGroup(o.group);
-						ArrayList<Event> events = g.events;
-
-						for (int i = 0; i < events.size(); i++) {
-							if (events.get(i).ID.equals(o.ID)) {
-								Event e = events.get(i);
-								if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-									giveXp(o.e, 1);
-								}
-
-								if (!e.downVote.contains(o.e)) {
-									e.downVote.add(o.e);
-									giveXp(e.owner, -1);
-								}
-								if (e.upVote.contains(o.e)) {
-									e.upVote.remove(o.e);
-									giveXp(e.owner, -1);
-								}
-							}
-						}
-						saveGroup(g);
-					} else {
-						stuffToDo.add(object);
-						ArrayList<Event> events = world.getAround(o.lat, o.lng).get(0).events;
-						for (int i = 0; i < events.size(); i++) {
-							if (events.get(i).ID.equals(o.ID)) {
-								Event e = events.get(i);
-								if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
-									giveXp(o.e, 1);
-								}
-
-								if (!e.downVote.contains(o.e)) {
-									e.downVote.add(o.e);
-									giveXp(e.owner, -1);
-								}
-								if (e.upVote.contains(o.e)) {
-									e.upVote.remove(o.e);
-									giveXp(e.owner, -1);
-								}
-							}
+					Event e = find(o.lat,o.lng,o.ID);
+					if(e!=null){
+						if (!e.downVote.contains(o.e) && !e.upVote.contains(o.e)) {
+							giveXp(o.e, 1);
 						}
 
+						if (!e.downVote.contains(o.e)) {
+							e.downVote.add(o.e);
+							giveXp(e.owner, -1);
+						}
+						if (e.upVote.contains(o.e)) {
+							e.upVote.remove(o.e);
+							giveXp(e.owner, -1);
+						}
 					}
+					saveEvent(e);
+					
 				}
 
 				if (object instanceof Refresh) {
 					Refresh o = (Refresh) object;
-					ArrayList<Event> events = new ArrayList<Event>();
-					ArrayList<Datapoint> points = world.getAround(o.lat, o.lng);
+					ArrayList<Event> events = loadAllEvents();
 					Date d = new Date();
-					for (Datapoint p : points) {
-						for (int i = 0; i < p.events.size(); i++) {
-							if (p.events.get(i).end.before(d)
-									|| p.events.get(i).upVote.size() - p.events.get(i).downVote.size() < -5) {
-								p.events.remove(i);
-								world.eventsInStorage--;
-							} else {
-								events.add(p.events.get(i));
+					for(int i = 0; i < events.size(); i++){
+						if(Haversine.distance(o.lat, o.lng, events.get(i).lat, events.get(i).lng)<=40){
+							if(events.get(i).end.before(d) || events.get(i).upVote.size() - events.get(i).downVote.size() <-5){
+								removeEvent(events.get(i));
+							}
+							else{
+								sendEvent(connection, events.get(i), o.e);
 							}
 						}
-					}
-
-					for (Event e : events) {
-						sendEvent(connection, e, o.e);
 					}
 
 					sendAccount(connection, loadAccount(o.e));
@@ -934,6 +565,7 @@ public class UPServer extends JFrame {
 
 	}
 
+
 	protected boolean isAllowed(String e) {
 		boolean result = false;
 		for(int i = 0; i < endings.size(); i++){
@@ -947,11 +579,7 @@ public class UPServer extends JFrame {
 
 
 	public void saveAccount(Account a) {
-
-		
-
-		try {
-			
+		try {	
 			String loc = a.e;
 			String dir = "";
 			// System.out.println(a.e);
@@ -961,21 +589,42 @@ public class UPServer extends JFrame {
 			loc = loc.replace('.', '_');
 			loc = loc.replace('@', '_');
 			loc += ".profile";
-			File directory = new File(path + dir);
+			File directory = new File(path +"Accounts\\"+ dir);
 			if (!directory.exists()) {
 				directory.mkdir();
 			}
-			File f = new File(path + dir + "\\" + loc);
+			File f = new File(path +"Accounts\\"+ dir + "\\" + loc);
 			
 			f.createNewFile();
-			FileOutputStream fos = new FileOutputStream(f);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(a);
-			oos.close();
+			String info = "";
+			PrintWriter out = new PrintWriter(f);
+			
+			/**building info*/
+			
+			info+="<u>"+a.u+"</u>\n";
+			info+="<e>"+a.e+"</e>\n";
+			info+="<p>"+a.p+"</p>\n";
+			info+="<xp>"+a.xp+"</xp>\n";
+			info+="<code>"+a.code+"</code>\n";
+			info+="<confirmed>"+a.confirmed+"</confirmed>\n";
+			
+			for(int i = 0; i < a.friends.size(); i++){
+				info+="<friend>"+a.friends.get(i)+"</friend>\n";
+			}
+			for(int i = 0; i < a.groups.size(); i++){
+				Group g = a.groups.get(i);
+				info+="<group>"+g.name.replace(" ", "") + g.owner.replace(".", "_").replace("@", "_")+"</group>\n";
+			}
+			
+			/**end building info*/
+			
+			out.print(info);
+			out.close();
 		} catch (Exception e) {
-			right.printConsole("[Error]-Account save error");
+			//right.printConsole("[Error]-Account save error");
 			// e.printStackTrace();
 		}
+		
 	}
 
 	public Account loadAccount(String l) {
@@ -992,11 +641,19 @@ public class UPServer extends JFrame {
 			loc += ".profile";
 			File f = new File(path + dir + "\\" + loc);
 			if (f.exists()) {
-
-				FileInputStream fis = new FileInputStream(f);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				result = (Account) ois.readObject();
-				ois.close();
+				result = new Account();
+				List<String> lines = Files.readAllLines(f.toPath());
+				
+				for(int i = 0; i< lines.size(); i++){
+					if(lines.get(i).startsWith("<u>")){result.u = lines.get(i).substring(3, lines.get(i).length()-5);}
+					else if(lines.get(i).startsWith("<e>")){result.e = lines.get(i).substring(3, lines.get(i).length()-5);}
+					else if(lines.get(i).startsWith("<p>")){result.p = lines.get(i).substring(3, lines.get(i).length()-5);}
+					else if(lines.get(i).startsWith("<xp>")){result.xp = Long.parseLong(lines.get(i).substring(4, lines.get(i).length()-6));}
+					else if(lines.get(i).startsWith("<code>")){result.code = Integer.parseInt(lines.get(i).substring(6, lines.get(i).length()-8));}
+					else if(lines.get(i).startsWith("<confirmed>")){result.confirmed = Boolean.parseBoolean(lines.get(i).substring(10, lines.get(i).length()-12));}
+					else if(lines.get(i).startsWith("<group>")){result.groups.add(loadGroup(lines.get(i).substring(7, lines.get(i).length()-9)));}
+					
+				}
 			}
 		} catch (Exception e) {
 			right.printConsole("[Error]-Account load error");
@@ -1005,74 +662,33 @@ public class UPServer extends JFrame {
 		return result;
 	}
 
-	public void saveWorld(World w) {
-		//world = w;
-		File directory = new File(path);
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
-		File f = new File(path + "world.uPWorld");
-		while (isLoad) {
-		}
-		try {
-			isSave = true;
-			FileOutputStream fos = new FileOutputStream(f);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(w);
-			oos.close();
-			fos.close();
-			isSave = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			right.printConsole("[Error]-World save error");
-			//System.exit(0);
-		}
-	}
-
-	public World loadWorld() {
-		World result = null;
-		try {
-			File f = new File(path + "world.uPWorld");
-			while (isSave) {
-			}
-			if (f.exists()) {
-				isLoad = true;
-				FileInputStream fis = new FileInputStream(f);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				result = (World) ois.readObject();
-				ois.close();
-				fis.close();
-				isLoad = false;
-			} else {
-				result = new World();
-				result.init();
-				saveWorld(result);
-			}
-
-		} catch (Exception e) {
-
-			// right.printConsole("[Error]-World load error");
-		}
-		return result;
-	}
-
 	public void saveGroup(Group g) {
-		File directory = new File(path + "Groups\\");
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
-		File f = new File(
-				path + "Groups\\" + g.name.replace(" ", "") + g.owner.replace(".", "_").replace("@", "_") + ".uPGroup");
-
+		File f = new File(path + "Groups\\" + g.name.replace(" ", "") + g.owner.replace(".", "_").replace("@", "_") + ".uPGroup");
+		
 		try {
-			FileOutputStream fos = new FileOutputStream(f);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(g);
-			oos.close();
-		} catch (Exception e) {
+			f.createNewFile();
+			String info = "";
+			PrintWriter out = new PrintWriter(f);
+			
+			info += "<owner>"+g.owner+"</owner>\n";
+			info += "<name>" + g.name + "</name>\n";
+			
+			for(int i = 0; i < g.events.size();i++){
+				Event e = g.events.get(i);
+				info += "<event>" + Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event</event>\n";
+			}
+			
+			for(int i = 0; i < g.members.size();i++){
+				Member m = g.members.get(i);
+				info += "<member>" + m.rank+"_"+m.e+"</member>\n";
+				}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			right.printConsole("[Error]-Group save error");
 		}
+		
+		
 	}
 
 	public Group loadGroup(String id) {
@@ -1081,11 +697,27 @@ public class UPServer extends JFrame {
 			File f = new File(path + "Groups\\" + id + ".uPGroup");
 
 			if (f.exists()) {
-				FileInputStream fis = new FileInputStream(f);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				result = (Group) ois.readObject();
-				ois.close();
-
+				result = new Group();
+				List<String> lines = Files.readAllLines(f.toPath());
+				for(int i = 0; i < lines.size(); i++){
+					if(lines.get(i).startsWith("<owner>")){result.owner = lines.get(i).substring(7, lines.get(i).length()-9);}
+					else if(lines.get(i).startsWith("<name>")){result.name = lines.get(i).substring(6, lines.get(i).length()-8);}
+					else if(lines.get(i).startsWith("<event>")){ File ev = new File(path+"Events\\"+lines.get(i).substring(7, lines.get(i).length()-9));
+						if(ev.exists()){result.events.add(loadEvent(ev));}
+					}
+					else if(lines.get(i).startsWith("<member>")){
+						String[] breakdown = lines.get(i).substring(8, lines.get(i).length()-10).split("_");
+						Account a = loadAccount(breakdown[1]);
+						if(a!=null){
+							Member m = new Member();
+							m.e=a.e;
+							m.u=a.u;
+							m.xp=a.xp;
+							m.rank=Integer.parseInt(breakdown[0]);
+							result.members.add(m);
+						}
+					}
+				}
 			}
 
 		} catch (Exception e) {
@@ -1099,27 +731,11 @@ public class UPServer extends JFrame {
 		new UPServer();
 	}
 
-	public void removeEvent(Event e,World world) {
-		if (e.group.length() > 0) {
-			Group group = loadGroup(e.group);
-			for (int i = 0; i < group.events.size(); i++) {
-				if (group.events.get(i).ID.equals(e.ID)) {
-					group.events.remove(i);
-				}
-			}
-			saveGroup(group);
-		} else {
-			ArrayList<Event> evs = world.getAround(e.lat, e.lng).get(0).events;
-			for (int i = 0; i < evs.size(); i++) {
-				if (evs.get(i).ID.equals(e.ID)) {
-					evs.remove(i);
-					world.eventsInStorage--;
-				}
-
-			}
+	public void removeEvent(Event e) {
+		File f = new File(path+"Events\\"+Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event");
+		if(f.exists()){
+		f.delete();
 		}
-
-		saveWorld(world);
 
 	}
 
@@ -1166,6 +782,142 @@ public class UPServer extends JFrame {
 			}
 		}));
 		connect();
+	}
+	
+	public ArrayList<Event> loadAllEvents(){
+		ArrayList<Event> events = new ArrayList<Event>();
+		File folder = new File(path+"Events");
+		File[] listOfFiles = folder.listFiles();
+		for(int i = 0; i < listOfFiles.length; i++){
+			events.add(loadEvent(listOfFiles[i]));
+		}
+		return events;
+		
+	}
+	
+	public Event find(float lat, float lng, String ID){
+		Event result = null;
+		
+		File folder = new File(path+"Events");
+		File[] listOfFiles = folder.listFiles();
+		for(int i = 0; i < listOfFiles.length; i++){
+			if(listOfFiles[i].getPath().contains(Math.abs(lat)+(lat<0?"S":"N")+"_"+Math.abs(lng)+(lng<0?"W":"E"))){
+				Event temp = loadEvent(listOfFiles[i]);
+				if(temp.ID.equals(ID)){
+					result = temp;
+					break;
+				}
+			}
+		}
+		
+		
+		return result;
+		
+	}
+	
+	public boolean isReported(Event e){
+		return new File(path+"Reported\\"+Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event").exists();
+		
+	}
+	
+	public void report(Event e){
+		saveEvent(e);
+		File f = new File(path+"Events\\"+Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event");
+		try {
+			if(f.exists()){
+			Files.copy(f.toPath(), new File(path+"Reported\\"+Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event").toPath());
+			}
+			} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	public Event loadEvent(File f){
+		
+		
+				Event temp = new Event();
+					temp.start=new Date();
+					temp.end=new Date();
+					temp.posted=new Date();
+				
+				//READING INFO
+					try {
+						List<String> lines = Files.readAllLines(f.toPath());
+						
+						for(int j = 0; j < lines.size(); j++){
+							if(lines.get(j).startsWith("<name>")){temp.name=lines.get(j).substring(6, lines.get(j).length()-8);}
+							else if(lines.get(j).startsWith("<description>")){temp.description=lines.get(j).substring(13, lines.get(j).length()-15);}
+							else if(lines.get(j).startsWith("<location>")){temp.location=lines.get(j).substring(10, lines.get(j).length()-12);}
+							else if(lines.get(j).startsWith("<lng>")){temp.lng=Float.parseFloat(lines.get(j).substring(5, lines.get(j).length()-7));}
+							else if(lines.get(j).startsWith("<lat>")){temp.lat=Float.parseFloat(lines.get(j).substring(5, lines.get(j).length()-7));}
+							else if(lines.get(j).startsWith("<ID>")){temp.ID=lines.get(j).substring(4, lines.get(j).length()-6);}
+							else if(lines.get(j).startsWith("<group>")){temp.group=lines.get(j).substring(7, lines.get(j).length()-9);}
+							else if(lines.get(j).startsWith("<start>")){temp.start.setTime(Long.parseLong(lines.get(j).substring(7, lines.get(j).length()-9)));}
+							else if(lines.get(j).startsWith("<end>")){temp.end.setTime(Long.parseLong(lines.get(j).substring(5, lines.get(j).length()-7)));}
+							else if(lines.get(j).startsWith("<posted>")){temp.posted.setTime(Long.parseLong(lines.get(j).substring(8, lines.get(j).length()-10)));}
+							else if(lines.get(j).startsWith("<owner>")){temp.owner=lines.get(j).substring(7, lines.get(j).length()-9);}
+							else if(lines.get(j).startsWith("<ownerXp>")){temp.ownerXp=Long.parseLong(lines.get(j).substring(9, lines.get(j).length()-11));}
+							else if(lines.get(j).startsWith("<upVote>")){temp.upVote.add(lines.get(j).substring(8, lines.get(j).length()-10));}
+							else if(lines.get(j).startsWith("<downVote>")){temp.downVote.add(lines.get(j).substring(10, lines.get(j).length()-12));}
+							else if(lines.get(j).startsWith("<comment>")){temp.comments.add(lines.get(j).substring(9, lines.get(j).length()-11));}
+							else if(lines.get(j).startsWith("<reporter>")){temp.reporters.add(lines.get(j).substring(10, lines.get(j).length()-12));}
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				//END READING INFO
+					
+		
+		return temp;
+		
+	}
+	
+	protected void saveEvent(Event e) {
+		try {
+			File f = new File(path+"Events\\"+Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event");
+			f.createNewFile();
+			String info = "";
+			PrintWriter out = new PrintWriter(f);
+			info += "<name>" + e.name + "</name>\n";
+			info += "<description>"+e.description+"</description>\n";
+			info += "<location>"+e.location+"</location>\n";
+			info += "<lng>"+e.lng +"</lng>\n";
+			info += "<lat>"+e.lat+"</lat>\n";
+			info += "<ID>" + e.ID+"</ID>\n";
+			info += "<group>"+e.group+"</group>\n";
+			info += "<start>"+e.start.getTime()+"</start>\n";
+			info += "<end>"+e.end.getTime()+"</end>\n";
+			info += "<posted>"+e.posted.getTime()+"</posted>\n";
+			info += "<owner>"+e.owner+"</owner>\n";
+			info += "<ownerXp>"+e.ownerXp+"</ownerXp>\n";
+			
+			for(int i = 0 ;i < e.upVote.size(); i++){
+				info += "<upVote>" + e.upVote.get(i) + "</upVote>\n";
+			}
+			
+			for(int i = 0; i < e.downVote.size(); i++){
+				info += "<downVote>" + e.downVote.get(i) +"</downVote>\n";
+			}
+			
+			for(int i = 0; i < e.comments.size(); i++){
+				info += "<comment>" + e.comments.get(i) + "</comment>\n";
+			}
+			
+			for(int i = 0; i < e.reporters.size(); i++){
+				info += "<reporter>" + e.reporters.get(i) + "</reporter>\n";
+			}
+			
+			out.write(info);
+			out.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		
+		
 	}
 
 }

@@ -51,7 +51,7 @@ public class UPLoad extends JFrame{
 	//public boolean newReport=true;
 	
 	public UPLoad(){
-		world = loadWorld();
+		//world = loadWorld();
 		Thread t = new Thread(track);
 		
 		//left = new LeftPane(this);

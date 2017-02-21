@@ -4,6 +4,7 @@ package com.ggi.uparty.server;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ScrollPane;
+import java.io.File;
 import java.util.Date;
 
 import javax.swing.JPanel;
@@ -28,14 +29,14 @@ public class LeftPane extends JPanel{
 		stats.setBackground(Color.black);
 		stats.setForeground(Color.orange);
 		stats.setSize(400, 200);
-		
+	/*	
 		scroll.setBackground(Color.black);
 		scroll.setForeground(Color.orange);
 		scroll.setSize(400, 200);
-		
+	*/	
 		this.setLayout(new BorderLayout());
 		this.add(stats,BorderLayout.NORTH);
-		this.add(scroll,BorderLayout.SOUTH);
+	//	this.add(scroll,BorderLayout.SOUTH);
 	}
 	
 	private void buildStats(){
@@ -47,11 +48,10 @@ public class LeftPane extends JPanel{
 			+ "\nTime: "+new Date().toString()
 			+ "\nUsers Online: "+(u.server!=null?u.server.getConnections().length:0)
 			+ "\nLast Response Time: "+u.lastResponse+" ms"
-			+ "\nTotal Data Points: " + u.world.points.size()
-			+ "\nEvents in Storage: " + u.world.eventsInStorage
-			+ "\nReported Events: " + u.world.reported.size();
+			+ "\nEvents in Storage: " + new File(u.path+"Events").listFiles().length
+			+ "\nReported Events: " + new File(u.path+"Reported").listFiles().length;
 		}catch(Exception e){
-			u.saveWorld(u.world);
+			//u.saveWorld(u.world);
 		}
 		//System.out.println((instance.totalMemory() - instance.freeMemory()) / mb);
 	}
@@ -62,7 +62,7 @@ public class LeftPane extends JPanel{
 		if(stats!=null){
 			buildStats();
 		stats.setText(sts);}
-		
+		/*
 		if(scroll!=null && repaint == 5){
 			repaint = 0;
 		scroll.removeAll();
@@ -73,5 +73,6 @@ public class LeftPane extends JPanel{
 		scroll.add(g);
 		u.newReport=false;
 		}
+		*/
 	}
 }

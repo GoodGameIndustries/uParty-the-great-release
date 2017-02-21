@@ -60,6 +60,9 @@ public class World implements Comparator<Datapoint>, Serializable{
 			if(result.size()<8){
 				result.add(p);
 			}
+			else{
+				break;
+			}
 		}
 		return result;
 	}
