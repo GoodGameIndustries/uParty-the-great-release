@@ -639,7 +639,7 @@ public class UPServer extends JFrame {
 			loc = loc.replace('.', '_');
 			loc = loc.replace('@', '_');
 			loc += ".profile";
-			File f = new File(path + dir + "\\" + loc);
+			File f = new File(path+"Accounts" + dir + "\\" + loc);
 			if (f.exists()) {
 				result = new Account();
 				List<String> lines = Files.readAllLines(f.toPath());
