@@ -478,7 +478,10 @@ public class UPServer extends JFrame {
 				}
 
 				for (int i = 0; i < a.groups.size(); i++) {
-					Group g = a.groups.get(i);
+					Group g = null;
+					if(a.groups.get(i)!=null&&a.groups.get(i).name.length()>0){
+						g = a.groups.get(i);
+					}
 					boolean sent = false;
 					if(g!=null&&g.name.length()>0){
 					Group g2 = loadGroup(g.name.replace(" ", "") + g.owner.replace(".", "_").replace("@", "_"));
@@ -708,6 +711,8 @@ public class UPServer extends JFrame {
 
 			if (f.exists()) {
 				result = new Group();
+				result.name="";
+				result.owner="";
 				List<String> lines = Files.readAllLines(f.toPath());
 				for(int i = 0; i < lines.size(); i++){
 					if(lines.get(i).startsWith("<owner>")){result.owner = lines.get(i).substring(7, lines.get(i).length()-8);}
