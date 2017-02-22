@@ -310,7 +310,7 @@ public class UPServer extends JFrame {
 						saveEvent(o);
 						saveGroup(g);
 					}
-
+					saveEvent(o);
 					giveXp(o.owner, 2);
 
 				}
@@ -825,11 +825,27 @@ public class UPServer extends JFrame {
 			}
 		}
 		
-		
+		if(result == null){return findByID(ID);}
 		return result;
 		
 	}
 	
+	private Event findByID(String ID) {
+		Event result = null;
+		ArrayList<Event> events = loadAllEvents();
+		for(int i = 0; i < events.size(); i++){
+			if(events.get(i).ID.equals(ID)){
+				result = events.get(i);
+				break;
+			}
+		}
+		
+		return result;
+	}
+
+
+
+
 	public boolean isReported(Event e){
 		return new File(path+"Reported\\"+Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event").exists();
 		

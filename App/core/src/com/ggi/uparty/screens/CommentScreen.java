@@ -216,8 +216,8 @@ public class CommentScreen implements Screen, InputProcessor {
 			c.e = u.myAcc.e;
 			c.group = group == null ? ""
 					: group.name.replace(" ", "") + group.owner.replace(".", "_").replace("@", "_");
-			c.lat = u.controller.getLat();
-			c.lng = u.controller.getLong();
+			c.lat = e.lat;
+			c.lng = e.lng;
 			if (c.c.length() > 0) {
 				u.send(c);
 
