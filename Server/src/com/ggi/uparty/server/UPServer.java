@@ -480,7 +480,7 @@ public class UPServer extends JFrame {
 				for (int i = 0; i < a.groups.size(); i++) {
 					Group g = a.groups.get(i);
 					boolean sent = false;
-					if(g.name.length()>0){
+					if(g!=null&&g.name.length()>0){
 					Group g2 = loadGroup(g.name.replace(" ", "") + g.owner.replace(".", "_").replace("@", "_"));
 					if (g2 != null) {
 
