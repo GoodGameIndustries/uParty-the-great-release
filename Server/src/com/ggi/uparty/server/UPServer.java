@@ -645,13 +645,13 @@ public class UPServer extends JFrame {
 				List<String> lines = Files.readAllLines(f.toPath());
 				
 				for(int i = 0; i< lines.size(); i++){
-					if(lines.get(i).startsWith("<u>")){result.u = lines.get(i).substring(3, lines.get(i).length()-5);}
-					else if(lines.get(i).startsWith("<e>")){result.e = lines.get(i).substring(3, lines.get(i).length()-5);}
-					else if(lines.get(i).startsWith("<p>")){result.p = lines.get(i).substring(3, lines.get(i).length()-5);}
-					else if(lines.get(i).startsWith("<xp>")){result.xp = Long.parseLong(lines.get(i).substring(4, lines.get(i).length()-6));}
-					else if(lines.get(i).startsWith("<code>")){result.code = Integer.parseInt(lines.get(i).substring(6, lines.get(i).length()-8));}
-					else if(lines.get(i).startsWith("<confirmed>")){result.confirmed = Boolean.parseBoolean(lines.get(i).substring(10, lines.get(i).length()-12));}
-					else if(lines.get(i).startsWith("<group>")){result.groups.add(loadGroup(lines.get(i).substring(7, lines.get(i).length()-9)));}
+					if(lines.get(i).startsWith("<u>")){result.u = lines.get(i).substring(3, lines.get(i).length()-4);}
+					else if(lines.get(i).startsWith("<e>")){result.e = lines.get(i).substring(3, lines.get(i).length()-4);}
+					else if(lines.get(i).startsWith("<p>")){result.p = lines.get(i).substring(3, lines.get(i).length()-4);}
+					else if(lines.get(i).startsWith("<xp>")){result.xp = Long.parseLong(lines.get(i).substring(4, lines.get(i).length()-5));}
+					else if(lines.get(i).startsWith("<code>")){result.code = Integer.parseInt(lines.get(i).substring(6, lines.get(i).length()-7));}
+					else if(lines.get(i).startsWith("<confirmed>")){result.confirmed = Boolean.parseBoolean(lines.get(i).substring(10, lines.get(i).length()-11));}
+					else if(lines.get(i).startsWith("<group>")){result.groups.add(loadGroup(lines.get(i).substring(7, lines.get(i).length()-8)));}
 					
 				}
 			}
@@ -700,13 +700,13 @@ public class UPServer extends JFrame {
 				result = new Group();
 				List<String> lines = Files.readAllLines(f.toPath());
 				for(int i = 0; i < lines.size(); i++){
-					if(lines.get(i).startsWith("<owner>")){result.owner = lines.get(i).substring(7, lines.get(i).length()-9);}
-					else if(lines.get(i).startsWith("<name>")){result.name = lines.get(i).substring(6, lines.get(i).length()-8);}
-					else if(lines.get(i).startsWith("<event>")){ File ev = new File(path+"Events\\"+lines.get(i).substring(7, lines.get(i).length()-9));
+					if(lines.get(i).startsWith("<owner>")){result.owner = lines.get(i).substring(7, lines.get(i).length()-8);}
+					else if(lines.get(i).startsWith("<name>")){result.name = lines.get(i).substring(6, lines.get(i).length()-7);}
+					else if(lines.get(i).startsWith("<event>")){ File ev = new File(path+"Events\\"+lines.get(i).substring(7, lines.get(i).length()-8));
 						if(ev.exists()){result.events.add(loadEvent(ev));}
 					}
 					else if(lines.get(i).startsWith("<member>")){
-						String[] breakdown = lines.get(i).substring(8, lines.get(i).length()-10).split("_");
+						String[] breakdown = lines.get(i).substring(8, lines.get(i).length()-9).split("_");
 						Account a = loadAccount(breakdown[1]);
 						if(a!=null){
 							Member m = new Member();
@@ -847,22 +847,22 @@ public class UPServer extends JFrame {
 						List<String> lines = Files.readAllLines(f.toPath());
 						
 						for(int j = 0; j < lines.size(); j++){
-							if(lines.get(j).startsWith("<name>")){temp.name=lines.get(j).substring(6, lines.get(j).length()-8);}
-							else if(lines.get(j).startsWith("<description>")){temp.description=lines.get(j).substring(13, lines.get(j).length()-15);}
-							else if(lines.get(j).startsWith("<location>")){temp.location=lines.get(j).substring(10, lines.get(j).length()-12);}
-							else if(lines.get(j).startsWith("<lng>")){temp.lng=Float.parseFloat(lines.get(j).substring(5, lines.get(j).length()-7));}
-							else if(lines.get(j).startsWith("<lat>")){temp.lat=Float.parseFloat(lines.get(j).substring(5, lines.get(j).length()-7));}
-							else if(lines.get(j).startsWith("<ID>")){temp.ID=lines.get(j).substring(4, lines.get(j).length()-6);}
-							else if(lines.get(j).startsWith("<group>")){temp.group=lines.get(j).substring(7, lines.get(j).length()-9);}
-							else if(lines.get(j).startsWith("<start>")){temp.start.setTime(Long.parseLong(lines.get(j).substring(7, lines.get(j).length()-9)));}
-							else if(lines.get(j).startsWith("<end>")){temp.end.setTime(Long.parseLong(lines.get(j).substring(5, lines.get(j).length()-7)));}
-							else if(lines.get(j).startsWith("<posted>")){temp.posted.setTime(Long.parseLong(lines.get(j).substring(8, lines.get(j).length()-10)));}
-							else if(lines.get(j).startsWith("<owner>")){temp.owner=lines.get(j).substring(7, lines.get(j).length()-9);}
-							else if(lines.get(j).startsWith("<ownerXp>")){temp.ownerXp=Long.parseLong(lines.get(j).substring(9, lines.get(j).length()-11));}
-							else if(lines.get(j).startsWith("<upVote>")){temp.upVote.add(lines.get(j).substring(8, lines.get(j).length()-10));}
-							else if(lines.get(j).startsWith("<downVote>")){temp.downVote.add(lines.get(j).substring(10, lines.get(j).length()-12));}
-							else if(lines.get(j).startsWith("<comment>")){temp.comments.add(lines.get(j).substring(9, lines.get(j).length()-11));}
-							else if(lines.get(j).startsWith("<reporter>")){temp.reporters.add(lines.get(j).substring(10, lines.get(j).length()-12));}
+							if(lines.get(j).startsWith("<name>")){temp.name=lines.get(j).substring(6, lines.get(j).length()-7);}
+							else if(lines.get(j).startsWith("<description>")){temp.description=lines.get(j).substring(13, lines.get(j).length()-14);}
+							else if(lines.get(j).startsWith("<location>")){temp.location=lines.get(j).substring(10, lines.get(j).length()-11);}
+							else if(lines.get(j).startsWith("<lng>")){temp.lng=Float.parseFloat(lines.get(j).substring(5, lines.get(j).length()-6));}
+							else if(lines.get(j).startsWith("<lat>")){temp.lat=Float.parseFloat(lines.get(j).substring(5, lines.get(j).length()-6));}
+							else if(lines.get(j).startsWith("<ID>")){temp.ID=lines.get(j).substring(4, lines.get(j).length()-5);}
+							else if(lines.get(j).startsWith("<group>")){temp.group=lines.get(j).substring(7, lines.get(j).length()-8);}
+							else if(lines.get(j).startsWith("<start>")){temp.start.setTime(Long.parseLong(lines.get(j).substring(7, lines.get(j).length()-8)));}
+							else if(lines.get(j).startsWith("<end>")){temp.end.setTime(Long.parseLong(lines.get(j).substring(5, lines.get(j).length()-6)));}
+							else if(lines.get(j).startsWith("<posted>")){temp.posted.setTime(Long.parseLong(lines.get(j).substring(8, lines.get(j).length()-9)));}
+							else if(lines.get(j).startsWith("<owner>")){temp.owner=lines.get(j).substring(7, lines.get(j).length()-8);}
+							else if(lines.get(j).startsWith("<ownerXp>")){temp.ownerXp=Long.parseLong(lines.get(j).substring(9, lines.get(j).length()-10));}
+							else if(lines.get(j).startsWith("<upVote>")){temp.upVote.add(lines.get(j).substring(8, lines.get(j).length()-9));}
+							else if(lines.get(j).startsWith("<downVote>")){temp.downVote.add(lines.get(j).substring(10, lines.get(j).length()-11));}
+							else if(lines.get(j).startsWith("<comment>")){temp.comments.add(lines.get(j).substring(9, lines.get(j).length()-10));}
+							else if(lines.get(j).startsWith("<reporter>")){temp.reporters.add(lines.get(j).substring(10, lines.get(j).length()-11));}
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
