@@ -655,7 +655,12 @@ public class UPServer extends JFrame {
 					else if(lines.get(i).startsWith("<confirmed>")){result.confirmed = Boolean.parseBoolean(lines.get(i).substring(11, lines.get(i).length()-12));}
 					else if(lines.get(i).startsWith("<group>")){
 						if(lines.get(i).substring(7, lines.get(i).length()-8).length()>0){
-						result.groups.add(loadGroup(lines.get(i).substring(7, lines.get(i).length()-8)));}
+							Group g = loadGroup(lines.get(i).substring(7, lines.get(i).length()-8));
+							if(g!=null){
+						result.groups.add(g);
+							}
+							}
+						
 					}
 					
 				}
