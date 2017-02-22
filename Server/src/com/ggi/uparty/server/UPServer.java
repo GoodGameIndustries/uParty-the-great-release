@@ -891,6 +891,7 @@ public class UPServer extends JFrame {
 	}
 	
 	protected void saveEvent(Event e) {
+		if(e!=null){
 		try {
 			File f = new File(path+"Events\\"+Math.abs(e.lat)+(e.lat<0?"S":"N")+"_"+Math.abs(e.lng)+(e.lng<0?"W":"E")+"_"+e.ownerXp+".event");
 			f.createNewFile();
@@ -929,6 +930,7 @@ public class UPServer extends JFrame {
 			out.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		}
 		}
 		
 		
