@@ -722,15 +722,15 @@ public class UPServer extends JFrame {
 					}
 					else if(lines.get(i).startsWith("<member>")){
 						String[] breakdown = lines.get(i).substring(8, lines.get(i).length()-9).split("_");
-						Account a = loadAccount(breakdown[1]);
-						if(a!=null){
+						//Account a = loadAccount(breakdown[1]);
+						//if(a!=null){
 							Member m = new Member();
-							m.e=a.e;
-							m.u=a.u;
-							m.xp=a.xp;
+							m.e=breakdown[1];
+							//m.u=a.u;
+							//m.xp=a.xp;
 							m.rank=Integer.parseInt(breakdown[0]);
 							result.members.add(m);
-						}
+						//}
 					}
 				}
 			}
