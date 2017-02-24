@@ -495,11 +495,11 @@ public class UPServer extends JFrame {
 							}
 						}
 					} else {
-						a.groups.remove(i);
+						//a.groups.remove(i);
 						sent = true;
 					}
 					if (!sent) {
-						a.groups.remove(i);
+						//a.groups.remove(i);
 					}
 				}
 				}
