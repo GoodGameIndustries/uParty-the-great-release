@@ -696,11 +696,14 @@ public class UPServer extends JFrame {
 				info += "<member>" + m.rank+"_"+m.e+"</member>\n";
 				}
 			
+			out.write(info);
+			out.close();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	
 		
 	}
 
@@ -736,7 +739,7 @@ public class UPServer extends JFrame {
 			}
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			// right.printConsole("[Error]-World load error");
 		}
 		return result;
