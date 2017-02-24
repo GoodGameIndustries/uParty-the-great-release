@@ -488,7 +488,7 @@ public class UPServer extends JFrame {
 					if (g2 != null) {
 
 						for (int j = 0; j < g2.members.size(); j++) {
-							right.printConsole("[Debug]-Group email compare: " + g2.members.get(j).e +" vs " + a.e);
+							//right.printConsole("[Debug]-Group email compare: " + g2.members.get(j).e +" vs " + a.e);
 							if (g2.members.get(j).e.equals(a.e)) {
 								sent = true;
 								sendGroup(c, g2, a.e);
