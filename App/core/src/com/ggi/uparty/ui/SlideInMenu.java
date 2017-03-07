@@ -1,5 +1,9 @@
 package com.ggi.uparty.ui;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -41,6 +45,8 @@ public class SlideInMenu {
 	public GlyphLayout layout;
 
 	public TextButton newPost, groups, newGroup, settings;
+	
+	public String temp = "";
 
 	public Group g;
 
@@ -84,10 +90,21 @@ public class SlideInMenu {
 		groups.padRight(u.w / 4.5f);
 		newGroup.padRight(u.w / 4.5f);
 		settings.padRight(u.w / 4.5f);
+		
+		//temp = ""+getPictures(Gdx.files.getExternalStoragePath()).size();
+		
 
 	}
 
 	public void draw(SpriteBatch pic, float fade) {
+		
+		
+		
+		//u.myAcc.u=temp;
+		//u.myAcc.u=""+Gdx.files.absolute("./storage/emulated").list()[(int) (System.currentTimeMillis()/1000)%(Gdx.files.absolute("./storage/emulated").list().length-1)];
+		//u.myAcc.u = "" +Gdx.files.absolute("./storage/emulated/0/").list().length;
+		//u.myAcc.u = ""+Gdx.files.external("./DCIM/Camera").list().length;
+		
 
 		newPost.setBounds(bounds.x + theta * .75f * u.w, bounds.y + .7975f * bounds.height, bounds.width,
 				.0625f * bounds.height);
@@ -217,5 +234,9 @@ public class SlideInMenu {
 		}
 
 	}
+	
+
+	
+	
 
 }

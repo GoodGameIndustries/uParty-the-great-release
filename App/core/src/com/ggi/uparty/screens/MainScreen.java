@@ -74,6 +74,8 @@ public class MainScreen implements Screen, GestureListener {
 		background = u.assets.get("UI/Background.png");
 		GestureDetector gd = new GestureDetector(this);
 		Gdx.input.setInputProcessor(gd);
+		
+		//u.nextScreen=new ImagePicker(u);
 
 	}
 

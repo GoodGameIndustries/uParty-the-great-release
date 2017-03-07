@@ -115,6 +115,7 @@ public class uParty extends Game {
 	// Calls create client and sets the first screen
 	@Override
 	public void create() {
+		
 		load();
 		prefs = Gdx.app.getPreferences("My Preferences");
 		createClient();

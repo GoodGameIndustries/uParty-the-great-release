@@ -252,7 +252,7 @@ public class GroupSettingsScreen implements Screen, InputProcessor {
 		toggleOff();
 		if (!initTouch) {
 			if (Intersector.overlaps(touch, backB)) {
-				goB = true;
+				u.nextScreen = new MainScreen(u);
 			}
 			if (Intersector.overlaps(touch, inviteB) && g.owner.equals(u.myAcc.e)) {
 				u.nextScreen = new InviteScreen(u, g);
